@@ -93,9 +93,9 @@ pojedynczy_bardzo_kurwa_indywidualny_zajebiscie_wyekstrahowany_ekperyment_zwany_
   #jegzberymendy
   props <- single_experiment(n,m,nus[[1]],V, optimizer, max_iter, perm)
   for (nu in nus[-1]) {
-  props <- rbind(props, single_experiment(n, m, nu, V, optimizer, max_iter, perm))
+    props <- rbind(props, single_experiment(n, m, nu, V, optimizer, max_iter, perm))
+  }
   props
-}
 }
 #rób co chcesz z maciorą
 plotuj_macierz_3naen <- function(maciora) {
