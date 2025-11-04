@@ -6,7 +6,7 @@ n_nus <- 10 #number of different numbers of observations
 nu_lb <- 50
 nu_ub <- 5000 # lower and upper bounds for numbers of observations
 lwblg <- log(nu_lb)
-upblg <- log(nu_up)
+upblg <- log(nu_ub)
 nus <- round(exp(seq(lwblg, upblg, length.out = n_nus))) # final vector of numbers of observations (spread out logarithmicaly)
 perm <- "(2,3,4)"
 optimizer <- "BF"
