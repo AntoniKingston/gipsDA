@@ -46,7 +46,7 @@ for (i in 1:max_iterations) {
   cat(sprintf("--- Iteration %d: Testing with divisor psi = %d ---\n", i, psi / 2**i))
   
   # ** Generate synthetic data with the new covariance matrix **
-  class_means <- matrix(runif(n_classes * p, min = -2, max = 2), nrow = p, ncol = n_classes)
+  class_means <- matrix(runif(n_classes * p, min = 0, max = 1), nrow = p, ncol = n_classes)
   data_list <- list()
   
   for (k in 1:n_classes) {
