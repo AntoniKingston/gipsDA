@@ -71,7 +71,7 @@ lda.matrix <- function(x, grouping, ..., subset, na.action)
 }
 lda.default <-
   function(x, grouping, prior = proportions, tol = 1.0e-4,
-           nu = 5, ...)
+           nu = 5, weighted_avg = FALSE, ...)
   {
       if(is.null(dim(x))) stop("'x' is not a matrix")
       x <- as.matrix(x)
@@ -127,11 +127,25 @@ lda.default <-
           gips::project_matrix(emp_cov, perm)
       }
 
+      if (weighted_avg) {
+        # compute each class covariance matrix S_g
+        cov_list <- tapply(
+            1:nrow(x),
+            g,
+            function(idx) cov( x[idx,, drop=FALSE] )
+        )
 
-      # adjust to "unbiased" scaling of covariance matrix
-      cov_raw <- MASS::cov.rob((x - group.means[g,  ]) %*% scaling)$cov
-      #MASS does: cov <- n/(n - ng) * cov.rob(...)$cov
-      cov_adj <- n/(n - ng) * cov_raw
+        # weighted pooled covariance: S = (1/n) * sum_g n_g * S_g
+        cov_adj <- Reduce(`+`, Map(function(Sg, ng) ng * Sg, cov_list, counts)) / n
+      }
+
+      else {
+          # adjust to "unbiased" scaling of covariance matrix
+          cov_raw <- MASS::cov.rob((x - group.means[g,  ]) %*% scaling, method = "classical")$cov
+          #MASS does: cov <- n/(n - ng) * cov.rob(...)$cov
+          cov_adj <- n/(n - ng) * cov_raw
+      }
+
       #project covariance using gips
       cov_proj <- project_cov(cov_adj, n)
       sX <- svd(cov_proj, nu = 0L)
@@ -140,8 +154,6 @@ lda.default <-
       if(rank < p) warning("variables are collinear")
       scaling <- scaling %*% sX$v[, 1L:rank] %*%
           diag(sqrt(1/sX$d[1L:rank]),,rank)
-
-
 
       xbar <- colSums(prior %*% group.means)
       fac <- 1/(ng - 1)
