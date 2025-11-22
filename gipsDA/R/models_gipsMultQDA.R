@@ -1,22 +1,7 @@
-# file MASS/R/qda.R
-# copyright (C) 1994-2023 W. N. Venables and B. D. Ripley
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 or 3 of the License
-#  (at your option).
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  A copy of the GNU General Public License is available at
-#  http://www.r-project.org/Licenses/
-#
-gipsqda <- function(x, ...) UseMethod("gipsqda")
 
-gipsqda.formula <- function(formula, data, ..., subset, na.action)
+gipsmultqda <- function(x, ...) UseMethod("gipsmultqda")
+
+gipsmultqda.formula <- function(formula, data, ..., subset, na.action)
 {
     m <- match.call(expand.dots = FALSE)
     m$... <- NULL
@@ -29,10 +14,10 @@ gipsqda.formula <- function(formula, data, ..., subset, na.action)
     if ((yvar <- attr(Terms, "response")) > 0) xvars <- xvars[-yvar]
     xint <- match("(Intercept)", colnames(x), nomatch=0L)
     if(xint > 0) x <- x[, -xint, drop=FALSE]
-    res <- gipsqda.default(x, grouping, ...)
+    res <- gipsmultqda.default(x, grouping, ...)
     res$terms <- Terms
     cl <- match.call()
-    cl[[1L]] <- as.name("gipsqda")
+    cl[[1L]] <- as.name("gipsmultqda")
     res$call <- cl
     res$contrasts <- attr(x, "contrasts")
     res$xlevels <- .getXlevels(Terms, m)
@@ -40,17 +25,17 @@ gipsqda.formula <- function(formula, data, ..., subset, na.action)
     res
 }
 
-gipsqda.data.frame <- function(x, ...)
+gipsmultqda.data.frame <- function(x, ...)
 {
-    res <- gipsqda(structure(data.matrix(x), class="matrix"), ...)
+    res <- gipsmultqda(structure(data.matrix(x), class="matrix"), ...)
     cl <- match.call()
-    cl[[1L]] <- as.name("gipsqda")
+    cl[[1L]] <- as.name("gipsmultqda")
     res$call <- cl
     res
 }
 
 
-gipsqda.matrix <- function(x, grouping, ..., subset, na.action)
+gipsmultqda.matrix <- function(x, grouping, ..., subset, na.action)
 {
     if(!missing(subset)) {
         x <- x[subset, , drop = FALSE]
@@ -62,15 +47,15 @@ gipsqda.matrix <- function(x, grouping, ..., subset, na.action)
         grouping <- dfr$g
         x <- dfr$x
     }
-#    res <- NextMethod("gipsqda")
-    res <- gipsqda.default(x, grouping, ...)
+#    res <- NextMethod("gipsmultqda")
+    res <- gipsmultqda.default(x, grouping, ...)
     cl <- match.call()
-    cl[[1L]] <- as.name("gipsqda")
+    cl[[1L]] <- as.name("gipsmultqda")
     res$call <- cl
     res
 }
 
-gipsqda.default <-
+gipsmultqda.default <-
   function(x, grouping, prior = proportions, nu = 5, ...)
 {
     if(is.null(dim(x))) stop("'x' is not a matrix")
@@ -85,7 +70,7 @@ gipsqda.default <-
     lev <- levels(g)
     counts <- as.vector(table(g))
     names(counts) <- lev
-    if(any(counts < p+1)) stop("some group is too small for 'gipsqda'")
+    if(any(counts < p+1)) stop("some group is too small for 'gipsmultqda'")
     proportions <- counts/length(g)
     ng <- length(proportions)
 # allow for supplied prior
@@ -96,14 +81,18 @@ gipsqda.default <-
     group.means <- tapply(x, list(rep(g, ncol(x)), col(x)), mean)
     scaling <- array(dim=c(p,p,ng))
     ldet <- numeric(ng)
+    cXs <- list()
     for (i in 1L:ng){
         cX <- MASS::cov.mve(x[unclass(g) == i, ])
-        cov_proj <- project_cov_MAP(cX$cov, counts[i])
+        cXs[[i]] <- cX$cov
         group.means[i,] <- cX$center
-        sX <- svd(cov_proj, nu=0)
-        scaling[, , i] <- sX$v %*% diag(sqrt(1/sX$d),,p)
-        ldet[i] <- sum(log(sX$d))
-
+    }
+    cXs <- project_covs_MAP(cXs, counts)
+    for (i in 1L:ng) {
+      cov_proj <- cXs[[i]]
+      sX <- svd(cov_proj, nu=0)
+      scaling[, , i] <- sX$v %*% diag(sqrt(1/sX$d),,p)
+      ldet[i] <- sum(log(sX$d))
     }
     if(is.null(dimnames(x)))
         dimnames(scaling) <- list(NULL, as.character(1L:p), lev)
@@ -112,18 +101,18 @@ gipsqda.default <-
         dimnames(group.means)[[2L]] <- colnames(x)
     }
     cl <- match.call()
-    cl[[1L]] <- as.name("gipsqda")
+    cl[[1L]] <- as.name("gipsmultqda")
     res <- list(prior = prior, counts = counts, means = group.means,
                 scaling = scaling, ldet = ldet, lev = lev, N = n, call = cl)
-    class(res) <- "gipsqda"
+    class(res) <- "gipsmultqda"
     res
 }
 
-predict.gipsqda <- function(object, newdata, prior = object$prior,
+predict.gipsmultqda <- function(object, newdata, prior = object$prior,
 			method = c("plug-in", "predictive", "debiased",
                           "looCV"), ...)
 {
-    if(!inherits(object, "gipsqda")) stop("object not of class \"gipsqda\"")
+    if(!inherits(object, "gipsmultqda")) stop("object not of class \"gipsmultqda\"")
     method <- match.arg(method)
     if(method == "looCV" && !missing(newdata))
         stop("cannot have leave-one-out CV with 'newdata'")
@@ -238,7 +227,7 @@ predict.gipsqda <- function(object, newdata, prior = object$prior,
     list(class = cl, posterior = posterior)
 }
 
-print.gipsqda <- function(x, ...)
+print.gipsmultqda <- function(x, ...)
 {
     if(!is.null(cl <- x$call)) {
         names(cl)[2L] <- ""
@@ -251,4 +240,5 @@ print.gipsqda <- function(x, ...)
     print(x$means, ...)
     invisible(x)
 }
-model.frame.gipsqda <-  model.frame.gipslda
+
+model.frame.gipsmultqda <-  model.frame.gipslda
