@@ -96,6 +96,7 @@ gipsqda.default <-
     group.means <- tapply(x, list(rep(g, ncol(x)), col(x)), mean)
     scaling <- array(dim=c(p,p,ng))
     ldet <- numeric(ng)
+####################################################################################
     for (i in 1L:ng){
         cX <- MASS::cov.mve(x[unclass(g) == i, ])
         cov_proj <- project_cov_MAP(cX$cov, counts[i])
@@ -105,6 +106,7 @@ gipsqda.default <-
         ldet[i] <- sum(log(sX$d))
 
     }
+####################################################################################
     if(is.null(dimnames(x)))
         dimnames(scaling) <- list(NULL, as.character(1L:p), lev)
     else {

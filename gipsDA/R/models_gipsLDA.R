@@ -115,9 +115,7 @@ gipslda.default <-
       }
       # scale columns to unit variance before checking for collinearity
       scaling <- diag(1/f1, , p)
-
-
-
+####################################################################################
       if (weighted_avg) {
         # compute each class covariance matrix S_g
         cov_list <- tapply(
@@ -138,6 +136,7 @@ gipslda.default <-
 
       #project covariance using gips
       cov_proj <- project_cov_MAP(cov_adj, n)
+####################################################################################
       sX <- svd(cov_proj, nu = 0L)
       rank <- sum(sX$d > tol^2)
       if(rank == 0L) stop("rank = 0: variables are numerically constant")
