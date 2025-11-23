@@ -1257,6 +1257,31 @@ get_diagonalized_matrices_for_heatmap <- function(x) {
   lapply(Ss, gips:::get_diagonalized_matrix_for_heatmap)
 }
 
+get_probabilities_from_gipsmult <- function(g) {
+  validate_gipsmult(g)
+
+    if (is.null(attr(g, "optimization_info"))) {
+    rlang::abort(c("There was a problem identified with the provided arguments:",
+      "i" = "`gips` objects has to be optimized with `find_MAP(return_probabilities=TRUE)` to use `get_probabilities_from_gips()` function.",
+      "x" = "You did not optimized `g`.",
+      "i" = "Did You use the wrong `g` as an argument for this function?",
+      "i" = "Did You forget to optimize `g`?"
+    ))
+  }
+
+  if (is.null(attr(g, "optimization_info")[["post_probabilities"]])) {
+    rlang::inform(c(
+      "You called `get_probabilities_from_gips(g)` on the `gips` object that does not have saved probabilities.",
+      "x" = "`NULL` will be returned",
+      "i" = "Did You use the wrong `g` as an argument for this function?",
+      "i" = "Did You forget to optimize with `g <- find_MAP(return_probabilities = TRUE)`?",
+      "i" = "Did You unintentionally use `g <- forget_perms(g)`?"
+    ))
+  }
+
+  attr(g, "optimization_info")[["post_probabilities"]]
+}
+
 
 
 

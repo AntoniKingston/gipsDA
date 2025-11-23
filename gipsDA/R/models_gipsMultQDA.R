@@ -56,7 +56,7 @@ gipsmultqda.matrix <- function(x, grouping, ..., subset, na.action)
 }
 
 gipsmultqda.default <-
-  function(x, grouping, prior = proportions, nu = 5, ...)
+  function(x, grouping, prior = proportions, nu = 5, MAP = TRUE, ...)
 {
     if(is.null(dim(x))) stop("'x' is not a matrix")
     x <- as.matrix(x)
@@ -89,7 +89,7 @@ gipsmultqda.default <-
         cXs[[i]] <- cX$cov
         group.means[i,] <- cX$center
     }
-    cXs <- project_covs_MAP(cXs, counts)
+    cXs <- project_covs(cXs, counts, MAP)
     for (i in 1L:ng) {
       cov_proj <- cXs[[i]]
       sX <- svd(cov_proj, nu=0)

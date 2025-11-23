@@ -71,7 +71,7 @@ gipsqda.matrix <- function(x, grouping, ..., subset, na.action)
 }
 
 gipsqda.default <-
-  function(x, grouping, prior = proportions, nu = 5, ...)
+  function(x, grouping, prior = proportions, nu = 5, MAP = TRUE,  ...)
 {
     if(is.null(dim(x))) stop("'x' is not a matrix")
     x <- as.matrix(x)
@@ -99,7 +99,7 @@ gipsqda.default <-
 ####################################################################################
     for (i in 1L:ng){
         cX <- MASS::cov.mve(x[unclass(g) == i, ])
-        cov_proj <- project_cov_MAP(cX$cov, counts[i])
+        cov_proj <- project_cov(cX$cov, counts[i], MAP)
         group.means[i,] <- cX$center
         sX <- svd(cov_proj, nu=0)
         scaling[, , i] <- sX$v %*% diag(sqrt(1/sX$d),,p)

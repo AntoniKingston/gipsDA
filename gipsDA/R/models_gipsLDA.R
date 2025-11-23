@@ -71,7 +71,7 @@ gipslda.matrix <- function(x, grouping, ..., subset, na.action)
 }
 gipslda.default <-
   function(x, grouping, prior = proportions, tol = 1.0e-4,
-           nu = 5, weighted_avg = FALSE, ...)
+           nu = 5, weighted_avg = FALSE, MAP = TRUE, ...)
   {
       if(is.null(dim(x))) stop("'x' is not a matrix")
       x <- as.matrix(x)
@@ -135,7 +135,7 @@ gipslda.default <-
       }
 
       #project covariance using gips
-      cov_proj <- project_cov_MAP(cov_adj, n)
+      cov_proj <- project_cov(cov_adj, n, MAP)
 ####################################################################################
       sX <- svd(cov_proj, nu = 0L)
       rank <- sum(sX$d > tol^2)
