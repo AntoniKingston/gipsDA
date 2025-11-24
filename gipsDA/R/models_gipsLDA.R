@@ -70,100 +70,113 @@ gipslda.matrix <- function(x, grouping, ..., subset, na.action)
     res
 }
 gipslda.default <-
-  function(x, grouping, prior = proportions, tol = 1.0e-4,
-           nu = 5, weighted_avg = FALSE, MAP = TRUE, ...)
-  {
-      if(is.null(dim(x))) stop("'x' is not a matrix")
-      x <- as.matrix(x)
-      if(any(!is.finite(x)))
-          stop("infinite, NA or NaN values in 'x'")
-      n <- nrow(x)
-      p <- ncol(x)
-      if(n != length(grouping))
-          stop("nrow(x) and length(grouping) are different")
-      g <- as.factor(grouping)
-      lev <- lev1 <- levels(g)
+function(x, grouping, prior = proportions, tol = 1.0e-4,
+       nu = 5, weighted_avg = FALSE, MAP = TRUE, optimizer = NULL, max_iter = NULL, ...) {
+    if(is.null(dim(x))) stop("'x' is not a matrix")
+    x <- as.matrix(x)
+    if(any(!is.finite(x)))
+      stop("infinite, NA or NaN values in 'x'")
+    n <- nrow(x)
+    p <- ncol(x)
+    if(n != length(grouping))
+      stop("nrow(x) and length(grouping) are different")
+    g <- as.factor(grouping)
+    lev <- lev1 <- levels(g)
+    counts <- as.vector(table(g))
+    if(!missing(prior)) {
+      if(any(prior < 0) || round(sum(prior), 5) != 1) stop("invalid 'prior'")
+      if(length(prior) != nlevels(g)) stop("'prior' is of incorrect length")
+      prior <- prior[counts > 0L]
+    }
+    if(any(counts == 0L)) {
+      empty <- lev[counts == 0L]
+      warning(sprintf(ngettext(length(empty),
+                               "group %s is empty",
+                               "groups %s are empty"),
+                      paste(empty, collapse = " ")), domain = NA)
+      lev1 <- lev[counts > 0L]
+      g <- factor(g, levels = lev1)
       counts <- as.vector(table(g))
-      if(!missing(prior)) {
-          if(any(prior < 0) || round(sum(prior), 5) != 1) stop("invalid 'prior'")
-          if(length(prior) != nlevels(g)) stop("'prior' is of incorrect length")
-          prior <- prior[counts > 0L]
+    }
+    if(is.null(optimizer)) {
+      if (p < 10) {
+          optimizer = "BF"
       }
-      if(any(counts == 0L)) {
-          empty <- lev[counts == 0L]
-          warning(sprintf(ngettext(length(empty),
-                                   "group %s is empty",
-                                   "groups %s are empty"),
-                          paste(empty, collapse = " ")), domain = NA)
-          lev1 <- lev[counts > 0L]
-          g <- factor(g, levels = lev1)
-          counts <- as.vector(table(g))
-      }
-      proportions <- counts/n
-      ng <- length(proportions)
-      names(prior) <- names(counts) <- lev1
-      ## drop attributes to avoid e.g. matrix() methods
-      group.means <- tapply(c(x), list(rep(g, p), col(x)), mean)
-      f1 <- sqrt(diag(var(x - group.means[g,  ])))
-      if(any(f1 < tol)) {
-          const <- format((1L:p)[f1 < tol])
-          stop(sprintf(ngettext(length(const),
-                       "variable %s appears to be constant within groups",
-                       "variables %s appear to be constant within groups"),
-                       paste(const, collapse = " ")),
-               domain = NA)
-      }
-      # scale columns to unit variance before checking for collinearity
-      scaling <- diag(1/f1, , p)
-####################################################################################
-      if (weighted_avg) {
-        # compute each class covariance matrix S_g
-        cov_list <- tapply(
-            1:nrow(x),
-            g,
-            function(idx) cov( x[idx,, drop=FALSE] )
-        )
-
-        # weighted pooled covariance: S = (1/n) * sum_g n_g * S_g
-        cov_adj <- Reduce(`+`, Map(function(Sg, ng) ng * Sg, cov_list, counts)) / n
-      }
-
       else {
-          # adjust to "unbiased" scaling of covariance matrix
-          cov_raw <- MASS::cov.rob((x - group.means[g,  ]) %*% scaling, method = "classical")$cov
-          cov_adj <- n/(n - ng) * cov_raw
+          optimizer = "MH"
       }
+    }
+    if (optimizer == "MH" & is.null(max_iter)) {
+        max_iter <- 100
+        warning("MH optimizer set but 'max_iter' argument is unspecified \n
+        Setting max_iter = 100 by default")
+    }
 
-      #project covariance using gips
-      cov_proj <- project_cov(cov_adj, n, MAP)
-####################################################################################
-      sX <- svd(cov_proj, nu = 0L)
-      rank <- sum(sX$d > tol^2)
-      if(rank == 0L) stop("rank = 0: variables are numerically constant")
-      if(rank < p) warning("variables are collinear")
-      scaling <- scaling %*% sX$v[, 1L:rank] %*%
-          diag(sqrt(1/sX$d[1L:rank]),,rank)
+    proportions <- counts/n
+    ng <- length(proportions)
+    names(prior) <- names(counts) <- lev1
+    ## drop attributes to avoid e.g. matrix() methods
+    group.means <- tapply(c(x), list(rep(g, p), col(x)), mean)
+    f1 <- sqrt(diag(var(x - group.means[g,  ])))
+    if(any(f1 < tol)) {
+      const <- format((1L:p)[f1 < tol])
+      stop(sprintf(ngettext(length(const),
+                   "variable %s appears to be constant within groups",
+                   "variables %s appear to be constant within groups"),
+                   paste(const, collapse = " ")),
+           domain = NA)
+    }
+    # scale columns to unit variance before checking for collinearity
+    scaling <- diag(1/f1, , p)
+    ####################################################################################
+    if (weighted_avg) {
+    # compute each class covariance matrix S_g
+    cov_list <- tapply(
+        1:nrow(x),
+        g,
+        function(idx) cov( x[idx,, drop=FALSE] )
+    )
 
-      xbar <- colSums(prior %*% group.means)
-      fac <- 1/(ng - 1)
-      X <- sqrt((n * prior)*fac) * scale(group.means, center = xbar, scale = FALSE) %*% scaling
-      X.s <- svd(X, nu = 0L)
-      rank <- sum(X.s$d > tol * X.s$d[1L])
-      if(rank == 0L) stop("group means are numerically identical")
-      scaling <- scaling %*% X.s$v[, 1L:rank]
-      if(is.null(dimnames(x)))
-          dimnames(scaling) <- list(NULL, paste("LD", 1L:rank, sep = ""))
-      else {
-          dimnames(scaling) <- list(colnames(x), paste("LD", 1L:rank, sep = ""))
-          dimnames(group.means)[[2L]] <- colnames(x)
-      }
-      cl <- match.call()
-      cl[[1L]] <- as.name("gipslda")
-      structure(list(prior = prior, counts = counts, means = group.means,
-                     scaling = scaling, lev = lev, svd = X.s$d[1L:rank],
-                     N = n, call = cl),
-                class = "gipslda")
-  }
+    # weighted pooled covariance: S = (1/n) * sum_g n_g * S_g
+    cov_adj <- Reduce(`+`, Map(function(Sg, ng) ng * Sg, cov_list, counts)) / n
+    }
+
+    else {
+      # adjust to "unbiased" scaling of covariance matrix
+      cov_raw <- MASS::cov.rob((x - group.means[g,  ]) %*% scaling, method = "classical")$cov
+      cov_adj <- n/(n - ng) * cov_raw
+    }
+
+    #project covariance using gips
+    cov_proj <- project_cov(cov_adj, n, MAP, optimizer, max_iter)
+    ####################################################################################
+    sX <- svd(cov_proj, nu = 0L)
+    rank <- sum(sX$d > tol^2)
+    if(rank == 0L) stop("rank = 0: variables are numerically constant")
+    if(rank < p) warning("variables are collinear")
+    scaling <- scaling %*% sX$v[, 1L:rank] %*%
+      diag(sqrt(1/sX$d[1L:rank]),,rank)
+
+    xbar <- colSums(prior %*% group.means)
+    fac <- 1/(ng - 1)
+    X <- sqrt((n * prior)*fac) * scale(group.means, center = xbar, scale = FALSE) %*% scaling
+    X.s <- svd(X, nu = 0L)
+    rank <- sum(X.s$d > tol * X.s$d[1L])
+    if(rank == 0L) stop("group means are numerically identical")
+    scaling <- scaling %*% X.s$v[, 1L:rank]
+    if(is.null(dimnames(x)))
+      dimnames(scaling) <- list(NULL, paste("LD", 1L:rank, sep = ""))
+    else {
+      dimnames(scaling) <- list(colnames(x), paste("LD", 1L:rank, sep = ""))
+      dimnames(group.means)[[2L]] <- colnames(x)
+    }
+    cl <- match.call()
+    cl[[1L]] <- as.name("gipslda")
+    structure(list(prior = prior, counts = counts, means = group.means,
+                 scaling = scaling, lev = lev, svd = X.s$d[1L:rank],
+                 N = n, call = cl),
+            class = "gipslda")
+}
 
 
 predict.gipslda <- function(object, newdata, prior = object$prior, dimen,

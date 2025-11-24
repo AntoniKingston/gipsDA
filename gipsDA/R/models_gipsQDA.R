@@ -71,7 +71,7 @@ gipsqda.matrix <- function(x, grouping, ..., subset, na.action)
 }
 
 gipsqda.default <-
-  function(x, grouping, prior = proportions, nu = 5, MAP = TRUE,  ...)
+  function(x, grouping, prior = proportions, nu = 5, MAP = TRUE, optimizer = NULL, max_iter = NULL, ...)
 {
     if(is.null(dim(x))) stop("'x' is not a matrix")
     x <- as.matrix(x)
@@ -92,6 +92,21 @@ gipsqda.default <-
     if(any(prior < 0) || round(sum(prior), 5) != 1) stop("invalid 'prior'")
     if(length(prior) != ng) stop("'prior' is of incorrect length")
     names(prior) <- lev
+
+    if(is.null(optimizer)) {
+      if (p < 10) {
+          optimizer = "BF"
+      }
+      else {
+          optimizer = "MH"
+      }
+    }
+    if (optimizer == "MH" & is.null(max_iter)) {
+        max_iter <- 100
+        warning("MH optimizer set but 'max_iter' argument is unspecified \n
+        Setting max_iter = 100 by default")
+    }
+
 # means by group (rows) and variable (columns)
     group.means <- tapply(x, list(rep(g, ncol(x)), col(x)), mean)
     scaling <- array(dim=c(p,p,ng))
@@ -99,7 +114,7 @@ gipsqda.default <-
 ####################################################################################
     for (i in 1L:ng){
         cX <- MASS::cov.mve(x[unclass(g) == i, ])
-        cov_proj <- project_cov(cX$cov, counts[i], MAP)
+        cov_proj <- project_cov(cX$cov, counts[i], MAP, optimizer, max_iter)
         group.means[i,] <- cX$center
         sX <- svd(cov_proj, nu=0)
         scaling[, , i] <- sX$v %*% diag(sqrt(1/sX$d),,p)
