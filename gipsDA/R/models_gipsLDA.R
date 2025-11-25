@@ -148,7 +148,9 @@ function(x, grouping, prior = proportions, tol = 1.0e-4,
     }
 
     #project covariance using gips
-    cov_proj <- project_cov(cov_adj, n, MAP, optimizer, max_iter)
+    pr_cov_opt_info <- project_covs(list(cov_adj), n, MAP, optimizer, max_iter)
+    cov_proj <- pr_cov_opt_info$covs[[1]]
+    optimization_info <- pr_cov_opt_info$opt_info
     ####################################################################################
     sX <- svd(cov_proj, nu = 0L)
     rank <- sum(sX$d > tol^2)
@@ -174,7 +176,7 @@ function(x, grouping, prior = proportions, tol = 1.0e-4,
     cl[[1L]] <- as.name("gipslda")
     structure(list(prior = prior, counts = counts, means = group.means,
                  scaling = scaling, lev = lev, svd = X.s$d[1L:rank],
-                 N = n, call = cl),
+                 N = n, optimization_info = optimization_info, call = cl),
             class = "gipslda")
 }
 
@@ -278,6 +280,8 @@ print.gipslda <- function(x, ...)
         cat("\nProportion of trace:\n")
         print(round(svd^2/sum(svd^2), 4L), ...)
     }
+    cat("\nPermutations with their estimated probabilities:\n")
+    print(x$optimization_info)
     invisible(x)
 }
 

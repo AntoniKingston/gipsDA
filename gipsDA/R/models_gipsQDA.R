@@ -114,7 +114,9 @@ gipsqda.default <-
 ####################################################################################
     for (i in 1L:ng){
         cX <- MASS::cov.mve(x[unclass(g) == i, ])
-        cov_proj <- project_cov(cX$cov, counts[i], MAP, optimizer, max_iter)
+        pr_cov_opt_info <- project_covs(list(cX$cov), n, MAP, optimizer, max_iter)
+        cov_proj <- pr_cov_opt_info$covs[[1]]
+        optimization_info <- pr_cov_opt_info$opt_info
         group.means[i,] <- cX$center
         sX <- svd(cov_proj, nu=0)
         scaling[, , i] <- sX$v %*% diag(sqrt(1/sX$d),,p)
@@ -131,7 +133,7 @@ gipsqda.default <-
     cl <- match.call()
     cl[[1L]] <- as.name("gipsqda")
     res <- list(prior = prior, counts = counts, means = group.means,
-                scaling = scaling, ldet = ldet, lev = lev, N = n, call = cl)
+                scaling = scaling, ldet = ldet, lev = lev, N = n, call = cl, optimization_info = optimization_info)
     class(res) <- "gipsqda"
     res
 }
@@ -266,6 +268,8 @@ print.gipsqda <- function(x, ...)
     print(x$prior, ...)
     cat("\nGroup means:\n")
     print(x$means, ...)
+    cat("\nPermutations with their estimated probabilities:\n")
+    print(x$optimization_info)
     invisible(x)
 }
 model.frame.gipsqda <-  model.frame.gipslda

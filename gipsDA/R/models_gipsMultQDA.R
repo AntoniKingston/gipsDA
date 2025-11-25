@@ -104,7 +104,9 @@ gipsmultqda.default <-
         cXs[[i]] <- cX$cov
         group.means[i,] <- cX$center
     }
-    cXs <- project_covs(cXs, counts, MAP, optimizer, max_iter)
+    pr_cov_opt_info <- project_covs(cXs, counts, MAP, optimizer, max_iter)
+    cov_proj <- pr_cov_opt_info$covs
+    optimization_info <- pr_cov_opt_info$opt_info
     for (i in 1L:ng) {
       cov_proj <- cXs[[i]]
       sX <- svd(cov_proj, nu=0)
@@ -121,7 +123,7 @@ gipsmultqda.default <-
     cl <- match.call()
     cl[[1L]] <- as.name("gipsmultqda")
     res <- list(prior = prior, counts = counts, means = group.means,
-                scaling = scaling, ldet = ldet, lev = lev, N = n, call = cl)
+                scaling = scaling, ldet = ldet, lev = lev, N = n, call = cl, optimization_info = optimization_info)
     class(res) <- "gipsmultqda"
     res
 }
@@ -256,6 +258,8 @@ print.gipsmultqda <- function(x, ...)
     print(x$prior, ...)
     cat("\nGroup means:\n")
     print(x$means, ...)
+    cat("\nPermutations with their estimated probabilities:\n")
+    print(x$optimization_info)
     invisible(x)
 }
 
