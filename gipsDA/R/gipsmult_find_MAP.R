@@ -148,7 +148,7 @@ find_MAP <- function(g, max_iter = NA, optimizer = NA,
     start_perm <- g[[1]]
   }
   delta <- attr(g, "delta")
-  D_matrix <- attr(g, "D_matrix")
+  D_matrices <- attr(g, "D_matrices")
   was_mean_estimated <- attr(g, "was_mean_estimated")
 
   if (was_mean_estimated) { # one degree of freedom is lost; we will return this 1 to numbers_of_observations after optimization in `combine_gips()`
@@ -163,7 +163,7 @@ find_MAP <- function(g, max_iter = NA, optimizer = NA,
     gips_optimized <- Metropolis_Hastings_optimizer(
       Ss = Ss, numbers_of_observations = edited_numbers_of_observations,
       max_iter = max_iter, start_perm = start_perm,
-      delta = delta, D_matrix = D_matrix,
+      delta = delta, D_matrices = D_matrices,
       return_probabilities = return_probabilities,
       save_all_perms = save_all_perms,
       show_progress_bar = show_progress_bar
@@ -172,14 +172,14 @@ find_MAP <- function(g, max_iter = NA, optimizer = NA,
     gips_optimized <- hill_climbing_optimizer(
       Ss = Ss, numbers_of_observations = edited_numbers_of_observations,
       max_iter = max_iter, start_perm = start_perm,
-      delta = delta, D_matrix = D_matrix,
+      delta = delta, D_matrices = D_matrices,
       save_all_perms = save_all_perms,
       show_progress_bar = show_progress_bar
     )
   } else if (optimizer %in% c("BF", "brute_force", "full")) {
     gips_optimized <- brute_force_optimizer(
       Ss = Ss, numbers_of_observations = edited_numbers_of_observations,
-      delta = delta, D_matrix = D_matrix,
+      delta = delta, D_matrices = D_matrices,
       return_probabilities = return_probabilities,
       save_all_perms = save_all_perms,
       show_progress_bar = show_progress_bar
@@ -214,7 +214,7 @@ find_MAP <- function(g, max_iter = NA, optimizer = NA,
 
 Metropolis_Hastings_optimizer <- function(Ss,
     numbers_of_observations, max_iter, start_perm = NULL,
-    delta = 3, D_matrix = NULL, return_probabilities = FALSE,
+    delta = 3, D_matrices = NULL, return_probabilities = FALSE,
     save_all_perms = FALSE, show_progress_bar = TRUE) {
   if (is.null(start_perm)) {
     start_perm <- permutations::id
@@ -223,7 +223,7 @@ Metropolis_Hastings_optimizer <- function(Ss,
   # check_correctness_of_arguments(
   #   Ss = Ss, numbers_of_observations = numbers_of_observations,
   #   max_iter = max_iter, start_perm = start_perm,
-  #   delta = delta, D_matrix = D_matrix, was_mean_estimated = FALSE,
+  #   delta = delta, D_matrices = D_matrices, was_mean_estimated = FALSE,
   #   return_probabilities = return_probabilities,
   #   save_all_perms = save_all_perms,
   #   show_progress_bar = show_progress_bar
@@ -244,14 +244,14 @@ Metropolis_Hastings_optimizer <- function(Ss,
   if (permutations::is.cycle(start_perm)) {
     start_perm <- gips::gips_perm(start_perm, perm_size)
   }
-  if (is.null(D_matrix)) {
-    D_matrix <- diag(nrow = perm_size)
+  if (is.null(D_matrices)) {
+    D_matrices <- list(rep(diag(nrow = perm_size), length(numbers_of_observations)))
   }
 
   my_goal_function <- function(perm, i) {
     out_val <- log_posteriori_of_perm(perm, # We recommend to use the `log_posteriori_of_gips()` function. If You really want to use `log_posteriori_of_perm()`, remember to edit `numbers_of_observations` if the mean was estimated!
       Ss = Ss, numbers_of_observations = numbers_of_observations,
-      delta = delta, D_matrix = D_matrix
+      delta = delta, D_matrices = D_matrices
     )
 
     if (is.nan(out_val) || is.infinite(out_val)) {
@@ -259,7 +259,7 @@ Metropolis_Hastings_optimizer <- function(Ss,
       rlang::abort(c(
         "gips is yet unable to process this S matrix, and produced a NaN or Inf value while trying.",
         "x" = paste0("The posteriori value of ", ifelse(is.nan(out_val), "NaN", "Inf"), " occured!"),
-        "i" = "We think it can only happen for ncol(S) > 500 or for huge D_matrix. If it is not the case for You, please get in touch with us on ISSUE#5.",
+        "i" = "We think it can only happen for ncol(S) > 500 or for huge D_matrices. If it is not the case for You, please get in touch with us on ISSUE#5.",
         "x" = paste0("The Metropolis Hastings algorithm was stopped after ", i, " iterations.")
       ))
     }
@@ -357,7 +357,7 @@ Metropolis_Hastings_optimizer <- function(Ss,
 
   new_gipsmult(
     list(found_perm), Ss, numbers_of_observations,
-    delta, D_matrix,
+    delta, D_matrices,
     was_mean_estimated = FALSE, optimization_info
   ) # was_mean_estimated will be changed in the `find_MAP` function
 }
@@ -365,7 +365,7 @@ Metropolis_Hastings_optimizer <- function(Ss,
 
 hill_climbing_optimizer <- function(Ss,
     numbers_of_observations, max_iter = 5,
-    start_perm = NULL, delta = 3, D_matrix = NULL,
+    start_perm = NULL, delta = 3, D_matrices = NULL,
     save_all_perms = FALSE, show_progress_bar = TRUE) {
   if (is.null(start_perm)) {
     start_perm <- permutations::id
@@ -374,7 +374,7 @@ hill_climbing_optimizer <- function(Ss,
   # check_correctness_of_arguments(
   #   Ss = Ss, numbers_of_observations = numbers_of_observations,
   #   max_iter = max_iter, start_perm = start_perm,
-  #   delta = delta, D_matrix = D_matrix, was_mean_estimated = FALSE,
+  #   delta = delta, D_matrices = D_matrices, was_mean_estimated = FALSE,
   #   return_probabilities = FALSE, save_all_perms = save_all_perms,
   #   show_progress_bar = show_progress_bar
   # )
@@ -398,15 +398,15 @@ hill_climbing_optimizer <- function(Ss,
 
   perm_size <- dim(Ss[[1]])[1]
 
-  if (is.null(D_matrix)) {
-    D_matrix <- diag(nrow = perm_size)
+  if (is.null(D_matrices)) {
+    D_matrices <- list(rep(diag(nrow = perm_size), length(numbers_of_observations)))
   }
 
 
   my_goal_function <- function(perm, i) {
     out_val <- log_posteriori_of_perm(perm, # We recommend to use the `log_posteriori_of_gips()` function. If You really want to use `log_posteriori_of_perm`, remember to edit `numbers_of_observations` if the mean was estimated!
       Ss = Ss, numbers_of_observations = numbers_of_observations,
-      delta = delta, D_matrix = D_matrix
+      delta = delta, D_matrices = D_matrices
     )
 
     if (is.nan(out_val) || is.infinite(out_val)) {
@@ -414,7 +414,7 @@ hill_climbing_optimizer <- function(Ss,
       rlang::abort(c(
         "gips is yet unable to process this S matrix, and produced a NaN or Inf value while trying.",
         "x" = paste0("The posteriori value of ", ifelse(is.nan(out_val), "NaN", "Inf"), " occured!"),
-        "i" = "We think it can only happen for ncol(S) > 500 or for D_matrix with huge values. If it is not the case for You, please get in touch with us on ISSUE#5.",
+        "i" = "We think it can only happen for ncol(S) > 500 or for D_matrices with huge values. If it is not the case for You, please get in touch with us on ISSUE#5.",
         "x" = paste0("The Hill Climbing algorithm was stopped after ", i, " iterations.")
       ))
     }
@@ -513,7 +513,7 @@ hill_climbing_optimizer <- function(Ss,
 
   new_gipsmult(
     list(last_perm), Ss, numbers_of_observations,
-    delta, D_matrix,
+    delta, D_matrices,
     was_mean_estimated = FALSE, optimization_info
   ) # was_mean_estimated will be changed in the `find_MAP` function
 }
@@ -522,13 +522,13 @@ hill_climbing_optimizer <- function(Ss,
 brute_force_optimizer <- function(
     Ss,
     numbers_of_observations,
-    delta = 3, D_matrix = NULL,
+    delta = 3, D_matrices = NULL,
     return_probabilities = return_probabilities,
     save_all_perms = FALSE, show_progress_bar = TRUE) {
   # check_correctness_of_arguments(
   #   Ss = Ss, numbers_of_observations = numbers_of_observations,
   #   max_iter = 5, start_perm = permutations::id, # max_iter, was_mean_estimated and start_perm are not important for optimization with brute_force
-  #   delta = delta, D_matrix = D_matrix, was_mean_estimated = FALSE,
+  #   delta = delta, D_matrices = D_matrices, was_mean_estimated = FALSE,
   #   return_probabilities = return_probabilities, save_all_perms = save_all_perms,
   #   show_progress_bar = show_progress_bar
   # )
@@ -571,14 +571,14 @@ brute_force_optimizer <- function(
     progressBar <- utils::txtProgressBar(min = 0, max = iterations_to_perform, initial = 1)
   }
 
-  if (is.null(D_matrix)) {
-    D_matrix <- diag(nrow = perm_size)
+  if (is.null(D_matrices)) {
+    D_matrices <- list(rep(diag(nrow = perm_size), length(numbers_of_observations)))
   }
 
   my_goal_function <- function(perm, i) {
     out_val <- log_posteriori_of_perm(perm, # We recommend to use the `log_posteriori_of_gips()` function. If You really want to use `log_posteriori_of_perm`, remember to edit `numbers_of_observations` if the mean was estimated!
       Ss = Ss, numbers_of_observations = numbers_of_observations,
-      delta = delta, D_matrix = D_matrix
+      delta = delta, D_matrices = D_matrices
     )
 
     if (is.nan(out_val) || is.infinite(out_val)) {
@@ -586,7 +586,7 @@ brute_force_optimizer <- function(
       rlang::abort(c(
         "gips is yet unable to process this S matrix, and produced a NaN or Inf value while trying.",
         "x" = paste0("The posteriori value of ", ifelse(is.nan(out_val), "NaN", "Inf"), " occured!"),
-        "i" = "We think it can only happen for ncol(S) > 500 or for huge D_matrix. If it is not the case for You, please get in touch with us on ISSUE#5.",
+        "i" = "We think it can only happen for ncol(S) > 500 or for huge D_matrices. If it is not the case for You, please get in touch with us on ISSUE#5.",
         "x" = paste0("The Brute Force algorithm was stopped after ", i, " iterations.")
       ))
     }
@@ -649,7 +649,7 @@ brute_force_optimizer <- function(
 
   new_gipsmult(
     list(best_perm), Ss, numbers_of_observations,
-    delta, D_matrix,
+    delta, D_matrices,
     was_mean_estimated = FALSE, optimization_info
   ) # was_mean_estimated will be changed in the `find_MAP` function
 }

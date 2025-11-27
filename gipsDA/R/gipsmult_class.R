@@ -1,6 +1,6 @@
 
 
-gipsmult <- function(Ss, numbers_of_observations, delta = 3, D_matrix = NULL,
+gipsmult <- function(Ss, numbers_of_observations, delta = 3, D_matrices = NULL,
                      was_mean_estimated = TRUE, perm = "") {
   if (inherits(perm, "gips")) {
       gips::validate_gips(perm)
@@ -16,14 +16,15 @@ gipsmult <- function(Ss, numbers_of_observations, delta = 3, D_matrix = NULL,
   }
 
 
-  if (is.null(D_matrix)) {
-    D_matrix <- diag(x = mean(diag(Ss[[1]])), nrow = ncol(Ss[[1]]))
+  if (is.null(D_matrices)) {
+    D_matrices <- lapply(Ss, function(y) diag(x = mean(diag(y)), nrow = ncol(y)))
+
   }
 
   new_gipsmult(
     list(gips_perm_object),
     Ss, numbers_of_observations, delta = delta,
-    D_matrix = D_matrix,
+    D_matrices = D_matrices,
     was_mean_estimated = was_mean_estimated,
     optimization_info = NULL
   )
@@ -31,14 +32,42 @@ gipsmult <- function(Ss, numbers_of_observations, delta = 3, D_matrix = NULL,
 
 }
 
+list_of_matrices_check <- function(x) {
+  if(!is.list(x)) {
+    return(FALSE)
+  }
+  if (!is.matrix(x[[1]])) {
+    return(FALSE)
+  }
+  shap <- dim(x[[1]])
+  for(y in x[-1]) {
+    if(!is.matrix(y) | !all(dim(y) == shap)) {
+      return(FALSE)
+    }
+  }
+  return(TRUE)
+}
+
+SDN_compatibility_check <- function(Ss, D_matrices, numbers_of_observations) {
+  n <- length(numbers_of_observations)
+  if (length(Ss) != n | length(D_matrices) != n) {
+    return(FALSE)
+  }
+  if(!all(dim(D_matrices[[1]]) == dim(Ss[[1]]))) {
+    return(FALSE)
+  }
+  return(TRUE)
+}
+
 new_gipsmult <- function(list_of_gips_perm, Ss, numbers_of_observations,
-                     delta, D_matrix, was_mean_estimated, optimization_info) {
+                     delta, D_matrices, was_mean_estimated, optimization_info) {
   if (!is.list(list_of_gips_perm) ||
     !inherits(list_of_gips_perm[[1]], "gips_perm") ||
-    !is.list(Ss) ||
+    !list_of_matrices_check(Ss) ||
+    !list_of_matrices_check(D_matrices) ||
     !is.numeric(numbers_of_observations) ||
+    !SDN_compatibility_check(Ss, D_matrices, numbers_of_observations) ||
     !is.numeric(delta) ||
-    !is.matrix(D_matrix) ||
     !is.logical(was_mean_estimated) ||
     !(is.null(optimization_info) || is.list(optimization_info))) {
     rlang::abort(c("x" = "`gipsmult` object cannot be created from those arguments."))
@@ -49,7 +78,7 @@ new_gipsmult <- function(list_of_gips_perm, Ss, numbers_of_observations,
             Ss = Ss,
             numbers_of_observations = numbers_of_observations,
             delta = delta,
-            D_matrix = D_matrix,
+            D_matrices = D_matrices,
             was_mean_estimated = was_mean_estimated,
             optimization_info = optimization_info,
             class = c("gipsmult")
@@ -90,7 +119,7 @@ validate_gipsmult <- function(g) {
   Ss <- attr(g, "Ss")
   numbers_of_observations <- attr(g, "numbers_of_observations")
   delta <- attr(g, "delta")
-  D_matrix <- attr(g, "D_matrix")
+  D_matrices <- attr(g, "D_matrices")
   was_mean_estimated <- attr(g, "was_mean_estimated")
   optimization_info <- attr(g, "optimization_info")
 
@@ -122,7 +151,7 @@ validate_gipsmult <- function(g) {
   check_correctness_of_arguments( # max_iter, return_probabilities and show_progress_bar are to be checked here, but some value has to be passed
     Ss = Ss, numbers_of_observations = numbers_of_observations,
     max_iter = 2, start_perm = perm,
-    delta = delta, D_matrix = D_matrix, was_mean_estimated = was_mean_estimated,
+    delta = delta, D_matrices = D_matrices, was_mean_estimated = was_mean_estimated,
     return_probabilities = FALSE, save_all_perms = TRUE, show_progress_bar = FALSE
   )
 
@@ -255,7 +284,7 @@ validate_gipsmult <- function(g) {
 
             # optimization_info[["last_perm"]] is proper gips_perm object
             last_perm_gips <- gipsmult(Ss, numbers_of_observations,
-              delta = delta, D_matrix = D_matrix,
+              delta = delta, D_matrices = D_matrices,
               was_mean_estimated = was_mean_estimated,
               perm = optimization_info[["last_perm"]]
             )
@@ -266,7 +295,7 @@ validate_gipsmult <- function(g) {
                 "x" = paste0(
                   "You have `attr(g, 'optimization_info')[['last_perm_log_posteriori']] == ",
                   optimization_info[["last_perm_log_posteriori"]],
-                  "`, but `log_posteriori_of_gips(gips(attr(g, 'Ss'), attr(g, 'numbers_of_observations'), delta=attr(g, 'delta'), D_matrix=attr(g, 'D_matrix'), was_mean_estimated=attr(g, 'was_mean_estimated'), perm=attr(g, 'optimization_info')[['last_perm']])) == ",
+                  "`, but `log_posteriori_of_gips(gips(attr(g, 'Ss'), attr(g, 'numbers_of_observations'), delta=attr(g, 'delta'), D_matrices=attr(g, 'D_matrices'), was_mean_estimated=attr(g, 'was_mean_estimated'), perm=attr(g, 'optimization_info')[['last_perm']])) == ",
                   log_posteriori_of_gipsmult(last_perm_gips), "`."
                 )
               )
@@ -430,14 +459,14 @@ validate_gipsmult <- function(g) {
         )
       )
     }
-    best_perm_gips <- gipsmult(Ss, numbers_of_observations, delta = delta, D_matrix = D_matrix, was_mean_estimated = was_mean_estimated, perm = perm) # this perm is g[[1]]
+    best_perm_gips <- gipsmult(Ss, numbers_of_observations, delta = delta, D_matrices = D_matrices, was_mean_estimated = was_mean_estimated, perm = perm) # this perm is g[[1]]
     if (!(abs(optimization_info[["best_perm_log_posteriori"]] - log_posteriori_of_gipsmult(best_perm_gips)) < 0.00000001)) {
       abort_text <- c(abort_text,
         "i" = "`attr(g, 'optimization_info')[['best_perm_log_posteriori']]` must be the log_posteriori of the base object, `g[[1]]`.",
         "x" = paste0(
           "You have `attr(g, 'optimization_info')[['best_perm_log_posteriori']] == ",
           optimization_info[["best_perm_log_posteriori"]],
-          "`, but `log_posteriori_of_gips(gips(attr(g, 'Ss'), attr(g, 'numbers_of_observations'), delta=attr(g, 'delta'), D_matrix=attr(g, 'D_matrix'), was_mean_estimated=attr(g, 'was_mean_estimated'), perm=g[[1]])) == ",
+          "`, but `log_posteriori_of_gips(gips(attr(g, 'Ss'), attr(g, 'numbers_of_observations'), delta=attr(g, 'delta'), D_matrices=attr(g, 'D_matrices'), was_mean_estimated=attr(g, 'was_mean_estimated'), perm=g[[1]])) == ",
           log_posteriori_of_gipsmult(best_perm_gips), "`."
         )
       )
@@ -531,7 +560,7 @@ validate_gipsmult <- function(g) {
 }
 
 check_correctness_of_arguments <- function(Ss, numbers_of_observations, max_iter,
-                                           start_perm, delta, D_matrix, was_mean_estimated,
+                                           start_perm, delta, D_matrices, was_mean_estimated,
                                            return_probabilities, save_all_perms, show_progress_bar) {
   if (!is.list(Ss)) {
     rlang::abort(c("There was a problem identified with provided argument:",
@@ -563,6 +592,10 @@ check_correctness_of_arguments <- function(Ss, numbers_of_observations, max_iter
       )
     ))
   }
+  if(!exists('abort_text')){
+    abort_text <- character(0)
+  }
+  additional_info <- 0
   for (i in numbers_of_observations){
     noo_check(i)
   }
@@ -608,41 +641,43 @@ check_correctness_of_arguments <- function(Ss, numbers_of_observations, max_iter
       "x" = paste0("You provided `delta == ", delta, "`.")
     )
   }
-  if (!(is.null(D_matrix) || is.matrix(D_matrix))) {
+  if (!(is.null(D_matrices) || is.list(D_matrices))) {
     abort_text <- c(abort_text,
-      "i" = "`D_matrix` must either be `NULL` or a matrix.",
+      "i" = "`D_matrices` must either be `NULL` or a list.",
       "x" = paste0(
-        "You provided `D_matrix` with type ",
-        typeof(D_matrix), "."
+        "You provided `D_matrices` with type ",
+        typeof(D_matrices), "."
       )
     )
-  } else if (!(is.null(D_matrix) || ncol(D_matrix) == nrow(D_matrix))) {
+  } else if (!(is.null(D_matrices) || all(vapply(D_matrices, function(x) is.matrix(x), logical(1))))) {
     abort_text <- c(abort_text,
-      "i" = "`D_matrix` must either be `NULL` or a square matrix.",
-      "x" = paste0(
-        "You provided `D_matrix` as a matrix, but with different sizes: ",
-        ncol(D_matrix), " and ", nrow(D_matrix), "."
-      )
+      "i" = "`D_matrices` must either be `NULL` or a list of square matrices with equal dimensions.",
+      "x" = "You provided `D_matrices` as a list, but not all its elements are matrices"
     )
-  } else if (!(is.null(D_matrix) || ncol(Ss[[1]]) == ncol(D_matrix))) {
+  } else if (!(is.null(D_matrices) || all(vapply(D_matrices, function (x) ncol(x) == nrow(x), logical(1))))) {
     abort_text <- c(abort_text,
-      "i" = "`Ss` must be a list of square matrices with the same shape as a square matrix `D_matrix`.",
-      "x" = paste0(
-        "You provided `Ss` with shape ",
-        ncol(Ss[[1]]), " and ", nrow(Ss[[1]]),
-        ", but also `D_matrix` with shape ",
-        ncol(D_matrix), " and ", nrow(D_matrix), "."
-      )
+      "i" = "`D_matrices` must either be `NULL` or a list of square matrices with equal dimensions.",
+      "x" = "You provided `D_matrices` as a list of matrices, but there are some that are not square"
     )
-  } else if (any(is.nan(D_matrix))) {
+  } else if (!(is.null(D_matrices) || all(vapply(D_matrices[-1], function (x) ncol(x) == ncol(D_matrices[[1]]), logical(1))))) {
     abort_text <- c(abort_text,
-      "i" = "`D_matrix` must not contain any `NaN`s.",
-      "x" = "You provided `D_matrix` with `NaN`s!"
+      "i" = "`D_matrices` must either be `NULL` or a list of square matrices with equal dimensions.",
+      "x" = "You provided `D_matrices` as a list of matrices, but they don't have equal dimensions"
     )
-  } else if (any(is.infinite(D_matrix))) {
+  } else if (!(is.null(D_matrices) || all(vapply(Ss, function (x) ncol(x) == ncol(D_matrices[[1]]), logical(1))))) {
     abort_text <- c(abort_text,
-      "i" = "`D_matrix` must not contain any infinite values.",
-      "x" = "You provided `D_matrix` with infinite values!"
+      "i" = "`Ss` must be a list of square matrices with the same shape as  `D_matrices`.",
+      "x" = "There is a mismatch between dimensions of Ss and D_matrices"
+    )
+  } else if (any(vapply(D_matrices, function(m) any(is.nan(m)), logical(1)))) {
+    abort_text <- c(abort_text,
+      "i" = "`D_matrices` must not contain any `NaN`s.",
+      "x" = "You provided `D_matrices` with `NaN`s!"
+    )
+  } else if (any(vapply(D_matrices, function(m) any(is.infinite(m)), logical(1)))) {
+    abort_text <- c(abort_text,
+      "i" = "`D_matrices` must not contain any infinite values.",
+      "x" = "You provided `D_matrices` with infinite values!"
     )
   }
   if (!is.logical(was_mean_estimated)) {
@@ -700,9 +735,6 @@ check_correctness_of_arguments <- function(Ss, numbers_of_observations, max_iter
       "i" = "`show_progress_bar` must be a logic value (`TRUE` or `FALSE`).",
       "x" = "You provided `show_progress_bar` as an `NA`."
     )
-  }
-  if(!exists('abort_text')){
-    abort_text <- character(0)
   }
   if (length(abort_text) > 0) {
     abort_text <- c(
@@ -821,7 +853,7 @@ print.gipsmult <- function(x, digits = 3, compare_to_original = TRUE,
       # See ISSUE#5; We hope the implementation of log calculations have stopped this problem.
       rlang::warn(c("gips is yet unable to process this S matrix, and produced a NaN or Inf value while trying.",
         "x" = paste0("The posteriori value of ", ifelse(is.nan(log_posteriori), "NaN", "Inf"), " occured!"),
-        "i" = "We think it can only happen for ncol(S) > 500 or for huge D_matrix. If it is not the case for You, please get in touch with us on ISSUE#5."
+        "i" = "We think it can only happen for ncol(S) > 500 or for huge D_matrices. If it is not the case for You, please get in touch with us on ISSUE#5."
       ))
     }
 
@@ -829,7 +861,7 @@ print.gipsmult <- function(x, digits = 3, compare_to_original = TRUE,
       x_id <- gipsmult(
         Ss = attr(x, "Ss"),
         numbers_of_observations = attr(x, "numbers_of_observations"),
-        delta = attr(x, "delta"), D_matrix = attr(x, "D_matrix"),
+        delta = attr(x, "delta"), D_matrices = attr(x, "D_matrices"),
         was_mean_estimated = attr(x, "was_mean_estimated"), perm = ""
       )
       log_posteriori_id <- log_posteriori_of_gipsmult(x_id)
@@ -847,7 +879,7 @@ print.gipsmult <- function(x, digits = 3, compare_to_original = TRUE,
     x_original <- gipsmult(
       Ss = attr(x, "Ss"),
       numbers_of_observations = attr(x, "numbers_of_observations"),
-      delta = attr(x, "delta"), D_matrix = attr(x, "D_matrix"),
+      delta = attr(x, "delta"), D_matrices = attr(x, "D_matrices"),
       was_mean_estimated = attr(x, "was_mean_estimated"), perm = attr(x, "optimization_info")[["original_perm"]]
     )
     log_posteriori_original <- log_posteriori_of_gipsmult(x_original)
@@ -856,7 +888,7 @@ print.gipsmult <- function(x, digits = 3, compare_to_original = TRUE,
       # See ISSUE#5; We hope the implementation of log calculations have stopped this problem.
       rlang::warn(c("gips is yet unable to process this S matrix, and produced a NaN or Inf value while trying.",
         "x" = paste0("The posteriori value of ", ifelse(is.nan(log_posteriori), "NaN", "Inf"), " occured!"),
-        "i" = "We think it can only happen for ncol(S) > 500 or for huge D_matrix. If it is not the case for You, please get in touch with us on ISSUE#5."
+        "i" = "We think it can only happen for ncol(S) > 500 or for huge D_matrices. If it is not the case for You, please get in touch with us on ISSUE#5."
       ))
     }
 
