@@ -25,7 +25,14 @@ project_covs <- function(emp_covs, ns_obs, MAP = TRUE, optimizer, max_iter, tol 
     }
     gg <- find_MAP(gg, optimizer = optimizer, max_iter = max_iter, return_probabilities = TRUE, save_all_perms = TRUE)
     probs <- get_probabilities_from_gipsmult(gg)
-    probs <- probs[probs > tol]
+    if (all(probs <= tol)) {
+        warning("There are no perms with estimated probability above threshold, projecting onto MAP")
+        probs <- probs[1]
+    }
+    else {
+        probs <- probs[probs > tol]
+    }
+
 
     return(list(covs = lapply(emp_covs, function(x) project_matrix_multiperm(x, probs)), opt_info = probs))
 }
@@ -38,6 +45,6 @@ project_matrix_multiperm <- function(emp_cov, probs) {
     for (i in 1:length(probs)) {
         projected_matrix <- projected_matrix + probs[[i]] * gips::project_matrix(emp_cov, perms[i])
     }
-    return(projected_matrix)
+    return(projected_matrix / sum(probs))
 }
 
