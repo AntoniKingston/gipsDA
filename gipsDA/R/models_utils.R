@@ -48,3 +48,109 @@ project_matrix_multiperm <- function(emp_cov, probs) {
     return(projected_matrix / sum(probs))
 }
 
+
+
+serialize_for_json <- function(x) {
+  # Handle gips_perm
+  if (inherits(x, "gips_perm")) {
+    return(list(
+      `__type` = "gips_perm",
+      value = as.character(x),
+      size = recursive_length(x)# you said this is safe
+    ))
+  }
+
+  # Handle calls/language objects
+  if (typeof(x) == "language") {
+    return(list(
+      `__type` = "call",
+      value = paste(deparse(x), collapse = " ")
+    ))
+  }
+
+  # Handle formulas
+  if (inherits(x, "formula") || inherits(x, "terms")) {
+    return(list(
+      `__type` = "formula",
+      value = paste(deparse(x), collapse = " ")
+    ))
+  }
+
+  # Handle matrices explicitly
+  if (is.matrix(x)) {
+    return(list(
+      `__type` = "matrix",
+      data = as.vector(x),
+      nrow = nrow(x),
+      ncol = ncol(x)
+    ))
+  }
+
+  # Recurse into lists
+  if (is.list(x)) {
+    return(lapply(x, serialize_for_json))
+  }
+
+  # Base case
+  x
+}
+deserialize_from_json <- function(x) {
+  # Detect encoded objects
+  if (is.list(x) && !is.null(x$`__type`)) {
+    type <- x$`__type`
+
+    if (type == "gips_perm") {
+      return(gips::gips_perm(x$value, x$size))
+    }
+
+    if (type == "call") {
+      return(str2lang(x$value))
+    }
+
+    if (type == "formula") {
+      return(as.formula(x$value))
+    }
+
+    if (type == "matrix") {
+      return(matrix(x$data, nrow = x$nrow, ncol = x$ncol))
+    }
+  }
+
+  # Recurse through plain lists
+  if (is.list(x)) {
+    return(lapply(x, deserialize_from_json))
+  }
+
+  # Base case
+  x
+}
+
+gipsDA_to_json <- function(obj, file) {
+  jsonlite::write_json(
+    serialize_for_json(obj),
+    file,
+    pretty = TRUE,
+    auto_unbox = TRUE
+  )
+}
+
+gipsDA_from_json <- function(file, classname) {
+  raw <- jsonlite::read_json(file)
+  obj <- deserialize_from_json(raw)
+  class(obj) <- classname
+  obj
+}
+
+recursive_length <- function(x) {
+  if (is.atomic(x)) {
+    return(length(x))
+  }
+  if (is.list(x)) {
+    return(sum(vapply(x, recursive_length, integer(1))))
+  }
+  return(0)
+}
+
+
+
+
