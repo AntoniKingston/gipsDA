@@ -33,7 +33,6 @@ plot_matrix_columns <- function(mat,
 }
 
 
-results <- as.matrix(read.csv("tests/gipsmult/test_csv/m-50_dim-5_opt-BF_iter-100_perm-1325.csv"))
 
 colnames(results)[1] <- "number of observations"
 

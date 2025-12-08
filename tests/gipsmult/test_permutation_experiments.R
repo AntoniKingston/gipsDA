@@ -5,11 +5,6 @@ correct_perm_pro <- function(counts, correct_perm, tot) {
   return(counts[[correct_perm]]/tot)
 }
 
-mat_gen <- function(m, nu, V) {
-  Ss <- rWishart(m, nu, V) / nu
-  Ss <- lapply(seq_len(dim(Ss)[3]), function(i) Ss[,,i])
-  Ss
-}
 
 avg_list_of_mat <- function(Ss) {
   suma <- Ss[[1]]
@@ -19,36 +14,7 @@ avg_list_of_mat <- function(Ss) {
   suma / length(Ss)
 }
 
-single_experiment <- function(n, m, nu, V, optimizer, max_iter, perm) {
-  # Generowanie danych jest teraz losowe dla każdego wywołania, co jest poprawne
-  Sss <- replicate(n = n, expr = mat_gen(m, nu, V), simplify = FALSE)
-  perms <- list()
-  perms_gips <- list()
-  perms_ggips <- list()
 
-  for (i in 1:n) {
-    Ss <- Sss[[i]]
-    g <- gipsmult:::gipsmult(Ss, nu, was_mean_estimated = FALSE)
-    gg <- gips::gips(Ss[[1]], nu, was_mean_estimated = FALSE)
-    ggg <- gips::gips(avg_list_of_mat(Ss), nu*m, was_mean_estimated = FALSE)
-
-    g_map <- gipsmult:::find_MAP(g, optimizer = optimizer, max_iter = max_iter, show_progress_bar = FALSE)
-    gg_map <- gips::find_MAP(gg, optimizer = optimizer,  max_iter = max_iter, show_progress_bar = FALSE)
-    ggg_map <- gips::find_MAP(ggg, optimizer = optimizer, max_iter = max_iter, show_progress_bar = FALSE)
-
-    perms <- c(perms, as.character(g_map[[1]]))
-    perms_gips <- c(perms_gips, as.character(gg_map[[1]]))
-    perms_ggips <- c(perms_ggips, as.character(ggg_map[[1]]))
-  }
-
-  counts <- sort(table(unlist(perms)), decreasing = TRUE)
-  counts_gips <- sort(table(unlist(perms_gips)), decreasing = TRUE)
-  counts_ggips <- sort(table(unlist(perms_ggips)), decreasing = TRUE)
-
-  return(c(gipsmult = correct_perm_pro(counts, perm, n),
-           gips_single = correct_perm_pro(counts_gips, perm, n),
-           gips_avg = correct_perm_pro(counts_ggips, perm, n)))
-}
 
 
 # ==============================================================================
@@ -181,3 +147,5 @@ message("\n--- Wszystkie eksperymenty zostały zlecone i zakończone! ---")
 
 # Zamknij procesy w tle po zakończeniu pracy (dobra praktyka)
 plan(sequential)
+
+lda(iris)
