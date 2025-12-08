@@ -7,6 +7,7 @@ S3method(gipslda, matrix)
 S3method(gipslda, data.frame)
 S3method(gipslda, formula)
 S3method(plot, gipslda)
+S3method(predict, gipslda)
 
 
 # gipsqda exports
@@ -15,6 +16,7 @@ S3method(gipsqda, default)
 S3method(gipsqda, matrix)
 S3method(gipsqda, data.frame)
 S3method(gipsqda, formula)
+S3method(predict, gipsqda)
 
 # gipsmultqda exports
 export(gipsmultqda)
@@ -22,3 +24,4 @@ S3method(gipsmultqda, default)
 S3method(gipsmultqda, matrix)
 S3method(gipsmultqda, data.frame)
 S3method(gipsmultqda, formula)
+S3method(predict, gipsmultqda)

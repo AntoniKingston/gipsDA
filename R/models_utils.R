@@ -56,7 +56,7 @@ serialize_for_json <- function(x) {
     return(list(
       `__type` = "gips_perm",
       value = as.character(x),
-      size = recursive_length(x)# you said this is safe
+      size = recursive_length(x)
     ))
   }
 
@@ -91,11 +91,9 @@ serialize_for_json <- function(x) {
     return(lapply(x, serialize_for_json))
   }
 
-  # Base case
   x
 }
 deserialize_from_json <- function(x) {
-  # Detect encoded objects
   if (is.list(x) && !is.null(x$`__type`)) {
     type <- x$`__type`
 
@@ -116,12 +114,10 @@ deserialize_from_json <- function(x) {
     }
   }
 
-  # Recurse through plain lists
   if (is.list(x)) {
     return(lapply(x, deserialize_from_json))
   }
 
-  # Base case
   x
 }
 
@@ -150,7 +146,4 @@ recursive_length <- function(x) {
   }
   return(0)
 }
-
-
-
 

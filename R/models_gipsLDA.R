@@ -174,6 +174,10 @@ function(x, grouping, prior = proportions, tol = 1.0e-4,
     }
     cl <- match.call()
     cl[[1L]] <- as.name("gipslda")
+    cl$weighted_avg <- NULL
+    cl$MAP <- NULL
+    cl$optimizer <- NULL
+    cl$max_iter <- NULL
     structure(list(prior = prior, counts = counts, means = group.means,
                  scaling = scaling, lev = lev, svd = X.s$d[1L:rank],
                  N = n, optimization_info = optimization_info, call = cl),
