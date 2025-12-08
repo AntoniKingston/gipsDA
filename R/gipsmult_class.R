@@ -869,7 +869,7 @@ print.gipsmult <- function(x, digits = 3, compare_to_original = TRUE,
       printing_text <- c(
         printing_text,
         paste0(
-          "is ", gips::convert_log_diff_to_str(log_posteriori - log_posteriori_id, digits),
+          "is ", gips:::convert_log_diff_to_str(log_posteriori - log_posteriori_id, digits),
           " times more likely than the () permutation"
         )
       )
