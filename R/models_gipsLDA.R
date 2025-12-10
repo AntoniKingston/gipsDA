@@ -134,7 +134,7 @@ function(x, grouping, prior = proportions, tol = 1.0e-4,
     cov_list <- tapply(
         1:nrow(x),
         g,
-        function(idx) cov( x[idx,, drop=FALSE] )
+        function(idx) cov(x[idx,, drop=FALSE])
     )
 
     # weighted pooled covariance: S = (1/n) * sum_g n_g * S_g
@@ -143,7 +143,7 @@ function(x, grouping, prior = proportions, tol = 1.0e-4,
 
     else {
       # adjust to "unbiased" scaling of covariance matrix
-      cov_raw <- MASS::cov.rob((x - group.means[g,  ]) %*% scaling, method = "classical")$cov
+      cov_raw <- cov((x - group.means[g,  ]) %*% scaling)
       cov_adj <- n/(n - ng) * cov_raw
     }
 

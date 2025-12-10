@@ -100,10 +100,16 @@ gipsmultqda.default <-
     cXs <- list()
 
     for (i in 1L:ng){
-        cX <- MASS::cov.mve(x[unclass(g) == i, ])
-        cXs[[i]] <- cX$cov
-        group.means[i,] <- cX$center
+        x_i <- (x[unclass(g) == i, ])
+        cXs[[i]] <- cov(x_i)
+        group.means[i,] <- colMeans(x_i)
     }
+
+    # for (i in 1L:ng){
+    #     cX <- MASS::cov.mve(x[unclass(g) == i, ])
+    #     cXs[[i]] <- cX$cov
+    #     group.means[i,] <- cX$center
+    # }
     pr_cov_opt_info <- project_covs(cXs, counts, MAP, optimizer, max_iter)
     cov_proj <- pr_cov_opt_info$covs
     optimization_info <- pr_cov_opt_info$opt_info

@@ -101,7 +101,7 @@ gipsqda.default <-
           optimizer = "MH"
       }
     }
-    if (optimizer == "MH" & is.null(max_iter)) {
+    if (optimizer == "MH" && is.null(max_iter)) {
         max_iter <- 100
         warning("MH optimizer set but 'max_iter' argument is unspecified \n
         Setting max_iter = 100 by default")
@@ -112,17 +112,30 @@ gipsqda.default <-
     scaling <- array(dim=c(p,p,ng))
     ldet <- numeric(ng)
 ####################################################################################
+
     for (i in 1L:ng){
-        cX <- MASS::cov.mve(x[unclass(g) == i, ])
-        pr_cov_opt_info <- project_covs(list(cX$cov), n, MAP, optimizer, max_iter)
+        x_i <- (x[unclass(g) == i, ])
+        pr_cov_opt_info <- project_covs(list(cov(x_i)), n, MAP, optimizer, max_iter)
         cov_proj <- pr_cov_opt_info$covs[[1]]
         optimization_info <- pr_cov_opt_info$opt_info
-        group.means[i,] <- cX$center
+        group.means[i,] <- colMeans(x_i)
         sX <- svd(cov_proj, nu=0)
         scaling[, , i] <- sX$v %*% diag(sqrt(1/sX$d),,p)
         ldet[i] <- sum(log(sX$d))
 
     }
+
+    # for (i in 1L:ng){
+    #     cX <- MASS::cov.mve(x[unclass(g) == i, ])
+    #     pr_cov_opt_info <- project_covs(list(cX$cov), n, MAP, optimizer, max_iter)
+    #     cov_proj <- pr_cov_opt_info$covs[[1]]
+    #     optimization_info <- pr_cov_opt_info$opt_info
+    #     group.means[i,] <- cX$center
+    #     sX <- svd(cov_proj, nu=0)
+    #     scaling[, , i] <- sX$v %*% diag(sqrt(1/sX$d),,p)
+    #     ldet[i] <- sum(log(sX$d))
+    #
+    # }
 ####################################################################################
     if(is.null(dimnames(x)))
         dimnames(scaling) <- list(NULL, as.character(1L:p), lev)
