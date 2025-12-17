@@ -1,2 +1,7 @@
 ^gipsDA\.Rproj$
 ^\.Rproj\.user$
+^\.idea$
+^\.git$
+.*\.md
+.gitignore
+

@@ -1,11 +1,24 @@
 Package: gipsDA
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
-Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Title: Training DA Models Utilizing gips
+Version: 0.1
+Authors@R:
+    person("Antoni", "Kingston", email = "qqtrol@gmail.com", role = c("aut", "cre"))
+    person("Norbert", "Frydrysiak", email =  "first.last@example.com", role = c("cre"))
+Description: Training LDA and QDA models with gips constraints on the covariance matrix.
+License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
+Imports:
+    gips,
+    dplyr,
+    ggplot2,
+    jsonlite,
+    lattice,
+    patchwork,
+    permutations,
+    rlang,
+    tibble,
+    tidyr
+
+
