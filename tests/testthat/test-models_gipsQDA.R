@@ -86,7 +86,7 @@ test_that("predict.gipsqda works correctly", {
   row_sums <- rowSums(pred$posterior)
 
   # expect_equal with a vector handles tolerance automatically
-  expect_equal(row_sums, rep(1, nrow(iris)), tolerance = 1e-6,
+  expect_equal(unname(row_sums), rep(1, nrow(iris)), tolerance = 1e-6,
                ignore_attr = TRUE)
 })
 

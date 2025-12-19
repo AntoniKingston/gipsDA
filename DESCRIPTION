@@ -20,5 +20,7 @@ Imports:
     rlang,
     tibble,
     tidyr
+Suggests:
+    testthat
 
 
