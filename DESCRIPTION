@@ -4,7 +4,13 @@ Version: 0.1
 Authors@R:
     person("Antoni", "Kingston", email = "qqtrol@gmail.com", role = c("aut", "cre"))
     person("Norbert", "Frydrysiak", email =  "first.last@example.com", role = c("cre"))
-Description: Training LDA and QDA models with gips constraints on the covariance matrix.
+Description: Extends classical linear and quadratic discriminant analysis by incorporating
+  permutation group symmetries into covariance matrix estimation. The package leverages
+  methodology from the ‘gips’ framework to identify and impose permutation structures
+  that act as a form of regularization, improving stability and interpretability in
+  settings with symmetric or exchangeable features. Several discriminant analysis variants
+  are provided, including pooled and class-specific covariance models, as well
+  as multi-class extensions with shared or independent symmetry structures.
 License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
