@@ -24,6 +24,11 @@ test_that("recursive_length calculates depth correctly", {
   nested <- list(a = 1, b = list(c = 2, d = 3), e = 4)
   expect_equal(recursive_length(nested), 4)
   expect_equal(recursive_length(list()), 0)
+
+  func <- function(x) {
+    x + 1
+  }
+  expect_equal(recursive_length(func), 0)
 })
 
 test_that("Serialization handles basic types (Matrix, Formula)", {
@@ -38,6 +43,44 @@ test_that("Serialization handles basic types (Matrix, Formula)", {
   expect_true(is.matrix(restored$mat))
   expect_equal(restored$mat, original_data$mat)
   expect_equal(format(restored$form), format(original_data$form))
+})
+
+test_that("serialize_for_json works with gips_perm class and formulas", {
+  fake_perm <- list(1L, 2L, 3L)
+  class(fake_perm) <- "gips_perm"
+
+  attr(fake_perm, "size") <- 3L
+
+  result <- serialize_for_json(fake_perm)
+
+  expect_equal(result$`__type`, "gips_perm")
+  expect_equal(result$size, 3)
+
+  fake_formula <- list("x", "y")
+  class(fake_formula) <- "formula"
+
+  result <- serialize_for_json(fake_formula)
+
+  expect_equal(result$`__type`, "formula")
+})
+
+test_that("deserialize_from_json works with gips_perm class and formulas", {
+  json_input_perm <- list(
+    `__type` = "gips_perm",
+    value = "(1)(2)",
+    size = 2L
+  )
+
+  real_perm_obj <- deserialize_from_json(json_input_perm)
+  expect_s3_class(real_perm_obj, "gips_perm")
+
+  json_input_form <- list(
+    `__type` = "formula",
+    value = "Species ~ ."
+  )
+
+  real_form_obj <- deserialize_from_json(json_input_form)
+  expect_s3_class(real_form_obj, "formula")
 })
 
 test_that("gipsDA_to_json and gipsDA_from_json perform full file round-trip", {
