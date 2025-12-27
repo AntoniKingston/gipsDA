@@ -27,5 +27,6 @@ Imports:
     tibble,
     tidyr
 Suggests:
+    MASS,
     mockery,
     testthat
