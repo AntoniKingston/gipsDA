@@ -24,7 +24,10 @@ test_that("log_posteriori_of_gipsmult returns a valid scalar", {
 test_that("internal log_posteriori_of_perm matches the wrapper function", {
   # Setup
   g <- gipsmult(Ss, ns)
+  g2 <- gipsmult(Ss, ns)
+  attr(g2, "was_mean_estimated") <- FALSE
   val <- log_posteriori_of_gipsmult(g)
+  val2 <- log_posteriori_of_gipsmult(g2)
 
   # Internal extraction
   D_mats <- attr(g, "D_matrices")
@@ -37,8 +40,10 @@ test_that("internal log_posteriori_of_perm matches the wrapper function", {
 
   # Note: Assuming log_posteriori_of_perm is available in the testing namespace
   val_internal <- log_posteriori_of_perm(perm, Ss, ns - 1L, delta, D_mats)
+  val_internal2 <- log_posteriori_of_perm(perm, Ss, ns, delta, D_mats)
 
   # Assertions
   expect_type(val_internal, "double")
   expect_equal(val, val_internal)
+  expect_equal(val2, val_internal2)
 })
