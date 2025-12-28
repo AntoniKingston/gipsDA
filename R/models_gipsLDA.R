@@ -150,6 +150,7 @@ function(x, grouping, prior = proportions, tol = 1.0e-4,
     #project covariance using gips
     pr_cov_opt_info <- project_covs(list(cov_adj), n, MAP, optimizer, max_iter)
     cov_proj <- pr_cov_opt_info$covs[[1]]
+    cov_proj <- shrink_offdiag_until_det(cov_proj, 0.05, 0.95)
     optimization_info <- pr_cov_opt_info$opt_info
     ####################################################################################
     sX <- svd(cov_proj, nu = 0L)

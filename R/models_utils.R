@@ -147,3 +147,32 @@ recursive_length <- function(x) {
   return(0)
 }
 
+shrink_offdiag_until_det <- function(A, threshold, rate, max_iter = 10000) {
+  if (!is.matrix(A) || nrow(A) != ncol(A)) {
+    stop("A must be a square matrix")
+  }
+  if (rate <= 0 || rate >= 1) {
+    stop("rate must be in (0, 1)")
+  }
+
+  n <- nrow(A)
+  offdiag <- row(A) != col(A)
+
+  detA <- det(A)
+
+  iter <- 0
+  while (detA < threshold) {
+    if (iter >= max_iter) {
+      warning("Maximum iterations reached before threshold was met")
+      break
+    }
+
+    A[offdiag] <- A[offdiag] * rate
+    detA <- det(A)
+    iter <- iter + 1
+  }
+
+  return(A)
+}
+
+

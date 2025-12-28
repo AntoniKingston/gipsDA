@@ -70,7 +70,7 @@ gipsmultqda.default <-
     lev <- levels(g)
     counts <- as.vector(table(g))
     names(counts) <- lev
-    if(any(counts < p+1)) stop("some group is too small for 'gipsmultqda'")
+    # if(any(counts < p+1)) stop("some group is too small for 'gipsmultqda'")
     proportions <- counts/length(g)
     ng <- length(proportions)
 # allow for supplied prior
@@ -112,10 +112,11 @@ gipsmultqda.default <-
     # }
     pr_cov_opt_info <- project_covs(cXs, counts, MAP, optimizer, max_iter)
     cov_proj <- pr_cov_opt_info$covs
+    cov_proj <- lapply(cov_proj, function(mat) shrink_offdiag_until_det(mat, 0.05, 0.95))
     optimization_info <- pr_cov_opt_info$opt_info
     for (i in 1L:ng) {
-      cov_proj <- cXs[[i]]
-      sX <- svd(cov_proj, nu=0)
+      cov_proj_sng <- cov_proj[[i]]
+      sX <- svd(cov_proj_sng, nu=0)
       scaling[, , i] <- sX$v %*% diag(sqrt(1/sX$d),,p)
       ldet[i] <- sum(log(sX$d))
     }
