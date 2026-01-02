@@ -138,7 +138,7 @@ function(x, grouping, prior = proportions, tol = 1.0e-4,
     )
 
     # weighted pooled covariance: S = (1/n) * sum_g n_g * S_g
-    cov_adj <- Reduce(`+`, Map(function(Sg, ng) ng * Sg, cov_list, counts)) / n
+    cov_adj <- Reduce(`+`, Map(`*`, cov_list, proportions))
     }
 
     else {
