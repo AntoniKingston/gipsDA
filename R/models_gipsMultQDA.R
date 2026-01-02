@@ -112,7 +112,7 @@ gipsmultqda.default <-
     # }
     pr_cov_opt_info <- project_covs(cXs, counts, MAP, optimizer, max_iter)
     cov_proj <- pr_cov_opt_info$covs
-    cov_proj <- lapply(cov_proj, function(mat) shrink_offdiag_until_det(mat, 0.05, 0.95))
+    cov_proj <- lapply(cov_proj, function(mat) desingularize(mat, 0.05))
     optimization_info <- pr_cov_opt_info$opt_info
     for (i in 1L:ng) {
       cov_proj_sng <- cov_proj[[i]]

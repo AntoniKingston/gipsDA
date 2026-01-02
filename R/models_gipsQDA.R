@@ -118,7 +118,7 @@ gipsqda.default <-
         pr_cov_opt_info <- project_covs(list(cov(x_i)), n, MAP, optimizer, max_iter)
         cov_proj <- pr_cov_opt_info$covs[[1]]
         optimization_info <- pr_cov_opt_info$opt_info
-        cov_proj <- shrink_offdiag_until_det(cov_proj, 0.05, 0.95)
+        cov_proj <- desingularize(cov_proj, 0.05)
         group.means[i,] <- colMeans(x_i)
         sX <- svd(cov_proj, nu=0)
         scaling[, , i] <- sX$v %*% diag(sqrt(1/sX$d),,p)

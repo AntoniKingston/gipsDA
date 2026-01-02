@@ -147,32 +147,23 @@ recursive_length <- function(x) {
   return(0)
 }
 
-shrink_offdiag_until_det <- function(A, threshold, rate, max_iter = 10000) {
-  if (!is.matrix(A) || nrow(A) != ncol(A)) {
-    stop("A must be a square matrix")
-  }
-  if (rate <= 0 || rate >= 1) {
-    stop("rate must be in (0, 1)")
-  }
+desingularize <- function(A, target = 0.05) {
+  symmetric <- all.equal(A, t(A))
+  eigvals <- eigen(A, symmetric = symmetric, only.values = TRUE)$values
+  idx <- which.min(abs(eigvals))
+  lambda <- eigvals[idx]
 
-  n <- nrow(A)
-  offdiag <- row(A) != col(A)
-
-  detA <- det(A)
-
-  iter <- 0
-  while (detA < threshold) {
-    if (iter >= max_iter) {
-      warning("Maximum iterations reached before threshold was met")
-      break
-    }
-
-    A[offdiag] <- A[offdiag] * rate
-    detA <- det(A)
-    iter <- iter + 1
+  if (abs(lambda) >= target) {
+    return(A)
   }
 
-  return(A)
+  s <- (target - lambda) / (1 - target)
+
+  if (1 + s <= 0) {
+    stop("Invalid scaling: 1 + s <= 0")
+  }
+
+  return((A + diag(s, nrow(A))) / (1 + s))
 }
 
 
