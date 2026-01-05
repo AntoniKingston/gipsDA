@@ -1,6 +1,7 @@
 
 gipsmultqda <- function(x, ...) UseMethod("gipsmultqda")
 
+#' @exportS3Method
 gipsmultqda.formula <- function(formula, data, ..., subset, na.action)
 {
     m <- match.call(expand.dots = FALSE)
@@ -25,6 +26,7 @@ gipsmultqda.formula <- function(formula, data, ..., subset, na.action)
     res
 }
 
+#' @exportS3Method
 gipsmultqda.data.frame <- function(x, ...)
 {
     res <- gipsmultqda(structure(data.matrix(x), class="matrix"), ...)
@@ -34,7 +36,7 @@ gipsmultqda.data.frame <- function(x, ...)
     res
 }
 
-
+#' @exportS3Method
 gipsmultqda.matrix <- function(x, grouping, ..., subset, na.action)
 {
     if(!missing(subset)) {
@@ -55,6 +57,7 @@ gipsmultqda.matrix <- function(x, grouping, ..., subset, na.action)
     res
 }
 
+#' @exportS3Method
 gipsmultqda.default <-
   function(x, grouping, prior = proportions, nu = 5, MAP = TRUE, optimizer = NULL, max_iter = NULL, ...)
 {
@@ -135,6 +138,7 @@ gipsmultqda.default <-
     res
 }
 
+#' @exportS3Method
 predict.gipsmultqda <- function(object, newdata, prior = object$prior,
 			method = c("plug-in", "predictive", "debiased",
                           "looCV"), ...)
@@ -254,6 +258,7 @@ predict.gipsmultqda <- function(object, newdata, prior = object$prior,
     list(class = cl, posterior = posterior)
 }
 
+#' @exportS3Method
 print.gipsmultqda <- function(x, ...)
 {
     if(!is.null(cl <- x$call)) {
@@ -270,4 +275,5 @@ print.gipsmultqda <- function(x, ...)
     invisible(x)
 }
 
+#' @exportS3Method
 model.frame.gipsmultqda <-  model.frame.gipslda

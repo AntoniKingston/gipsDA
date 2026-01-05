@@ -16,7 +16,7 @@
 #
 gipslda <- function(x, ...) UseMethod("gipslda")
 
-
+#' @exportS3Method
 gipslda.formula <- function(formula, data, ..., subset, na.action)
 {
     m <- match.call(expand.dots = FALSE)
@@ -40,6 +40,7 @@ gipslda.formula <- function(formula, data, ..., subset, na.action)
     res
 }
 
+#' @exportS3Method
 gipslda.data.frame <- function(x, ...)
 {
     res <- gipslda(structure(data.matrix(x), class = "matrix"), ...)
@@ -49,7 +50,7 @@ gipslda.data.frame <- function(x, ...)
     res
 }
 
-
+#' @exportS3Method
 gipslda.matrix <- function(x, grouping, ..., subset, na.action)
 {
     if(!missing(subset)) {
@@ -69,6 +70,8 @@ gipslda.matrix <- function(x, grouping, ..., subset, na.action)
     res$call <- cl
     res
 }
+#' @exportS3Method
+
 gipslda.default <-
 function(x, grouping, prior = proportions, tol = 1.0e-4,
        nu = 5, weighted_avg = FALSE, MAP = TRUE, optimizer = NULL, max_iter = NULL, ...) {
@@ -185,7 +188,7 @@ function(x, grouping, prior = proportions, tol = 1.0e-4,
             class = "gipslda")
 }
 
-
+#' @exportS3Method
 predict.gipslda <- function(object, newdata, prior = object$prior, dimen,
 			method = c("plug-in", "predictive", "debiased"), ...)
 {
@@ -266,6 +269,7 @@ predict.gipslda <- function(object, newdata, prior = object$prior, dimen,
     list(class = cl, posterior = posterior, x = x[, 1L:dimen, drop = FALSE])
 }
 
+#' @exportS3Method
 print.gipslda <- function(x, ...)
 {
     if(!is.null(cl <- x$call)) {
@@ -290,6 +294,7 @@ print.gipslda <- function(x, ...)
     invisible(x)
 }
 
+#' @exportS3Method
 plot.gipslda <- function(x, panel = panel.gipslda, ..., cex = 0.7,
                      dimen, abbrev = FALSE,
                      xlab = "LD1", ylab = "LD2")
@@ -395,6 +400,7 @@ function(data, g, nbins = 25, h, x0 = -h/1000, breaks,
     invisible()
 }
 
+#' @exportS3Method
 pairs.gipslda <- function(x, labels = colnames(x), panel = panel.gipslda,
                       dimen, abbrev = FALSE, ..., cex = 0.7,
                       type = c("std", "trellis"))
@@ -445,6 +451,7 @@ pairs.gipslda <- function(x, labels = colnames(x), panel = panel.gipslda,
     invisible(NULL)
 }
 
+#' @exportS3Method
 model.frame.gipslda <- function(formula, ...)
 {
     oc <- formula$call
@@ -458,4 +465,5 @@ model.frame.gipslda <- function(formula, ...)
     eval(oc, env)
 }
 
+#' @exportS3Method
 coef.gipslda <- function(object, ...) object$scaling
