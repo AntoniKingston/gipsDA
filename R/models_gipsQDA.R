@@ -16,6 +16,7 @@
 #
 gipsqda <- function(x, ...) UseMethod("gipsqda")
 
+#' @exportS3Method
 gipsqda.formula <- function(formula, data, ..., subset, na.action)
 {
     m <- match.call(expand.dots = FALSE)
@@ -40,6 +41,7 @@ gipsqda.formula <- function(formula, data, ..., subset, na.action)
     res
 }
 
+#' @exportS3Method
 gipsqda.data.frame <- function(x, ...)
 {
     res <- gipsqda(structure(data.matrix(x), class="matrix"), ...)
@@ -49,7 +51,7 @@ gipsqda.data.frame <- function(x, ...)
     res
 }
 
-
+#' @exportS3Method
 gipsqda.matrix <- function(x, grouping, ..., subset, na.action)
 {
     if(!missing(subset)) {
@@ -70,6 +72,7 @@ gipsqda.matrix <- function(x, grouping, ..., subset, na.action)
     res
 }
 
+#' @exportS3Method
 gipsqda.default <-
   function(x, grouping, prior = proportions, nu = 5, MAP = TRUE, optimizer = NULL, max_iter = NULL, ...)
 {
@@ -152,6 +155,7 @@ gipsqda.default <-
     res
 }
 
+#' @exportS3Method
 predict.gipsqda <- function(object, newdata, prior = object$prior,
 			method = c("plug-in", "predictive", "debiased",
                           "looCV"), ...)
@@ -271,6 +275,7 @@ predict.gipsqda <- function(object, newdata, prior = object$prior,
     list(class = cl, posterior = posterior)
 }
 
+#' @exportS3Method
 print.gipsqda <- function(x, ...)
 {
     if(!is.null(cl <- x$call)) {

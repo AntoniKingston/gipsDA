@@ -1,3 +1,95 @@
+#' The constructor of a `gipsmult` class.
+#'
+#' Create a `gipsmult` object.
+#' This object will contain initial data and all other information
+#' needed to find the most likely invariant permutation.
+#' It will not perform optimization. One must call
+#' the [find_MAP()] function to do it. See the examples below.
+#'
+#' @param S A matrix; empirical covariance matrix.
+#'     When `Z` is the observed data:
+#' * if one does not know the theoretical mean and has to
+#'     estimate it with the observed mean, use `S = cov(Z)`,
+#'     and leave parameter `was_mean_estimated = TRUE` as default;
+#' * if one know the theoretical mean is 0, use
+#'     `S = (t(Z) %*% Z) / number_of_observations`, and set
+#'     parameter `was_mean_estimated = FALSE`.
+#' @param number_of_observations A number of data points
+#'     that `S` is based on.
+#' @param delta A number, hyper-parameter of a Bayesian model.
+#'     It has to be strictly bigger than 1.
+#'     See the **Hyperparameters** section below.
+#' @param D_matrix Symmetric, positive-definite matrix of the same size as `S`.
+#'     Hyper-parameter of a Bayesian model.
+#'     When `NULL`, the (hopefully) reasonable one is derived from the data.
+#'     For more details, see the **Hyperparameters** section below.
+#' @param was_mean_estimated A boolean.
+#' * Set `TRUE` (default) when your `S` parameter is a result of
+#'     a [stats::cov()] function.
+#' * Set FALSE when your `S` parameter is a result of
+#'     a `(t(Z) %*% Z) / number_of_observations` calculation.
+#' @param perm An optional permutation to be the base for the `gipsmult` object.
+#'     It can be of a `gips_perm` or a `permutation` class, or anything
+#'     the function [permutations::permutation()] can handle.
+#'     It can also be of a `gipsmult` class, but
+#'     it will be interpreted as the underlying `gips_perm`.
+#'
+#' @section Methods for a `gipsmult` class:
+#' * [plot.gipsmult()]
+#' * [print.gipsmult()]
+#'
+#' @section Hyperparameters:
+#' We encourage the user to try `D_matrix = d * I`, where `I` is an identity matrix of a size
+#' `p x p` and `d > 0` for some different `d`.
+#' When `d` is small compared to the data (e.g., `d = 0.1 * mean(diag(S))`),
+#'     bigger structures will be found.
+#' When `d` is big compared to the data (e.g., `d = 100 * mean(diag(S))`),
+#'     the posterior distribution does not depend on the data.
+#'
+#' Taking `D_matrix = d * I` is equivalent to setting \code{S <- S / d}.
+#'
+#' The default for `D_matrix` is `D_matrix = d * I`, where
+#' `d = mean(diag(S))`, which is equivalent to modifying `S`
+#' so that the mean value on the diagonal is 1.
+#'
+#' In the Bayesian model, the prior distribution for
+#' the covariance matrix is a generalized case of
+#' [Wishart distribution](https://en.wikipedia.org/wiki/Wishart_distribution).
+#'
+#' @returns `gipsmult()` returns an object of
+#'     a `gipsmult` class after the safety checks.
+#'
+#' @export
+#' @seealso
+#' * [stats::cov()] – The `Ss` parameter, as a list of empirical covariance matrices,
+#'     is most of the time a result of the `cov()` function.
+#'     For more information, see
+#'     [Wikipedia - Estimation of covariance matrices](https://en.wikipedia.org/wiki/Estimation_of_covariance_matrices).
+#' * [find_MAP()] – The function that finds
+#'     the Maximum A Posteriori (MAP) Estimator
+#'     for a given `gipsmult` object.
+#' * [gips_perm()] – The constructor of a `gips_perm` class.
+#'     The `gips_perm` object is used as the base object for
+#'     the `gipsmult` object.
+#'
+#' @examples
+#' perm_size <- 5
+#' numbers_of_observations <- c(15, 18, 19)
+#' Sigma <- diag(rep(1, perm_size))
+#' n_matrices <- 3
+#' df <- 20
+#' Ss <- rWishart(n = n_matrices, df = df, Sigma = Sigma)
+#' Ss <- lapply(1:n_matrices, function(x) Ss[, , x])
+#' g <- gipsmult(Ss, numbers_of_observations)
+#'
+#' g_map <- find_MAP(g, show_progress_bar = FALSE, optimizer = "brute_force")
+#' g_map
+#'
+#' print(g_map)
+#'
+#' if (require("graphics")) {
+#'   plot(g_map, type = "MLE", logarithmic_x = TRUE)
+#' }
 
 
 gipsmult <- function(Ss, numbers_of_observations, delta = 3, D_matrices = NULL,
@@ -583,12 +675,12 @@ check_correctness_of_arguments <- function(Ss, numbers_of_observations, max_iter
     }
   }
 
-  if (!is.integer(numbers_of_observations)){
+  if (!is.numeric(numbers_of_observations)){
     rlang::abort(c("There was a problem identified with provided argument:",
-      "i" = "The `numbers_of_observation` must be an integer type.",
+      "i" = "The `numbers_of_observation` must be a numeric type.",
       "x" = paste0(
         "You provided `numbers_of_observations` with `typeof(numbers_of_observations) == '",
-        typeof(numbers_of_observations), "'."
+        typeof(numbers_of_observations), "' which is not numeric."
       )
     ))
   }
@@ -841,6 +933,7 @@ noo_check <- function(number_of_observations){
   }
 }
 
+#' @exportS3Method
 print.gipsmult <- function(x, digits = 3, compare_to_original = TRUE,
                        log_value = FALSE, oneline = FALSE, ...) {
   validate_gipsmult(x)
@@ -932,7 +1025,7 @@ print.gipsmult <- function(x, digits = 3, compare_to_original = TRUE,
   invisible(NULL)
 }
 
-
+#' @exportS3Method
 plot.gipsmult <- function(x, type = NA,
                       logarithmic_y = TRUE, logarithmic_x = FALSE,
                       color = NULL,
@@ -1316,211 +1409,5 @@ get_probabilities_from_gipsmult <- function(g) {
 
 
 
-
-#też chujwie
-# summary.gipsmult <- function(object, ...) {
-#   # validate_gipsmult(object) # validation is done in `log_posteriori_of_gipsmult()`
-#   permutation_log_posteriori <- log_posteriori_of_gipsmult(object)
-#
-#   tmp <- get_n0_and_edited_number_of_observations_from_gipsmult(object)
-#   n0 <- tmp[1]
-#   edited_number_of_observations <- tmp[2]
-#
-#   n_parameters <- sum(gips::get_structure_constants(object[[1]])[["dim_omega"]])
-#
-#   # Likelihood-Ratio test:
-#   if (edited_number_of_observations < n0 || !gips::is.positive.definite.matrix(attr(object, "S"))) {
-#     likelihood_ratio_test_statistics <- NULL
-#     likelihood_ratio_test_p_value <- NULL
-#   } else {
-#     likelihood_ratio_test_statistics <- edited_number_of_observations*(determinant(project_matrix(attr(object, "S"), object[[1]]))$modulus - determinant(attr(object, "S"))$modulus)
-#     attributes(likelihood_ratio_test_statistics) <- NULL
-#     p <- attr(object[[1]], "size")
-#     df_chisq <- p*(p+1)/2 - n_parameters
-#     if (df_chisq == 0) {
-#       likelihood_ratio_test_p_value <- NULL
-#     } else {
-#       # when likelihood_ratio_test_statistics is close to 0, the H_0
-#       likelihood_ratio_test_p_value <- 1 - pchisq(likelihood_ratio_test_statistics, df_chisq)
-#     }
-#   }
-#
-#   if (is.null(attr(object, "optimization_info"))) {
-#     log_posteriori_id <- log_posteriori_of_perm(
-#       perm_proposal = "", S = attr(object, "S"),
-#       number_of_observations = edited_number_of_observations,
-#       delta = attr(object, "delta"), D_matrix = attr(object, "D_matrix")
-#     )
-#
-#     summary_list <- list(
-#       optimized = FALSE,
-#       start_permutation = object[[1]],
-#       start_permutation_log_posteriori = permutation_log_posteriori,
-#       times_more_likely_than_id = exp(permutation_log_posteriori - log_posteriori_id),
-#       log_times_more_likely_than_id = permutation_log_posteriori - log_posteriori_id,
-#       likelihood_ratio_test_statistics = likelihood_ratio_test_statistics,
-#       likelihood_ratio_test_p_value = likelihood_ratio_test_p_value,
-#       n0 = n0,
-#       S_matrix = attr(object, "S"),
-#       number_of_observations = attr(object, "number_of_observations"),
-#       was_mean_estimated = attr(object, "was_mean_estimated"),
-#       delta = attr(object, "delta"),
-#       D_matrix = attr(object, "D_matrix"),
-#       n_parameters = n_parameters,
-#       AIC = suppressWarnings(AIC(object, classes = c("singular_matrix", "likelihood_does_not_exists"))), # warning for NA and NULL
-#       BIC = suppressWarnings(BIC(object, classes = c("singular_matrix", "likelihood_does_not_exists"))) # warning for NA and NULL
-#     )
-#   } else {
-#     optimization_info <- attr(object, "optimization_info")
-#
-#     if (optimization_info[["optimization_algorithm_used"]][length(optimization_info[["optimization_algorithm_used"]])] != "brute_force") {
-#       when_was_best <- which(abs(optimization_info[["log_posteriori_values"]] - permutation_log_posteriori) < 0.0000001) # close enought; this is the first generator of the group
-#       log_posteriori_calls_after_best <- length(optimization_info[["log_posteriori_values"]]) - when_was_best[1]
-#       start_permutation <- optimization_info[["start_perm"]]
-#       start_permutation_log_posteriori <- optimization_info[["log_posteriori_values"]][1]
-#     } else {
-#       # for brute_force when_was_best is useless.
-#       # Also, the `optimization_info[["visited_perms"]]` is a list, but
-#         # its elements are not of class `gips_perm`, because it was done with
-#         # `optimization_info[["visited_perms"]] <- permutations::allperms()`
-#       # Real original permutation is saved in optimization_info[["original_perm"]]
-#       when_was_best <- NULL
-#       log_posteriori_calls_after_best <- NULL
-#       start_permutation <- optimization_info[["original_perm"]]
-#       gips_start <- gips(
-#         S = attr(object, "S"),
-#         number_of_observations = attr(object, "number_of_observations"),
-#         delta = attr(object, "delta"),
-#         D_matrix = attr(object, "D_matrix"),
-#         was_mean_estimated = attr(object, "was_mean_estimated"),
-#         perm = start_permutation
-#       )
-#       start_permutation_log_posteriori <- log_posteriori_of_gips(gips_start)
-#     }
-#
-#     summary_list <- list(
-#       optimized = TRUE,
-#       found_permutation = object[[1]],
-#       found_permutation_log_posteriori = permutation_log_posteriori,
-#       start_permutation = start_permutation,
-#       start_permutation_log_posteriori = start_permutation_log_posteriori,
-#       times_more_likely_than_start = exp(permutation_log_posteriori - start_permutation_log_posteriori),
-#       log_times_more_likely_than_start = permutation_log_posteriori - start_permutation_log_posteriori,
-#       likelihood_ratio_test_statistics = likelihood_ratio_test_statistics,
-#       likelihood_ratio_test_p_value = likelihood_ratio_test_p_value,
-#       n0 = n0,
-#       S_matrix = attr(object, "S"),
-#       number_of_observations = attr(object, "number_of_observations"),
-#       was_mean_estimated = attr(object, "was_mean_estimated"),
-#       delta = attr(object, "delta"),
-#       D_matrix = attr(object, "D_matrix"),
-#       n_parameters = n_parameters,
-#       AIC = suppressWarnings(AIC(object), classes = c("singular_matrix", "likelihood_does_not_exists")), # warning for NA and NULL
-#       BIC = suppressWarnings(BIC(object), classes = c("singular_matrix", "likelihood_does_not_exists")), # warning for NA and NULL
-#       optimization_algorithm_used = optimization_info[["optimization_algorithm_used"]],
-#       did_converge = optimization_info[["did_converge"]],
-#       number_of_log_posteriori_calls = length(optimization_info[["log_posteriori_values"]]),
-#       whole_optimization_time = optimization_info[["whole_optimization_time"]],
-#       log_posteriori_calls_after_best = log_posteriori_calls_after_best,
-#       acceptance_rate = optimization_info[["acceptance_rate"]]
-#     )
-#   }
-#
-#   structure(summary_list,
-#     class = c("summary.gips")
-#   )
-# }
-#
-#
-# get_n0_and_edited_number_of_observations_from_gipsmult <- function(g) {
-#   # validate_gips(g) # TODO(Make sure all uses of `get_n0_and_edited_number_of_observations_from_gips()` are on already validated g)
-#
-#   n0 <- gips::get_n0_from_perm(g[[1]], attr(g, "was_mean_estimated"))
-#
-#   edited_number_of_observations <- attr(g, "numbers_of_observations")
-#
-#   if (attr(g, "was_mean_estimated")) { # correction for estimating the mean
-#     edited_number_of_observations <- edited_number_of_observations - 1
-#   }
-#
-#   c(n0, edited_number_of_observations)
-# }
-#
-# forget_perms <- function(g) {
-#   validate_gipsmult(g)
-#
-#   optimization_info <- attr(g, "optimization_info")
-#
-#   if (is.null(optimization_info)) {
-#     rlang::inform(c(
-#       "Provided `g` is a `gips` object, but it was not optimized yet.",
-#       "i" = "Did You provide the wrong `gips` object?"
-#     ))
-#   } else if (all(is.na(optimization_info[["visited_perms"]]))) {
-#     rlang::inform(c(
-#       "Provided `g` is an optimized `gips` object that already has forgotten all permutations.",
-#       "i" = "Did You provide the wrong `gips` object?"
-#     ))
-#   } else {
-#     optimization_info[["visited_perms"]] <- I(NA)
-#     attr(g, "optimization_info") <- optimization_info
-#   }
-#
-#   g
-# }
-#
-# as.character.gipsmult <- function(x, ...) {
-#   validate_gipsmult(x)
-#
-#   as.character(x[[1]], ...)
-# }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# V <- gips::project_matrix((rWishart(1,nu, diag(5)))[,,1], "(1,2,4)(3,5)")
-# nu <- 20
-#
-# Ss <- rWishart(4, nu, diag(5))
-#
-#
-# Ss <- lapply(seq_len(dim(Ss)[3]), function(i) Ss[,,i])
-#
-#
-# numbers_of_observations <- sample(5:50, 4)
-#
-# # library(gips)
-#
-# gips_obj <- gips(Ss[[1]], numbers_of_observations[[1]])
-#
-# gipsmult_obj <- gipsmult(Ss, numbers_of_observations = numbers_of_observations, perm = "(125)(34)")
-#
-#
-# plot(gipsmult_obj, type="heatmap")
-#
-#
-# g_map <- find_MAP(gipsmult_obj, optimizer = "BF", save_all_perms = TRUE, return_probabilities = TRUE, max_iter = 100)
-#
-# plot(g_map)
-#
-# attr(g_map, "optimization_info")$post_probabilities
 
 

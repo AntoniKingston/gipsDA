@@ -25,7 +25,8 @@ Imports:
     permutations,
     rlang,
     tibble,
-    tidyr
+    tidyr,
+    roxygen2
 Suggests:
     MASS,
     mockery,
