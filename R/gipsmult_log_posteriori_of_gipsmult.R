@@ -1,5 +1,4 @@
 log_posteriori_of_gipsmult <- function(g) {
-  validate_gipsmult(g)
 
   numbers_of_observations <- attr(g, "numbers_of_observations")
   was_mean_estimated <- attr(g, "was_mean_estimated")

@@ -2,45 +2,12 @@ find_MAP <- function(g, max_iter = NA, optimizer = NA,
                      show_progress_bar = TRUE,
                      save_all_perms = FALSE,
                      return_probabilities = FALSE) {
-  # check the correctness of the g argument
-  # validate_gips(g)
 
   possible_optimizers <- c(
     "MH", "Metropolis_Hastings", "HC", "hill_climbing",
     "BF", "brute_force", "full", "continue"
   )
 
-  # check the correctness of the rest of arguments
-  # if (length(optimizer) > 1) {
-  #   rlang::abort(c("There was a problem identified with the provided arguments:",
-  #     "i" = paste0(
-  #       "`optimizer` must be the character vector of length 1. Must be one of: c('",
-  #       paste0(possible_optimizers, collapse = "', '"), "')."
-  #     ),
-  #     "x" = paste0(
-  #       "You provided `optimizer == (",
-  #       paste0(optimizer, collapse = ", "), ")`."
-  #     ),
-  #     "i" = "Did You misspell the optimizer name?"
-  #   ))
-  # }
-  # # default optimizer:
-  # if (is.na(optimizer)) {
-  #   optimizer <- ifelse(!is.null(attr(g, "optimization_info")),
-  #     "continue",
-  #     ifelse(ncol(attr(g, "S")) <= 9,
-  #       "BF",
-  #       "MH"
-  #     )
-  #   )
-  #
-  #   rlang::inform(c("You used the default value of the 'optimizer' argument in `find_MAP()`.",
-  #     "i" = paste0(
-  #       "The 'optimizer = NA' was automatically changed to 'optimizer = \"",
-  #       optimizer, "\"'."
-  #     )
-  #   ))
-  # }
 
   # get a chosen optimizer, even with part of the name:
   chosen_optimizer_number <- pmatch(optimizer, possible_optimizers)
@@ -196,17 +163,17 @@ find_MAP <- function(g, max_iter = NA, optimizer = NA,
     n0 <- n0 + 1
     attr(gips_optimized, "optimization_info")[["all_n0"]] <- attr(gips_optimized, "optimization_info")[["all_n0"]] + 1 # when all_n0 is NA, all_n0 + 1 is also an NA
   }
-  # if (n0 > numbers_of_observations) {
-  #   rlang::warn(c(
-  #     paste0(
-  #       "The found permutation has n0 = ", n0,
-  #       ", which is bigger than the numbers_of_observations = ",
-  #       numbers_of_observations, "."
-  #     ),
-  #     "i" = "The covariance matrix invariant under the found permutation does not have the likelihood properly defined.",
-  #     "i" = "For a more in-depth explanation, see the 'Project Matrix - Equation (6)' section in the `vignette('Theory', package = 'gips')` or its pkgdown page: https://przechoj.github.io/gips/articles/Theory.html."
-  #   ))
-  # }
+  if (any(n0 > numbers_of_observations)) {
+    rlang::warn(c(
+      paste0(
+        "The found permutation has n0 = ", n0,
+        ", which is bigger than the numbers_of_observations = ",
+        numbers_of_observations, "."
+      ),
+      "i" = "The covariance matrix invariant under the found permutation does not have the likelihood properly defined.",
+      "i" = "For a more in-depth explanation, see the 'Project Matrix - Equation (6)' section in the `vignette('Theory', package = 'gips')` or its pkgdown page: https://przechoj.github.io/gips/articles/Theory.html."
+    ))
+  }
 
   return(combine_gips(g, gips_optimized))
 }
