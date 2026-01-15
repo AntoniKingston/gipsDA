@@ -1,19 +1,109 @@
-# file MASS/R/qda.R
-# copyright (C) 1994-2023 W. N. Venables and B. D. Ripley
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 or 3 of the License
-#  (at your option).
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  A copy of the GNU General Public License is available at
-#  http://www.r-project.org/Licenses/
-#
+#' Quadratic Discriminant Analysis with gips covariance projection
+#'
+#' Quadratic discriminant analysis (QDA) using covariance matrices projected
+#' via the \emph{gips} framework to enforce permutation symmetry and improve
+#' numerical stability.
+#'
+#' This function is a minor modification of \code{\link[MASS]{qda}}, replacing
+#' the classical sample covariance estimators by projected covariance matrices
+#' obtained using \code{project_covs()}.
+#'
+#' @name gipsqda
+#' @aliases
+#'   gipsqda gipsqda.default gipsqda.formula gipsqda.data.frame gipsqda.matrix
+#'   predict.gipsqda print.gipsqda model.frame.gipsqda
+#'
+#' @usage
+#' gipsqda(x, ...)
+#'
+#' \method{gipsqda}{formula}(formula, data, ..., subset, na.action)
+#'
+#' \method{gipsqda}{default}(x, grouping, prior = proportions,
+#'   nu = 5, MAP = TRUE, optimizer = NULL, max_iter = NULL, ...)
+#'
+#' \method{gipsqda}{data.frame}(x, ...)
+#'
+#' \method{gipsqda}{matrix}(x, grouping, ..., subset, na.action)
+#'
+#' @param formula A formula of the form \code{groups ~ x1 + x2 + ...}.
+#'   The response is the grouping factor and the right-hand side specifies
+#'   the (non-factor) discriminators.
+#' @param data An optional data frame, list or environment from which variables
+#'   specified in \code{formula} are preferentially taken.
+#' @param x (required if no formula is given as the principal argument)
+#'   a matrix or data frame containing the explanatory variables.
+#' @param grouping (required if no formula is given)
+#'   a factor specifying the class for each observation.
+#' @param prior The prior probabilities of class membership.
+#'   Must sum to one and have length equal to the number of groups.
+#' @param nu Degrees of freedom parameter used internally by covariance
+#'   projection.
+#' @param MAP Logical; if \code{TRUE}, maximum a posteriori covariance projection
+#'   is used.
+#' @param optimizer Character string specifying the optimization method used
+#'   for covariance projection. If \code{NULL}, a default choice depending on
+#'   the problem dimension is used.
+#' @param max_iter Maximum number of iterations for stochastic optimizers.
+#' @param subset An index vector specifying the cases to be used in the training
+#'   sample. (NOTE: must be named.)
+#' @param na.action A function specifying the action to be taken if \code{NA}s
+#'   are found.
+#' @param ... Arguments passed to or from other methods.
+#'
+#' @return
+#' An object of class \code{"gipsqda"} containing the following components:
+#' \itemize{
+#'   \item \code{prior}: prior probabilities of the groups
+#'   \item \code{counts}: number of observations in each group
+#'   \item \code{means}: group means
+#'   \item \code{scaling}: group-specific scaling matrices derived from the
+#'     projected covariance matrices
+#'   \item \code{ldet}: log-determinants of the projected covariance matrices
+#'   \item \code{lev}: class labels
+#'   \item \code{N}: total number of observations
+#'   \item \code{optimization_info}: information returned by the covariance
+#'     projection optimizer
+#'   \item \code{call}: the matched call
+#' }
+#'
+#' @details
+#' Quadratic discriminant analysis models each class with its own covariance
+#' matrix. In \code{gipsqda}, these covariance matrices are projected using the
+#' \emph{gips} framework, which enforces permutation symmetry and mitigates
+#' singularity and overfitting in high-dimensional or small-sample settings.
+#'
+#' Classification can be performed using plug-in, predictive, debiased,
+#' or leave-one-out cross-validation rules via \code{\link{predict.gipsqda}}.
+#'
+#' @note
+#' The function may be called with either a formula interface or with a matrix
+#' and grouping factor. Arguments \code{subset} and \code{na.action}, if used,
+#' must be named.
+#'
+#' @references
+#' Chojecki, A., et al. (2025).
+#' \emph{Learning Permutation Symmetry of a Gaussian Vector with gips in R}.
+#' Journal of Statistical Software, \strong{112}(7), 1--38.
+#' \doi{10.18637/jss.v112.i07}
+#'
+#' Venables, W. N. and Ripley, B. D. (2002).
+#' \emph{Modern Applied Statistics with S}. Fourth edition. Springer.
+#'
+#' @seealso
+#' \code{\link[MASS]{qda}}, \code{\link{predict.gipsqda}},
+#' \code{\link{gipslda}}, \code{\link[MASS]{lda}}
+#'
+#' @examples
+#' tr <- sample(1:50, 25)
+#' train <- rbind(iris3[tr,,1], iris3[tr,,2], iris3[tr,,3])
+#' test <- rbind(iris3[-tr,,1], iris3[-tr,,2], iris3[-tr,,3])
+#' cl <- factor(c(rep("s",25), rep("c",25), rep("v",25)))
+#' z <- gipsqda(train, cl)
+#' predict(z,test)$class
+#'
+#' @keywords multivariate classification
+#'
+#' @export
 gipsqda <- function(x, ...) UseMethod("gipsqda")
 
 #' @exportS3Method

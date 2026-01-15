@@ -57,7 +57,7 @@
 #' exp(log_posteriori_of_gipsmult(g2) - log_posteriori_of_gipsmult(g1)) # 28.406
 #' # g2 is 28.406 times more likely than g1.
 #' # This is the expected outcome because S1[1,1] and S2 [1,1] are very close to S1[2,2] and S2[2,2] respectively.
-log_posteriori_of_gipsmultmult <- function(g) {
+log_posteriori_of_gipsmult <- function(g) {
 
   numbers_of_observations <- attr(g, "numbers_of_observations")
   was_mean_estimated <- attr(g, "was_mean_estimated")

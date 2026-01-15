@@ -1,4 +1,104 @@
-
+#' Quadratic Discriminant Analysis with multiple gips-projected covariances
+#'
+#' Quadratic Discriminant Analysis (QDA) in which each class covariance matrix
+#' is projected using the \emph{gipsmult} framework, allowing for structured
+#' permutation symmetry across multiple covariance matrices.
+#'
+#' This function is a modification of \code{\link[MASS]{qda}} in which the
+#' class-specific covariance matrices are jointly projected to improve
+#' numerical stability and exploit shared symmetry assumptions.
+#'
+#' @name gipsmultqda
+#' @aliases
+#'   gipsmultqda gipsmultqda.default gipsmultqda.formula
+#'   gipsmultqda.data.frame gipsmultqda.matrix
+#'   predict.gipsmultqda print.gipsmultqda model.frame.gipsmultqda
+#'
+#' @usage
+#' gipsmultqda(x, ...)
+#'
+#' \method{gipsmultqda}{formula}(formula, data, ..., subset, na.action)
+#'
+#' \method{gipsmultqda}{default}(x, grouping, prior = proportions,
+#'   nu = 5, MAP = TRUE, optimizer = NULL, max_iter = NULL, ...)
+#'
+#' \method{gipsmultqda}{data.frame}(x, ...)
+#'
+#' \method{gipsmultqda}{matrix}(x, grouping, ..., subset, na.action)
+#'
+#' @param formula A formula of the form \code{groups ~ x1 + x2 + ...}.
+#'   The response is the grouping factor and the right-hand side specifies
+#'   the (non-factor) discriminators.
+#' @param data An optional data frame, list or environment from which variables
+#'   specified in \code{formula} are preferentially taken.
+#' @param x (required if no formula is given as the principal argument)
+#'   a matrix or data frame containing the explanatory variables.
+#' @param grouping A factor specifying the class for each observation.
+#' @param prior Prior probabilities of class membership. Must sum to one.
+#' @param nu Degrees of freedom parameter used internally during covariance
+#'   projection.
+#' @param MAP Logical; if \code{TRUE}, a maximum a posteriori covariance
+#'   projection is used.
+#' @param optimizer Character string specifying the optimization method used
+#'   for covariance projection. If \code{NULL}, a default choice is made
+#'   based on the problem dimension.
+#' @param max_iter Maximum number of iterations for stochastic optimizers.
+#' @param subset An index vector specifying the cases to be used in the training
+#'   sample. (NOTE: must be named.)
+#' @param na.action A function specifying the action to be taken if \code{NA}s
+#'   are found.
+#' @param ... Arguments passed to or from other methods.
+#'
+#' @return
+#' An object of class \code{"gipsmultqda"} containing:
+#' \itemize{
+#'   \item \code{prior}: prior probabilities of the groups
+#'   \item \code{counts}: number of observations per group
+#'   \item \code{means}: group means
+#'   \item \code{scaling}: array of group-specific scaling matrices derived
+#'     from the projected covariance matrices
+#'   \item \code{ldet}: log-determinants of the projected covariance matrices
+#'   \item \code{lev}: class labels
+#'   \item \code{N}: total number of observations
+#'   \item \code{optimization_info}: information returned by the covariance
+#'     projection optimizer
+#'   \item \code{call}: the matched call
+#' }
+#'
+#' @details
+#' In contrast to classical QDA, which estimates each class covariance matrix
+#' independently, \code{gipsmultqda} performs a joint projection of all class
+#' covariance matrices using the \emph{gipsmult} framework. This allows the
+#' incorporation of shared permutation symmetries and can improve classification
+#' performance in high-dimensional or small-sample regimes.
+#'
+#' Several classification rules are available via
+#' \code{\link{predict.gipsmultqda}}, including plug-in, predictive, debiased,
+#' and leave-one-out cross-validation.
+#'
+#' @note
+#' This function is not a drop-in replacement for \code{\link[MASS]{qda}}.
+#' The covariance estimation, returned object, and classification rules
+#' differ substantially.
+#'
+#' The theoretical background and details of the covariance projection are
+#' documented in the \code{gipsmult} package.
+#'
+#' @seealso
+#' \code{\link[MASS]{qda}}, \code{\link{predict.gipsmultqda}},
+#' \code{\link{gipsqda}}, \code{\link{gipslda}}
+#'
+#' @examples
+#' tr <- sample(1:50, 25)
+#' train <- rbind(iris3[tr,,1], iris3[tr,,2], iris3[tr,,3])
+#' test <- rbind(iris3[-tr,,1], iris3[-tr,,2], iris3[-tr,,3])
+#' cl <- factor(c(rep("s",25), rep("c",25), rep("v",25)))
+#' z <- gipsmultqda(train, cl)
+#' predict(z,test)$class
+#'
+#' @keywords multivariate classification
+#'
+#' @export
 gipsmultqda <- function(x, ...) UseMethod("gipsmultqda")
 
 #' @exportS3Method

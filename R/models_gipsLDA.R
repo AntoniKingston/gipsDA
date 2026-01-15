@@ -1,19 +1,106 @@
-# file MASS/R/lda.R
-# copyright (C) 1994-2023 W. N. Venables and B. D. Ripley
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 or 3 of the License
-#  (at your option).
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  A copy of the GNU General Public License is available at
-#  http://www.r-project.org/Licenses/
-#
+#' Linear Discriminant Analysis with gips Covariance Projection
+#'
+#' A modification of Linear Discriminant Analysis (LDA) in which the
+#' within-class covariance matrix is projected onto a permutation-invariant
+#' structure using the gips framework.
+#'
+#' @name gipslda
+#' @aliases gipslda.default gipslda.data.frame gipslda.formula gipslda.matrix
+#'   model.frame.gipslda print.gipslda coef.gipslda plot.gipslda pairs.gipslda
+#'
+#' @usage
+#' gipslda(x, ...)
+#'
+#' \method{gipslda}{formula}(formula, data, ..., subset, na.action)
+#'
+#' \method{gipslda}{default}(x, grouping, prior = proportions,
+#'   tol = 1e-4, nu = 5, weighted_avg = FALSE,
+#'   MAP = TRUE, optimizer = NULL, max_iter = NULL, ...)
+#'
+#' \method{gipslda}{data.frame}(x, ...)
+#'
+#' \method{gipslda}{matrix}(x, grouping, ..., subset, na.action)
+#'
+#' @param formula A formula of the form \code{groups ~ x1 + x2 + ...}.
+#'   The response is the grouping factor and the right-hand side specifies
+#'   the (non-factor) discriminators.
+#' @param data An optional data frame, list or environment from which variables
+#'   specified in \code{formula} are preferentially taken.
+#' @param x (required if no formula is given as the principal argument)
+#'   a matrix or data frame or Matrix containing the explanatory variables.
+#' @param grouping (required if no formula principal argument is given)
+#'   a factor specifying the class for each observation.
+#' @param prior The prior probabilities of class membership. If unspecified,
+#'   the class proportions for the training set are used.
+#' @param tol A tolerance to decide if a matrix is singular; variables whose
+#'   variance is less than \code{tol^2} are rejected.
+#' @param subset An index vector specifying the cases to be used in the training
+#'   sample. (NOTE: must be named.)
+#' @param na.action A function specifying the action for \code{NA}s.
+#' #' @param weighted_avg Logical; if TRUE, uses a weighted average of
+#'   class-specific covariance matrices instead of the pooled covariance.
+#'
+#' @param MAP Logical; whether to compute a Maximum A Posteriori
+#'   gips projection of the covariance matrix.
+#'
+#' @param optimizer Character; optimization method used by gips
+#'   (e.g. \code{"BF"} or \code{"MH"}).
+#'
+#' @param max_iter Maximum number of iterations for the optimizer.
+
+#' @param ... Arguments passed to or from other methods.
+#'
+#' @return
+#' An object of class \code{"gipslda"} containing:
+#' \itemize{
+#'   \item \code{prior}: prior class probabilities
+#'   \item \code{counts}: number of observations per class
+#'   \item \code{means}: group means
+#'   \item \code{scaling}: linear discriminant coefficients
+#'   \item \code{svd}: singular values of the between-class scatter
+#'   \item \code{N}: number of observations
+#'   \item \code{optimization_info}: information about the gips optimization
+#'   \item \code{call}: matched call
+#' }
+#'
+#' @details
+#' Unlike classical LDA, the within-class covariance matrix is first
+#' projected onto a permutation-invariant structure using the gips
+#' framework. This can stabilize covariance estimation in high dimensions
+#' or when symmetry assumptions are justified.
+#'
+#' The choice of optimizer and MAP estimation affects both the covariance
+#' estimate and the resulting discriminant directions.
+#'
+#' See Chojecki et al. (2025) for theoretical background.
+#'
+#' @note
+#' This function is inspired by \code{\link[MASS]{lda}} but is not
+#' a drop-in replacement. The covariance estimator, optimization
+#' procedure, and returned object differ substantially.
+#'
+#' @references
+#' Chojecki, A., et al. (2025).
+#' \emph{Learning Permutation Symmetry of a Gaussian Vector with gips in R}.
+#' Journal of Statistical Software, \strong{112}(7), 1--38.
+#' \doi{10.18637/jss.v112.i07}
+#'
+#' @seealso
+#' \code{\link[MASS]{lda}},
+#' \code{\link{predict.gipslda}},
+#' \code{\link{gips}}
+#'
+#' @examples
+#' Iris <- data.frame(rbind(iris3[,,1], iris3[,,2], iris3[,,3]),
+#'                    Sp = rep(c("s","c","v"), rep(50,3)))
+#' train <- sample(1:150, 75)
+#' z <- gipslda(Sp ~ ., Iris, prior = c(1,1,1)/3, subset = train)
+#' predict(z, Iris[-train, ])$class
+#' (z1 <- update(z, . ~ . - Petal.W.))
+#'
+#' @keywords multivariate
+#'
+#' @export
 gipslda <- function(x, ...) UseMethod("gipslda")
 
 #' @exportS3Method
@@ -70,8 +157,8 @@ gipslda.matrix <- function(x, grouping, ..., subset, na.action)
     res$call <- cl
     res
 }
-#' @exportS3Method
 
+#' @exportS3Method
 gipslda.default <-
 function(x, grouping, prior = proportions, tol = 1.0e-4,
        nu = 5, weighted_avg = FALSE, MAP = TRUE, optimizer = NULL, max_iter = NULL, ...) {
