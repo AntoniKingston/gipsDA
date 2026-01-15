@@ -1,3 +1,163 @@
+#' Find the Maximum A Posteriori Estimation
+#'
+#' Use one of the optimization algorithms to find the permutation that
+#' maximizes a posteriori probability based on observed data.
+#' Not all optimization algorithms will always find the MAP, but they try
+#' to find a significant value. More information can be found in
+#' the "**Possible algorithms to use as optimizers**" section below.
+#'
+#' `find_MAP()` can produce a warning when:
+#' * the optimizer "hill_climbing" gets to the end of
+#'   its `max_iter` without converging.
+#' * the optimizer will find the permutation with smaller `n0` than
+#'   `number_of_observations`
+#'
+#' @section Possible algorithms to use as optimizers:
+#'
+#' For an in-depth explanation, see in the
+#'   `vignette("Optimizers", package = "gips")` or in its
+#'   [pkgdown page](https://przechoj.github.io/gips/articles/Optimizers.html).
+#'
+#' For every algorithm, there are some aliases available.
+#'
+#' * `"brute_force"`, `"BF"`, `"full"` - use
+#'     the **Brute Force** algorithm that checks the whole permutation
+#'     space of a given size. This algorithm will find
+#'     the actual Maximum A Posteriori Estimation, but it is
+#'     very computationally expensive for bigger spaces.
+#'     We recommend Brute Force only for `p <= 9`.
+#'
+#' * `"Metropolis_Hastings"`, `"MH"` - use
+#'     the **Metropolis-Hastings** algorithm;
+#'     [see Wikipedia](https://en.wikipedia.org/wiki/Metropolis%E2%80%93Hastings_algorithm).
+#'     The algorithm will draw a random transposition in every iteration
+#'     and consider changing the current state (permutation).
+#'     When the `max_iter` is reached, the algorithm will return the best
+#'     permutation calculated as the MAP Estimator. This implements
+#'     the [*Second approach* from references, section 4.1.2](https://arxiv.org/abs/2004.03503).
+#'     This algorithm used in this context is a special case of the
+#'     **Simulated Annealing** the user may be more familiar with;
+#'     [see Wikipedia](https://en.wikipedia.org/wiki/Simulated_annealing).
+#'
+#' * `"hill_climbing"`, `"HC"` - use
+#'     the **hill climbing** algorithm;
+#'     [see Wikipedia](https://en.wikipedia.org/wiki/Hill_climbing).
+#'     The algorithm will check all transpositions in every iteration and
+#'     go to the one with the biggest a posteriori value.
+#'     The optimization ends when all *neighbors* will have a smaller
+#'     a posteriori value. If the `max_iter` is reached before the end,
+#'     then the warning is shown, and it is recommended to continue
+#'     the optimization on the output of the `find_MAP()` with
+#'     `optimizer = "continue"`; see examples.
+#'     Remember that `p*(p-1)/2` transpositions will be checked
+#'     in every iteration. For bigger `p`, this may be costly.
+#'
+#' @param g Object of a `gipsmult` class.
+#' @param max_iter The number of iterations for an algorithm to perform.
+#'     At least 2. For `optimizer = "BF"`, it is not used;
+#'     for `optimizer = "MH"`, it has to be finite;
+#'     for `optimizer = "HC"`, it can be infinite.
+#' @param optimizer The optimizer for the search of the maximum posteriori:
+#'   * `"BF"` (the default for unoptimized `g` with `perm size <= 9`) - Brute Force;
+#'   * `"MH"` (the default for unoptimized `g` with `perm size > 10`) - Metropolis-Hastings;
+#'   * `"HC"` - Hill Climbing;
+#'   * `"continue"` (the default for optimized `g`) - The same as
+#'       the `g` was optimized by (see Examples).
+#'
+#' See the **Possible algorithms to use as optimizers**
+#' section below for more details.
+#' @param show_progress_bar A boolean.
+#'     Indicate whether or not to show the progress bar:
+#'   * When `max_iter` is infinite, `show_progress_bar` has to be `FALSE`;
+#'   * When `return_probabilities = TRUE`, then
+#'       shows an additional progress bar for the time
+#'       when the probabilities are calculated.
+#' @param save_all_perms A boolean. `TRUE` indicates saving
+#'     a list of all permutations visited during optimization.
+#'     This can be useful sometimes but needs a lot more RAM.
+#' @param return_probabilities A boolean. `TRUE` can only be provided
+#'     only when `save_all_perms = TRUE`. For:
+#'   * `optimizer = "MH"` - use Metropolis-Hastings results to
+#'       estimate posterior probabilities;
+#'   * `optimizer = "BF"` - use brute force results to
+#'       calculate exact posterior probabilities.
+#'
+#' These additional calculations are costly, so a second and third
+#'     progress bar is shown (when `show_progress_bar = TRUE`).
+#'
+#' To examine probabilities after optimization,
+#'     call [get_probabilities_from_gipsmult()].
+#'
+#' @returns Returns an optimized object of a `gipsmult` class.
+#'
+#' @export
+#'
+#' @references Piotr Graczyk, Hideyuki Ishi, Bartosz Kołodziejek, Hélène Massam.
+#' "Model selection in the space of Gaussian models invariant by symmetry."
+#' The Annals of Statistics, 50(3) 1747-1774 June 2022.
+#' [arXiv link](https://arxiv.org/abs/2004.03503);
+#' \doi{10.1214/22-AOS2174}
+#'
+#' @seealso
+#' * [gipsmult()] - The constructor of a `gipsmult` class.
+#'     The `gipsmult` object is used as the `g` parameter of `find_MAP()`.
+#' * [plot.gipsmult()] - Practical plotting function for
+#'     visualizing the optimization process.
+#' * [get_probabilities_from_gipsmult()] - When
+#'     `find_MAP(return_probabilities = TRUE)` was called,
+#'     probabilities can be extracted with this function.
+#' * [log_posteriori_of_gipsmult()] - The function that the optimizers
+#'     of `find_MAP()` tries to find the argmax of.
+#'
+#' @export
+#'
+#' @examples
+#' require("MASS") # for mvrnorm()
+#'
+#' perm_size <- 6
+#' mu1 <- runif(6, -10, 10)
+#' mu2 <- runif(6, -10, 10) # Assume we don't know the means
+#' sigma1 <- matrix(
+#'   data = c(
+#'     1.0, 0.8, 0.6, 0.4, 0.6, 0.8,
+#'     0.8, 1.0, 0.8, 0.6, 0.4, 0.6,
+#'     0.6, 0.8, 1.0, 0.8, 0.6, 0.4,
+#'     0.4, 0.6, 0.8, 1.0, 0.8, 0.6,
+#'     0.6, 0.4, 0.6, 0.8, 1.0, 0.8,
+#'     0.8, 0.6, 0.4, 0.6, 0.8, 1.0
+#'   ),
+#'   nrow = perm_size, byrow = TRUE
+#' )
+#' sigma2 <- matrix(
+#'   data = c(
+#'     1.0, 0.5, 0.2, 0.0, 0.2, 0.5,
+#'     0.5, 1.0, 0.5, 0.2, 0.0, 0.2,
+#'     0.2, 0.5, 1.0, 0.5, 0.2, 0.0,
+#'     0.0, 0.2, 0.5, 1.0, 0.5, 0.2,
+#'     0.2, 0.0, 0.2, 0.5, 1.0, 0.5,
+#'     0.5, 0.2, 0.0, 0.2, 0.5, 1.0
+#'   ),
+#'   nrow = perm_size, byrow = TRUE
+#' )
+#' # sigma1 and sigma2 are matrices invariant under permutation (1,2,3,4,5,6)
+#' numbers_of_observations <- c(21,37)
+#' Z1 <- MASS::mvrnorm(numbers_of_observations[1], mu = mu1, Sigma = sigma1)
+#' Z2 <- MASS::mvrnorm(numbers_of_observations[2], mu = mu2, Sigma = sigma2)
+#' S1 <- cov(Z1)
+#' S2 <- cov(Z2) # Assume we have to estimate the mean
+#'
+#' g <- gipsmult(list(S1,S2), numbers_of_observations)
+#'
+#' g_map <- find_MAP(g, max_iter = 5, show_progress_bar = FALSE, optimizer = "Metropolis_Hastings")
+#' g_map
+#'
+#' g_map2 <- find_MAP(g_map, max_iter = 5, show_progress_bar = FALSE, optimizer = "continue")
+#'
+#' if (require("graphics")) {
+#'   plot(g_map2, type = "both", logarithmic_x = TRUE)
+#' }
+#'
+#' g_map_BF <- find_MAP(g, show_progress_bar = FALSE, optimizer = "brute_force")
 find_MAP <- function(g, max_iter = NA, optimizer = NA,
                      show_progress_bar = TRUE,
                      save_all_perms = FALSE,
@@ -50,9 +210,9 @@ find_MAP <- function(g, max_iter = NA, optimizer = NA,
   if (continue_optimization) {
     if (is.null(attr(g, "optimization_info"))) {
       rlang::abort(c("There was a problem identified with the provided arguments:",
-        "i" = "`optimizer == 'continue'` can be provided only with an optimized gips object `g`.",
-        "x" = "You provided `optimizer == 'continue'`, but the gips object `g` is not optimized.",
-        "i" = "Did You provide wrong `gips` object?",
+        "i" = "`optimizer == 'continue'` can be provided only with an optimized gipsmult object `g`.",
+        "x" = "You provided `optimizer == 'continue'`, but the gipsmult object `g` is not optimized.",
+        "i" = "Did You provide wrong `gipsmult` object?",
         "i" = "Did You want to call another optimizer like 'MH' or 'HC'?"
       ))
     }
@@ -61,7 +221,7 @@ find_MAP <- function(g, max_iter = NA, optimizer = NA,
     if (optimizer %in% c("BF", "brute_force", "full")) {
       rlang::abort(c("There was a problem identified with the provided arguments:",
         "i" = "`optimizer == 'continue'` cannot be provided after optimizating with `optimizer == 'brute_force'`, because the whole space was already browsed.",
-        "x" = "You provided `optimizer == 'continue'`, but the gips object `g` was optimized with brute_force optimizer. Better permutation will not be found."
+        "x" = "You provided `optimizer == 'continue'`, but the gipsmult object `g` was optimized with brute_force optimizer. Better permutation will not be found."
       ))
     }
   }
@@ -118,7 +278,7 @@ find_MAP <- function(g, max_iter = NA, optimizer = NA,
   D_matrices <- attr(g, "D_matrices")
   was_mean_estimated <- attr(g, "was_mean_estimated")
 
-  if (was_mean_estimated) { # one degree of freedom is lost; we will return this 1 to numbers_of_observations after optimization in `combine_gips()`
+  if (was_mean_estimated) { # one degree of freedom is lost; we will return this 1 to numbers_of_observations after optimization in `combine_gipsmult()`
     edited_numbers_of_observations <- numbers_of_observations - 1
   } else {
     edited_numbers_of_observations <- numbers_of_observations
@@ -127,7 +287,7 @@ find_MAP <- function(g, max_iter = NA, optimizer = NA,
   start_time <- Sys.time()
 
   if (optimizer %in% c("MH", "Metropolis_Hastings")) {
-    gips_optimized <- Metropolis_Hastings_optimizer(
+    gipsmult_optimized <- Metropolis_Hastings_optimizer(
       Ss = Ss, numbers_of_observations = edited_numbers_of_observations,
       max_iter = max_iter, start_perm = start_perm,
       delta = delta, D_matrices = D_matrices,
@@ -136,7 +296,7 @@ find_MAP <- function(g, max_iter = NA, optimizer = NA,
       show_progress_bar = show_progress_bar
     )
   } else if (optimizer %in% c("HC", "hill_climbing")) {
-    gips_optimized <- hill_climbing_optimizer(
+    gipsmult_optimized <- hill_climbing_optimizer(
       Ss = Ss, numbers_of_observations = edited_numbers_of_observations,
       max_iter = max_iter, start_perm = start_perm,
       delta = delta, D_matrices = D_matrices,
@@ -144,7 +304,7 @@ find_MAP <- function(g, max_iter = NA, optimizer = NA,
       show_progress_bar = show_progress_bar
     )
   } else if (optimizer %in% c("BF", "brute_force", "full")) {
-    gips_optimized <- brute_force_optimizer(
+    gipsmult_optimized <- brute_force_optimizer(
       Ss = Ss, numbers_of_observations = edited_numbers_of_observations,
       delta = delta, D_matrices = D_matrices,
       return_probabilities = return_probabilities,
@@ -154,28 +314,28 @@ find_MAP <- function(g, max_iter = NA, optimizer = NA,
   }
 
   end_time <- Sys.time()
-  attr(gips_optimized, "optimization_info")[["optimization_time"]] <- end_time - start_time
-  attr(gips_optimized, "optimization_info")[["whole_optimization_time"]] <- end_time - start_time
+  attr(gipsmult_optimized, "optimization_info")[["optimization_time"]] <- end_time - start_time
+  attr(gipsmult_optimized, "optimization_info")[["whole_optimization_time"]] <- end_time - start_time
 
-  structure_constants <- gips::get_structure_constants(gips_optimized[[1]])
+  structure_constants <- gips::get_structure_constants(gipsmult_optimized[[1]])
   n0 <- max(structure_constants[["r"]] * structure_constants[["d"]] / structure_constants[["k"]])
   if (attr(g, "was_mean_estimated")) { # correction for estimating the mean
     n0 <- n0 + 1
-    attr(gips_optimized, "optimization_info")[["all_n0"]] <- attr(gips_optimized, "optimization_info")[["all_n0"]] + 1 # when all_n0 is NA, all_n0 + 1 is also an NA
+    attr(gipsmult_optimized, "optimization_info")[["all_n0"]] <- attr(gipsmult_optimized, "optimization_info")[["all_n0"]] + 1 # when all_n0 is NA, all_n0 + 1 is also an NA
   }
   if (any(n0 > numbers_of_observations)) {
     rlang::warn(c(
       paste0(
         "The found permutation has n0 = ", n0,
-        ", which is bigger than the numbers_of_observations = ",
+        ", which is bigger than some number of observation in the numbers_of_observations = ",
         numbers_of_observations, "."
       ),
-      "i" = "The covariance matrix invariant under the found permutation does not have the likelihood properly defined.",
+      "i" = "The covariance matrices invariant under the found permutation do not have the likelihood properly defined.",
       "i" = "For a more in-depth explanation, see the 'Project Matrix - Equation (6)' section in the `vignette('Theory', package = 'gips')` or its pkgdown page: https://przechoj.github.io/gips/articles/Theory.html."
     ))
   }
 
-  return(combine_gips(g, gips_optimized))
+  return(combine_gipsmult(g, gipsmult_optimized))
 }
 
 
@@ -216,7 +376,7 @@ Metropolis_Hastings_optimizer <- function(Ss,
   }
 
   my_goal_function <- function(perm, i) {
-    out_val <- log_posteriori_of_perm(perm, # We recommend to use the `log_posteriori_of_gips()` function. If You really want to use `log_posteriori_of_perm()`, remember to edit `numbers_of_observations` if the mean was estimated!
+    out_val <- log_posteriori_of_perm(perm, # We recommend to use the `log_posteriori_of_gipsmult()` function. If You really want to use `log_posteriori_of_perm()`, remember to edit `numbers_of_observations` if the mean was estimated!
       Ss = Ss, numbers_of_observations = numbers_of_observations,
       delta = delta, D_matrices = D_matrices
     )
@@ -224,9 +384,9 @@ Metropolis_Hastings_optimizer <- function(Ss,
     if (is.nan(out_val) || is.infinite(out_val)) {
       # See ISSUE#5; We hope the implementation of log calculations have stopped this problem.
       rlang::abort(c(
-        "gips is yet unable to process this S matrix, and produced a NaN or Inf value while trying.",
+        "gipsmult is yet unable to process these Ss matrices, and produced a NaN or Inf value while trying.",
         "x" = paste0("The posteriori value of ", ifelse(is.nan(out_val), "NaN", "Inf"), " occured!"),
-        "i" = "We think it can only happen for ncol(S) > 500 or for huge D_matrices. If it is not the case for You, please get in touch with us on ISSUE#5.",
+        "i" = "We think it can only happen for ncol(Ss[[i]]) > 500 or for huge D_matrices. If it is not the case for You, please get in touch with us on ISSUE#5.",
         "x" = paste0("The Metropolis Hastings algorithm was stopped after ", i, " iterations.")
       ))
     }
@@ -371,7 +531,7 @@ hill_climbing_optimizer <- function(Ss,
 
 
   my_goal_function <- function(perm, i) {
-    out_val <- log_posteriori_of_perm(perm, # We recommend to use the `log_posteriori_of_gips()` function. If You really want to use `log_posteriori_of_perm`, remember to edit `numbers_of_observations` if the mean was estimated!
+    out_val <- log_posteriori_of_perm(perm, # We recommend to use the `log_posteriori_of_gipsmult()` function. If You really want to use `log_posteriori_of_perm`, remember to edit `numbers_of_observations` if the mean was estimated!
       Ss = Ss, numbers_of_observations = numbers_of_observations,
       delta = delta, D_matrices = D_matrices
     )
@@ -379,10 +539,10 @@ hill_climbing_optimizer <- function(Ss,
     if (is.nan(out_val) || is.infinite(out_val)) {
       # See ISSUE#5; We hope the implementation of log calculations have stopped this problem.
       rlang::abort(c(
-        "gips is yet unable to process this S matrix, and produced a NaN or Inf value while trying.",
+        "gipsmult is yet unable to process these Ss matrices, and produced a NaN or Inf value while trying.",
         "x" = paste0("The posteriori value of ", ifelse(is.nan(out_val), "NaN", "Inf"), " occured!"),
-        "i" = "We think it can only happen for ncol(S) > 500 or for D_matrices with huge values. If it is not the case for You, please get in touch with us on ISSUE#5.",
-        "x" = paste0("The Hill Climbing algorithm was stopped after ", i, " iterations.")
+        "i" = "We think it can only happen for ncol(Ss[[i]]) > 500 or for huge D_matrices. If it is not the case for You, please get in touch with us on ISSUE#5.",
+        "x" = paste0("The Metropolis Hastings algorithm was stopped after ", i, " iterations.")
       ))
     }
 
@@ -543,7 +703,7 @@ brute_force_optimizer <- function(
   }
 
   my_goal_function <- function(perm, i) {
-    out_val <- log_posteriori_of_perm(perm, # We recommend to use the `log_posteriori_of_gips()` function. If You really want to use `log_posteriori_of_perm`, remember to edit `numbers_of_observations` if the mean was estimated!
+    out_val <- log_posteriori_of_perm(perm, # We recommend to use the `log_posteriori_of_gipsmult()` function. If You really want to use `log_posteriori_of_perm`, remember to edit `numbers_of_observations` if the mean was estimated!
       Ss = Ss, numbers_of_observations = numbers_of_observations,
       delta = delta, D_matrices = D_matrices
     )
@@ -551,10 +711,10 @@ brute_force_optimizer <- function(
     if (is.nan(out_val) || is.infinite(out_val)) {
       # See ISSUE#5; We hope the implementation of log calculations have stopped this problem.
       rlang::abort(c(
-        "gips is yet unable to process this S matrix, and produced a NaN or Inf value while trying.",
+        "gipsmult is yet unable to process these Ss matrices, and produced a NaN or Inf value while trying.",
         "x" = paste0("The posteriori value of ", ifelse(is.nan(out_val), "NaN", "Inf"), " occured!"),
-        "i" = "We think it can only happen for ncol(S) > 500 or for huge D_matrices. If it is not the case for You, please get in touch with us on ISSUE#5.",
-        "x" = paste0("The Brute Force algorithm was stopped after ", i, " iterations.")
+        "i" = "We think it can only happen for ncol(Ss[[i]]) > 500 or for huge D_matrices. If it is not the case for You, please get in touch with us on ISSUE#5.",
+        "x" = paste0("The Metropolis Hastings algorithm was stopped after ", i, " iterations.")
       ))
     }
 
@@ -623,13 +783,13 @@ brute_force_optimizer <- function(
 
 
 
-#' Combining 2 gips objects
+#' Combining 2 gipsmult objects
 #'
 #' g2 was optimized with a single optimization method. g1 was potentially non-optimized or optimized once, or optimized multiple times.
 #' If g2 was optimized with "brute_force", forget the g1.
 #'
 #' @noRd
-combine_gips <- function(g1, g2, show_progress_bar = FALSE) {
+combine_gipsmult <- function(g1, g2, show_progress_bar = FALSE) {
   # first, adjust the number of observations:
   attr(g2, "numbers_of_observations") <- attr(g1, "numbers_of_observations")
   attr(g2, "was_mean_estimated") <- attr(g1, "was_mean_estimated")
@@ -651,7 +811,7 @@ combine_gips <- function(g1, g2, show_progress_bar = FALSE) {
 
   if (all(is.na(optimization_info1[["visited_perms"]])) || all(is.na(optimization_info2[["visited_perms"]]))) {
     if (!all(is.na(optimization_info1[["visited_perms"]])) || !all(is.na(optimization_info2[["visited_perms"]]))) {
-      rlang::warn("You wanted to save visited_perms on one of the optimized `gips` objects but forget it for the other. This is not possible, so both will be forgotten.")
+      rlang::warn("You wanted to save visited_perms on one of the optimized `gipsmult` objects but forget it for the other. This is not possible, so both will be forgotten.")
       optimization_info2[["post_probabilities"]] <- NULL
       optimization_info1[["post_probabilities"]] <- NULL
     }
@@ -663,7 +823,7 @@ combine_gips <- function(g1, g2, show_progress_bar = FALSE) {
 
   if (all(optimization_algorithm_used == "Metropolis_Hastings") &&
     !is.null(optimization_info2[["post_probabilities"]])) {
-    post_probabilities <- estimate_probabilities(visited_perms, show_progress_bar) # TODO(This can be combined more optimally when !is.null(optimization_info1[["post_probabilities"]]). It is significant, because those calculations are like the same speed as the MH itself. However, I (Adam) think this will be rarely done nevertheless.)
+    post_probabilities <- estimate_probabilities(visited_perms, show_progress_bar)
   } else {
     post_probabilities <- NULL
   }
