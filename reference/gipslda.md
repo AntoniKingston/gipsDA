@@ -1,0 +1,151 @@
+# Linear Discriminant Analysis with gips Covariance Projection
+
+A modification of Linear Discriminant Analysis (LDA) in which the
+within-class covariance matrix is projected onto a permutation-invariant
+structure using the gips framework.
+
+## Usage
+
+``` r
+gipslda(x, ...)
+
+# S3 method for class 'formula'
+gipslda(formula, data, ..., subset, na.action)
+
+# Default S3 method
+gipslda(x, grouping, prior = proportions,
+  tol = 1e-4, nu = 5, weighted_avg = FALSE,
+  MAP = TRUE, optimizer = NULL, max_iter = NULL, ...)
+
+# S3 method for class 'data.frame'
+gipslda(x, ...)
+
+# S3 method for class 'matrix'
+gipslda(x, grouping, ..., subset, na.action)
+```
+
+## Arguments
+
+- x:
+
+  (required if no formula is given as the principal argument) a matrix
+  or data frame or Matrix containing the explanatory variables.
+
+- ...:
+
+  Arguments passed to or from other methods.
+
+- formula:
+
+  A formula of the form `groups ~ x1 + x2 + ...`. The response is the
+  grouping factor and the right-hand side specifies the (non-factor)
+  discriminators.
+
+- data:
+
+  An optional data frame, list or environment from which variables
+  specified in `formula` are preferentially taken.
+
+- grouping:
+
+  (required if no formula principal argument is given) a factor
+  specifying the class for each observation.
+
+- prior:
+
+  The prior probabilities of class membership. If unspecified, the class
+  proportions for the training set are used.
+
+- tol:
+
+  A tolerance to decide if a matrix is singular; variables whose
+  variance is less than `tol^2` are rejected.
+
+- subset:
+
+  An index vector specifying the cases to be used in the training
+  sample. (NOTE: must be named.)
+
+- na.action:
+
+  A function specifying the action for `NA`s. \#' @param weighted_avg
+  Logical; if TRUE, uses a weighted average of class-specific covariance
+  matrices instead of the pooled covariance.
+
+- MAP:
+
+  Logical; whether to compute a Maximum A Posteriori gips projection of
+  the covariance matrix.
+
+- optimizer:
+
+  Character; optimization method used by gips (e.g. `"BF"` or `"MH"`).
+
+- max_iter:
+
+  Maximum number of iterations for the optimizer.
+
+## Value
+
+An object of class `"gipslda"` containing:
+
+- `prior`: prior class probabilities
+
+- `counts`: number of observations per class
+
+- `means`: group means
+
+- `scaling`: linear discriminant coefficients
+
+- `svd`: singular values of the between-class scatter
+
+- `N`: number of observations
+
+- `optimization_info`: information about the gips optimization
+
+- `call`: matched call
+
+## Details
+
+Unlike classical LDA, the within-class covariance matrix is first
+projected onto a permutation-invariant structure using the gips
+framework. This can stabilize covariance estimation in high dimensions
+or when symmetry assumptions are justified.
+
+The choice of optimizer and MAP estimation affects both the covariance
+estimate and the resulting discriminant directions.
+
+See Chojecki et al. (2025) for theoretical background.
+
+## Note
+
+This function is inspired by
+[`lda`](https://rdrr.io/pkg/MASS/man/lda.html) but is not a drop-in
+replacement. The covariance estimator, optimization procedure, and
+returned object differ substantially.
+
+## References
+
+Chojecki, A., et al. (2025). *Learning Permutation Symmetry of a
+Gaussian Vector with gips in R*. Journal of Statistical Software,
+**112**(7), 1–38.
+[doi:10.18637/jss.v112.i07](https://doi.org/10.18637/jss.v112.i07)
+
+## See also
+
+[`lda`](https://rdrr.io/pkg/MASS/man/lda.html), `predict.gipslda`,
+`gips`
+
+## Examples
+
+``` r
+Iris <- data.frame(rbind(iris3[,,1], iris3[,,2], iris3[,,3]),
+                   Sp = rep(c("s","c","v"), rep(50,3)))
+train <- sample(1:150, 75)
+z <- gipslda(Sp ~ ., Iris, prior = c(1,1,1)/3, subset = train)
+#> Error in gipslda(Sp ~ ., Iris, prior = c(1, 1, 1)/3, subset = train): could not find function "gipslda"
+predict(z, Iris[-train, ])$class
+#> Error: object 'z' not found
+(z1 <- update(z, . ~ . - Petal.W.))
+#> Error: object 'z' not found
+```

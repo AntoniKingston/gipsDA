@@ -42,7 +42,7 @@ the Maximum A Posteriori (MAP) Estimator."></head><body>
     <div class="ref-description section level2">
     <p>More precisely, it is the logarithm of an unnormalized
 posterior probability. It is the goal function for
-optimization algorithms in the <code>find_MAP()</code> function.
+optimization algorithms in the <code><a href="find_MAP.html">find_MAP()</a></code> function.
 The <code>perm_proposal</code> that maximizes this function is
 the Maximum A Posteriori (MAP) Estimator.</p>
     </div>
@@ -57,7 +57,7 @@ the Maximum A Posteriori (MAP) Estimator.</p>
 
 
 <dl><dt id="arg-g">g<a class="anchor" aria-label="anchor" href="#arg-g"></a></dt>
-<dd><p>An object of a <code>gips</code> class.</p></dd>
+<dd><p>An object of a <code>gipsmult</code> class.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -82,17 +82,10 @@ The Annals of Statistics, 50(3) 1747-1774 June 2022.
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index">
-<ul><li><p><code>calculate_gamma_function()</code> - The function that calculates
-the value needed for <code>log_posteriori_of_gips()</code>.</p></li>
-<li><p><code>get_structure_constants()</code> - The function that calculates
-the structure constants needed for <code>log_posteriori_of_gips()</code>.</p></li>
-<li><p><code>find_MAP()</code> - The function that optimizes
+<ul><li><p><code><a href="find_MAP.html">find_MAP()</a></code> - The function that optimizes
 the <code>log_posteriori_of_gips</code> function.</p></li>
-<li><p><code>compare_posteriories_of_perms()</code> - Uses <code>log_posteriori_of_gips()</code>
+<li><p><code><a href="https://przechoj.github.io/gips/reference/compare_posteriories_of_perms.html" class="external-link">gips::compare_posteriories_of_perms()</a></code> - Uses <code>log_posteriori_of_gips()</code>
 to compare a posteriori of two permutations.</p></li>
-<li><p><code><a href="https://przechoj.github.io/gips/articles/Theory.html" class="external-link">vignette("Theory", package = "gips")</a></code> or its
-<a href="https://przechoj.github.io/gips/articles/Theory.html" class="external-link">pkgdown page</a> -
-A place to learn more about the math behind the <code>gips</code> package.</p></li>
 </ul></div>
     </div>
 
@@ -102,44 +95,34 @@ A place to learn more about the math behind the <code>gips</code> package.</p></
 <span class="r-in"><span><span class="va">perm1</span> <span class="op">&lt;-</span> <span class="fu">permutations</span><span class="fu">::</span><span class="fu"><a href="https://robinhankin.github.io/permutations/reference/permutation.html" class="external-link">as.cycle</a></span><span class="op">(</span><span class="st">"(1)(2)"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">perm2</span> <span class="op">&lt;-</span> <span class="fu">permutations</span><span class="fu">::</span><span class="fu"><a href="https://robinhankin.github.io/permutations/reference/permutation.html" class="external-link">as.cycle</a></span><span class="op">(</span><span class="st">"(1,2)"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">S1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">2</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu">gips</span><span class="op">(</span><span class="va">S1</span>, <span class="fl">100</span>, perm <span class="op">=</span> <span class="va">perm1</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in gips(S1, 100, perm = perm1):</span> could not find function "gips"</span>
-<span class="r-in"><span><span class="va">g2</span> <span class="op">&lt;-</span> <span class="fu">gips</span><span class="op">(</span><span class="va">S1</span>, <span class="fl">100</span>, perm <span class="op">=</span> <span class="va">perm2</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in gips(S1, 100, perm = perm2):</span> could not find function "gips"</span>
-<span class="r-in"><span><span class="fu">log_posteriori_of_gips</span><span class="op">(</span><span class="va">g1</span><span class="op">)</span> <span class="co"># -134.1615, this is the MAP Estimator</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in log_posteriori_of_gips(g1):</span> could not find function "log_posteriori_of_gips"</span>
-<span class="r-in"><span><span class="fu">log_posteriori_of_gips</span><span class="op">(</span><span class="va">g2</span><span class="op">)</span> <span class="co"># -138.1695</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in log_posteriori_of_gips(g2):</span> could not find function "log_posteriori_of_gips"</span>
+<span class="r-in"><span><span class="va">S2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">7</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu"><a href="gipsmult.html">gipsmult</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">S1</span>,<span class="va">S2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">100</span><span class="op">)</span>, perm <span class="op">=</span> <span class="va">perm1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">g2</span> <span class="op">&lt;-</span> <span class="fu"><a href="gipsmult.html">gipsmult</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">S1</span>,<span class="va">S2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">100</span><span class="op">)</span>, perm <span class="op">=</span> <span class="va">perm2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">log_posteriori_of_gipsmult</span><span class="op">(</span><span class="va">g1</span><span class="op">)</span> <span class="co"># -354.4394, this is the MAP Estimator</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in log_posteriori_of_gipsmult(g1):</span> could not find function "log_posteriori_of_gipsmult"</span>
+<span class="r-in"><span><span class="fu">log_posteriori_of_gipsmult</span><span class="op">(</span><span class="va">g2</span><span class="op">)</span> <span class="co"># -380.0079</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in log_posteriori_of_gipsmult(g2):</span> could not find function "log_posteriori_of_gipsmult"</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fu">log_posteriori_of_gips</span><span class="op">(</span><span class="va">g1</span><span class="op">)</span> <span class="op">-</span> <span class="fu">log_posteriori_of_gips</span><span class="op">(</span><span class="va">g2</span><span class="op">)</span><span class="op">)</span> <span class="co"># 55.0</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in log_posteriori_of_gips(g1):</span> could not find function "log_posteriori_of_gips"</span>
-<span class="r-in"><span><span class="co"># g1 is 55 times more likely than g2.</span></span></span>
-<span class="r-in"><span><span class="co"># This is the expected outcome because S[1,1] significantly differs from S[2,2].</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">compare_posteriories_of_perms</span><span class="op">(</span><span class="va">g1</span>, <span class="va">g2</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in compare_posteriories_of_perms(g1, g2):</span> could not find function "compare_posteriories_of_perms"</span>
-<span class="r-in"><span><span class="co"># The same result, but presented in a more pleasant way</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fu">log_posteriori_of_gipsmult</span><span class="op">(</span><span class="va">g1</span><span class="op">)</span> <span class="op">-</span> <span class="fu">log_posteriori_of_gipsmult</span><span class="op">(</span><span class="va">g2</span><span class="op">)</span><span class="op">)</span> <span class="co"># 127131902082</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in log_posteriori_of_gipsmult(g1):</span> could not find function "log_posteriori_of_gipsmult"</span>
+<span class="r-in"><span><span class="co"># g1 is 127131902082 times more likely than g2.</span></span></span>
+<span class="r-in"><span><span class="co"># This is the expected outcome because S1[1,1] and S2 [1,1] significantly differ from S1[2,2] and S2[2,2] respectively.</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># ========================================================================</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">S2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">1.1</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu">gips</span><span class="op">(</span><span class="va">S2</span>, <span class="fl">100</span>, perm <span class="op">=</span> <span class="va">perm1</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in gips(S2, 100, perm = perm1):</span> could not find function "gips"</span>
-<span class="r-in"><span><span class="va">g2</span> <span class="op">&lt;-</span> <span class="fu">gips</span><span class="op">(</span><span class="va">S2</span>, <span class="fl">100</span>, perm <span class="op">=</span> <span class="va">perm2</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in gips(S2, 100, perm = perm2):</span> could not find function "gips"</span>
-<span class="r-in"><span><span class="fu">log_posteriori_of_gips</span><span class="op">(</span><span class="va">g1</span><span class="op">)</span> <span class="co"># -98.40984</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in log_posteriori_of_gips(g1):</span> could not find function "log_posteriori_of_gips"</span>
-<span class="r-in"><span><span class="fu">log_posteriori_of_gips</span><span class="op">(</span><span class="va">g2</span><span class="op">)</span> <span class="co"># -95.92039, this is the MAP Estimator</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in log_posteriori_of_gips(g2):</span> could not find function "log_posteriori_of_gips"</span>
+<span class="r-in"><span><span class="va">S3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">1.1</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">S4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">2.137</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu"><a href="gipsmult.html">gipsmult</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">S3</span>,<span class="va">S4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">100</span><span class="op">)</span>, perm <span class="op">=</span> <span class="va">perm1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">g2</span> <span class="op">&lt;-</span> <span class="fu"><a href="gipsmult.html">gipsmult</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">S3</span>,<span class="va">S4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">100</span><span class="op">)</span>, perm <span class="op">=</span> <span class="va">perm2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">log_posteriori_of_gipsmult</span><span class="op">(</span><span class="va">g1</span><span class="op">)</span> <span class="co"># -148.6485</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in log_posteriori_of_gipsmult(g1):</span> could not find function "log_posteriori_of_gipsmult"</span>
+<span class="r-in"><span><span class="fu">log_posteriori_of_gipsmult</span><span class="op">(</span><span class="va">g2</span><span class="op">)</span> <span class="co"># -145.3019, this is the MAP Estimator</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in log_posteriori_of_gipsmult(g2):</span> could not find function "log_posteriori_of_gipsmult"</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fu">log_posteriori_of_gips</span><span class="op">(</span><span class="va">g2</span><span class="op">)</span> <span class="op">-</span> <span class="fu">log_posteriori_of_gips</span><span class="op">(</span><span class="va">g1</span><span class="op">)</span><span class="op">)</span> <span class="co"># 12.05</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in log_posteriori_of_gips(g2):</span> could not find function "log_posteriori_of_gips"</span>
-<span class="r-in"><span><span class="co"># g2 is 12 times more likely than g1.</span></span></span>
-<span class="r-in"><span><span class="co"># This is the expected outcome because S[1,1] is very close to S[2,2].</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">compare_posteriories_of_perms</span><span class="op">(</span><span class="va">g2</span>, <span class="va">g1</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in compare_posteriories_of_perms(g2, g1):</span> could not find function "compare_posteriories_of_perms"</span>
-<span class="r-in"><span><span class="co"># The same result, but presented in a more pleasant way</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fu">log_posteriori_of_gipsmult</span><span class="op">(</span><span class="va">g2</span><span class="op">)</span> <span class="op">-</span> <span class="fu">log_posteriori_of_gipsmult</span><span class="op">(</span><span class="va">g1</span><span class="op">)</span><span class="op">)</span> <span class="co"># 28.406</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in log_posteriori_of_gipsmult(g2):</span> could not find function "log_posteriori_of_gipsmult"</span>
+<span class="r-in"><span><span class="co"># g2 is 28.406 times more likely than g1.</span></span></span>
+<span class="r-in"><span><span class="co"># This is the expected outcome because S1[1,1] and S2 [1,1] are very close to S1[2,2] and S2[2,2] respectively.</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
