@@ -7,7 +7,7 @@
 log_posteriori_of_gipsmult(g)
 }
 \arguments{
-\item{g}{An object of a \code{gips} class.}
+\item{g}{An object of a \code{gipsmult} class.}
 }
 \value{
 Returns a value of
@@ -31,32 +31,28 @@ If \code{Inf} or \code{NaN} is reached, it produces a warning.
 perm1 <- permutations::as.cycle("(1)(2)")
 perm2 <- permutations::as.cycle("(1,2)")
 S1 <- matrix(c(1, 0.5, 0.5, 2), nrow = 2, byrow = TRUE)
-g1 <- gips(S1, 100, perm = perm1)
-g2 <- gips(S1, 100, perm = perm2)
-log_posteriori_of_gips(g1) # -134.1615, this is the MAP Estimator
-log_posteriori_of_gips(g2) # -138.1695
+S2 <- matrix(c(2, 1, 3, 7), nrow = 2, byrow = TRUE)
+g1 <- gipsmult(list(S1,S2), c(100,100), perm = perm1)
+g2 <- gipsmult(list(S1,S2), c(100,100), perm = perm2)
+log_posteriori_of_gipsmult(g1) # -354.4394, this is the MAP Estimator
+log_posteriori_of_gipsmult(g2) # -380.0079
 
-exp(log_posteriori_of_gips(g1) - log_posteriori_of_gips(g2)) # 55.0
-# g1 is 55 times more likely than g2.
-# This is the expected outcome because S[1,1] significantly differs from S[2,2].
-
-compare_posteriories_of_perms(g1, g2)
-# The same result, but presented in a more pleasant way
+exp(log_posteriori_of_gipsmult(g1) - log_posteriori_of_gipsmult(g2)) # 127131902082
+# g1 is 127131902082 times more likely than g2.
+# This is the expected outcome because S1[1,1] and S2 [1,1] significantly differ from S1[2,2] and S2[2,2] respectively.
 
 # ========================================================================
 
-S2 <- matrix(c(1, 0.5, 0.5, 1.1), nrow = 2, byrow = TRUE)
-g1 <- gips(S2, 100, perm = perm1)
-g2 <- gips(S2, 100, perm = perm2)
-log_posteriori_of_gips(g1) # -98.40984
-log_posteriori_of_gips(g2) # -95.92039, this is the MAP Estimator
+S3 <- matrix(c(1, 0.5, 0.5, 1.1), nrow = 2, byrow = TRUE)
+S4 <- matrix(c(2, 1, 3, 2.137), nrow = 2, byrow = TRUE)
+g1 <- gipsmult(list(S3,S4), c(100,100), perm = perm1)
+g2 <- gipsmult(list(S3,S4), c(100,100), perm = perm2)
+log_posteriori_of_gipsmult(g1) # -148.6485
+log_posteriori_of_gipsmult(g2) # -145.3019, this is the MAP Estimator
 
-exp(log_posteriori_of_gips(g2) - log_posteriori_of_gips(g1)) # 12.05
-# g2 is 12 times more likely than g1.
-# This is the expected outcome because S[1,1] is very close to S[2,2].
-
-compare_posteriories_of_perms(g2, g1)
-# The same result, but presented in a more pleasant way
+exp(log_posteriori_of_gipsmult(g2) - log_posteriori_of_gipsmult(g1)) # 28.406
+# g2 is 28.406 times more likely than g1.
+# This is the expected outcome because S1[1,1] and S2 [1,1] are very close to S1[2,2] and S2[2,2] respectively.
 }
 \references{
 Piotr Graczyk, Hideyuki Ishi, Bartosz Kołodziejek, Hélène Massam.
@@ -67,16 +63,9 @@ The Annals of Statistics, 50(3) 1747-1774 June 2022.
 }
 \seealso{
 \itemize{
-\item \code{\link[=calculate_gamma_function]{calculate_gamma_function()}} - The function that calculates
-the value needed for \code{log_posteriori_of_gips()}.
-\item \code{\link[=get_structure_constants]{get_structure_constants()}} - The function that calculates
-the structure constants needed for \code{log_posteriori_of_gips()}.
 \item \code{\link[=find_MAP]{find_MAP()}} - The function that optimizes
 the \code{log_posteriori_of_gips} function.
-\item \code{\link[=compare_posteriories_of_perms]{compare_posteriories_of_perms()}} - Uses \code{log_posteriori_of_gips()}
+\item \code{\link[gips:compare_posteriories_of_perms]{gips::compare_posteriories_of_perms()}} - Uses \code{log_posteriori_of_gips()}
 to compare a posteriori of two permutations.
-\item \code{vignette("Theory", package = "gips")} or its
-\href{https://przechoj.github.io/gips/articles/Theory.html}{pkgdown page} -
-A place to learn more about the math behind the \code{gips} package.
 }
 }
