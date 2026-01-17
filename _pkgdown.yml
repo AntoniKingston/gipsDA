@@ -1,0 +1,9 @@
+url: https://AntoniKingston.github.io/gipsDA/
+
+template:
+  bootstrap: 5
+
+navbar:
+  structure:
+    left: [reference, articles, news]
+

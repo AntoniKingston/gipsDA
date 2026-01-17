@@ -1,0 +1,137 @@
+# gipsDA
+
+> **WORK IN PROGRESS** This package is currently under active
+> development. The API may change, and features are still being added.
+
+[![Build
+Status](https://img.shields.io/travis/com/your_username/gipsDA.svg?style=flat-square)](https://travis-ci.com/your_username/gipsDA)
+[![License:
+GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg?style=flat-square)](https://www.gnu.org/licenses/gpl-3.0.html)
+
+An R package for discriminant analysis classification using covariance
+matrices with permutation symmetries.
+
+## About The Project
+
+**gipsDA** is an R package that extends classical Linear Discriminant
+Analysis (LDA) and Quadratic Discriminant Analysis (QDA) by
+incorporating permutation group structures into the estimation of
+covariance matrices. By leveraging the methodology of the `gips`
+library, this package aims to improve classification performance in
+scenarios where features (variables) exhibit underlying symmetries.
+
+The core idea is to find and impose a permutation symmetry on the
+covariance matrix, which acts as a form of regularization and can lead
+to more stable and interpretable models, especially in high-dimensional
+settings. The ultimate goal is to submit `gipsDA` to the Comprehensive R
+Archive Network (CRAN).
+
+### Key Features
+
+- Implementation of four novel `gips`-based discriminant analysis
+  classifiers.
+- A flexible, user-friendly model API consistent with established
+  machine learning libraries in R.
+- A specialized `gipsmult` module for modeling class-specific
+  covariances under a shared symmetry.
+- Designed following best practices for R package development.
+
+## R Package Structure
+
+To adopt the best practices of R package development, the repository is
+organized with the following standard structure:
+
+- #### `R/`
+
+  This directory contains the core logic of the package. All source code
+  files are located here. To ensure proper documentation, we use the
+  `roxygen2` package, with documentation comments embedded directly
+  above the function definitions. To maintain logical modularity within
+  this flat directory structure, a file naming convention has been
+  adopted, where files are prefixed to indicate their module
+  affiliation:
+
+  - `gipsmult_`: for files belonging to the `gipsmult` module.
+  - `models_`: for files belonging to the `models` module.
+
+- #### `tests/`
+
+  This directory houses all testing scripts to ensure the reliability
+  and correctness of the package. Automated unit tests are implemented
+  using the `testthat` framework and are designed to verify the
+  functionality of individual functions and methods within the modules.
+
+## Available Models in `gipsDA`
+
+The `gipsDA` object can be configured to run one of four different
+classification algorithms, each with different assumptions about the
+data structure.
+
+1.  **`gipsLDA_weighted_average`** In this approach, a separate
+    covariance matrix is first estimated for each class. A final, single
+    covariance matrix is then computed as a **weighted average** of
+    these individual matrices. This pooled matrix is then processed by
+    the `gips` library before being used for classification.
+
+2.  **`gipsLDA_classic`** This model follows a more traditional approach
+    by using the **classic pooled covariance estimator** standard in
+    traditional LDA. This single, pooled matrix is then processed by the
+    `gips` library to find the most probable permutation symmetry.
+
+3.  **`gipsMultQDA`** This model leverages the `gipsmult` module. The
+    process involves first identifying the single most probable
+    **permutation structure that is common across all classes**.
+    Subsequently, a separate covariance matrix is estimated for each
+    class, with each matrix being projected onto this shared
+    permutation.
+
+4.  **`gipsQDA`** This represents the most flexible model. The `gips`
+    library is applied **independently to each class**. Consequently,
+    each class can have its own uniquely estimated permutation structure
+    and its own distinct covariance matrix. This is analogous to the
+    classic QDA framework but with individualized symmetry discovery for
+    each class.
+
+# Package index
+
+## All functions
+
+- [`find_MAP()`](https://AntoniKingston.github.io/gipsDA/reference/find_MAP.md)
+  : Find the Maximum A Posteriori Estimation
+
+- [`get_probabilities_from_gipsmult()`](https://AntoniKingston.github.io/gipsDA/reference/get_probabilities_from_gipsmult.md)
+  :
+
+  Extract probabilities for `gipsmult` object optimized with
+  `return_probabilities = TRUE`
+
+- [`gipslda()`](https://AntoniKingston.github.io/gipsDA/reference/gipslda.md)
+  : Linear Discriminant Analysis with gips Covariance Projection
+
+- [`gipsmult()`](https://AntoniKingston.github.io/gipsDA/reference/gipsmult.md)
+  [`new_gipsmult()`](https://AntoniKingston.github.io/gipsDA/reference/gipsmult.md)
+  :
+
+  The constructor of a `gipsmult` class.
+
+- [`gipsmultqda()`](https://AntoniKingston.github.io/gipsDA/reference/gipsmultqda.md)
+  : Quadratic Discriminant Analysis with multiple gips-projected
+  covariances
+
+- [`gipsqda()`](https://AntoniKingston.github.io/gipsDA/reference/gipsqda.md)
+  : Quadratic Discriminant Analysis with gips covariance projection
+
+- [`log_posteriori_of_gipsmult()`](https://AntoniKingston.github.io/gipsDA/reference/log_posteriori_of_gipsmult.md)
+  : A log of a posteriori that the covariance matrix is invariant under
+  permutation
+
+- [`plot(`*`<gipsmult>`*`)`](https://AntoniKingston.github.io/gipsDA/reference/plot.gipsmult.md)
+  :
+
+  Plot optimized matrix or optimization `gipsmult` object
+
+- [`print(`*`<gipsmult>`*`)`](https://AntoniKingston.github.io/gipsDA/reference/print.gipsmult.md)
+  :
+
+  Printing `gipsmult` object
+
