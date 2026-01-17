@@ -1,33 +1,36 @@
 Package: gipsDA
 Title: Training DA Models Utilizing gips
 Version: 0.1
-Authors@R:
-    person("Antoni", "Kingston", email = "qqtrol@gmail.com", role = c("aut", "cre"))
-    person("Norbert", "Frydrysiak", email =  "first.last@example.com", role = c("cre"))
-Description: Extends classical linear and quadratic discriminant analysis by incorporating
-  permutation group symmetries into covariance matrix estimation. The package leverages
-  methodology from the ‘gips’ framework to identify and impose permutation structures
-  that act as a form of regularization, improving stability and interpretability in
-  settings with symmetric or exchangeable features. Several discriminant analysis variants
-  are provided, including pooled and class-specific covariance models, as well
-  as multi-class extensions with shared or independent symmetry structures.
+Authors@R: c(
+    person("Antoni", "Kingston", , "qqtrol@gmail.com", role = "aut"),
+    person("Norbert", "Frydrysiak", , "first.last@example.com", role = c("aut", "cre"))
+  )
+Description: Extends classical linear and quadratic discriminant analysis
+    by incorporating permutation group symmetries into covariance matrix
+    estimation. The package leverages methodology from the ‘gips’
+    framework to identify and impose permutation structures that act as a
+    form of regularization, improving stability and interpretability in
+    settings with symmetric or exchangeable features. Several discriminant
+    analysis variants are provided, including pooled and class-specific
+    covariance models, as well as multi-class extensions with shared or
+    independent symmetry structures.
 License: GPL-3
-Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Imports:
-    gips,
     dplyr,
     ggplot2,
+    gips,
     jsonlite,
     lattice,
     patchwork,
     permutations,
     rlang,
+    roxygen2,
     tibble,
-    tidyr,
-    roxygen2
+    tidyr
 Suggests:
     MASS,
     mockery,
     testthat
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
