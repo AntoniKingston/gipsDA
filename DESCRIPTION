@@ -2,8 +2,10 @@ Package: gipsDA
 Title: Training DA Models Utilizing gips
 Version: 0.1
 Authors@R: c(
-    person("Antoni", "Kingston", , "qqtrol@gmail.com", role = "aut"),
-    person("Norbert", "Frydrysiak", , "first.last@example.com", role = c("aut", "cre"))
+    person(c("Antoni", "Zbigniew"), "Kingston", , "qqtrol@gmail.com", role = "aut"),
+    person(c("Norbert", "Maksymilian"), "Frydrysiak", , "norbert.frydrysiak@proton.me", role = c("aut", "cre")),
+    person(c("Adam", "Przemysław"), "Chojecki", , "adam.prze.choj@gmail.com", role = "ctb",
+           comment = c(ORCID = "0009-0008-2902-4096"))
   )
 Description: Extends classical linear and quadratic discriminant analysis
     by incorporating permutation group symmetries into covariance matrix
