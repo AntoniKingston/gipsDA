@@ -2,18 +2,21 @@
 
 ## Authors
 
-- **Antoni Kingston**. Author.
+- **Antoni Zbigniew Kingston**. Author.
 
-- **Norbert Frydrysiak**. Author, maintainer.
+- **Norbert Maksymilian Frydrysiak**. Author, maintainer.
+
+- **Adam Przemysław Chojecki**. Contributor.
+  [](https://orcid.org/0009-0008-2902-4096)
 
 ## Citation
 
-Kingston A, Frydrysiak N (2026). *gipsDA: Training DA Models Utilizing
+Kingston AZ, Frydrysiak NM (2026). *gipsDA: Training DA Models Utilizing
 gips*. R package version 0.1.
 
     @Manual{,
       title = {gipsDA: Training DA Models Utilizing gips},
-      author = {Antoni Kingston and Norbert Frydrysiak},
+      author = {Antoni Zbigniew Kingston and Norbert Maksymilian Frydrysiak},
       year = {2026},
       note = {R package version 0.1},
     }
