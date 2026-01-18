@@ -40,8 +40,8 @@ g_map <- find_MAP(g,
   optimizer = "BF", show_progress_bar = FALSE,
   return_probabilities = TRUE, save_all_perms = TRUE
 )
-#> Error in find_MAP(g, optimizer = "BF", show_progress_bar = FALSE, return_probabilities = TRUE,     save_all_perms = TRUE): could not find function "find_MAP"
 
 get_probabilities_from_gipsmult(g_map)
-#> Error: object 'g_map' not found
+#>        ()     (1,2) 
+#> 0.6487995 0.3512005 
 ```

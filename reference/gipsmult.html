@@ -193,17 +193,20 @@ the <code>gipsmult</code> object.</p></li>
 <span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">gipsmult</span><span class="op">(</span><span class="va">Ss</span>, <span class="va">numbers_of_observations</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">g_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="find_MAP.html">find_MAP</a></span><span class="op">(</span><span class="va">g</span>, show_progress_bar <span class="op">=</span> <span class="cn">FALSE</span>, optimizer <span class="op">=</span> <span class="st">"brute_force"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in find_MAP(g, show_progress_bar = FALSE, optimizer = "brute_force"):</span> could not find function "find_MAP"</span>
 <span class="r-in"><span><span class="va">g_map</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'g_map' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The permutation (1,2,5,3,4):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - was found after 67 posteriori calculations;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - is 1.132e+22 times more likely than the () permutation.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">g_map</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'g_map' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The permutation (1,2,5,3,4):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - was found after 67 posteriori calculations;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - is 1.132e+22 times more likely than the () permutation.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st">"graphics"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">g_map</span>, type <span class="op">=</span> <span class="st">"MLE"</span>, logarithmic_x <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'g_map' not found</span>
+<span class="r-plt img"><img src="gipsmult-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

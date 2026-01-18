@@ -159,23 +159,20 @@ if (require("graphics")) {
 
 
 g_map <- find_MAP(g, max_iter = 30, show_progress_bar = FALSE, optimizer = "hill_climbing")
-#> Error in find_MAP(g, max_iter = 30, show_progress_bar = FALSE, optimizer = "hill_climbing"): could not find function "find_MAP"
 if (require("graphics")) {
   plot(g_map, type = "both", logarithmic_x = TRUE)
 }
-#> Error: object 'g_map' not found
+
 
 if (require("graphics")) {
   plot(g_map, type = "MLE")
 }
-#> Error: object 'g_map' not found
+
 # Now, the output is (most likely) different because the permutation
   # `g_map[[1]]` is (most likely) not an identity permutation.
 
 g_map_MH <- find_MAP(g, max_iter = 30, show_progress_bar = FALSE, optimizer = "MH")
-#> Error in find_MAP(g, max_iter = 30, show_progress_bar = FALSE, optimizer = "MH"): could not find function "find_MAP"
 if (require("graphics")) {
   plot(g_map_MH, type = "n0")
 }
-#> Error: object 'g_map_MH' not found
 ```

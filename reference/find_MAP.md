@@ -199,18 +199,17 @@ S2 <- cov(Z2) # Assume we have to estimate the mean
 g <- gipsmult(list(S1,S2), numbers_of_observations)
 
 g_map <- find_MAP(g, max_iter = 5, show_progress_bar = FALSE, optimizer = "Metropolis_Hastings")
-#> Error in find_MAP(g, max_iter = 5, show_progress_bar = FALSE, optimizer = "Metropolis_Hastings"): could not find function "find_MAP"
 g_map
-#> Error: object 'g_map' not found
+#> The permutation ():
+#>  - was found after 5 posteriori calculations;
+#>  - is 1 times more likely than the () permutation.
 
 g_map2 <- find_MAP(g_map, max_iter = 5, show_progress_bar = FALSE, optimizer = "continue")
-#> Error in find_MAP(g_map, max_iter = 5, show_progress_bar = FALSE, optimizer = "continue"): could not find function "find_MAP"
 
 if (require("graphics")) {
   plot(g_map2, type = "both", logarithmic_x = TRUE)
 }
-#> Error: object 'g_map2' not found
+
 
 g_map_BF <- find_MAP(g, show_progress_bar = FALSE, optimizer = "brute_force")
-#> Error in find_MAP(g, show_progress_bar = FALSE, optimizer = "brute_force"): could not find function "find_MAP"
 ```

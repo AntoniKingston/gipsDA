@@ -57,12 +57,12 @@ S2 <- matrix(c(2, 1, 3, 7), nrow = 2, byrow = TRUE)
 g1 <- gipsmult(list(S1,S2), c(100,100), perm = perm1)
 g2 <- gipsmult(list(S1,S2), c(100,100), perm = perm2)
 log_posteriori_of_gipsmult(g1) # -354.4394, this is the MAP Estimator
-#> Error in log_posteriori_of_gipsmult(g1): could not find function "log_posteriori_of_gipsmult"
+#> [1] -354.4394
 log_posteriori_of_gipsmult(g2) # -380.0079
-#> Error in log_posteriori_of_gipsmult(g2): could not find function "log_posteriori_of_gipsmult"
+#> [1] -380.0079
 
 exp(log_posteriori_of_gipsmult(g1) - log_posteriori_of_gipsmult(g2)) # 127131902082
-#> Error in log_posteriori_of_gipsmult(g1): could not find function "log_posteriori_of_gipsmult"
+#> [1] 127131902082
 # g1 is 127131902082 times more likely than g2.
 # This is the expected outcome because S1[1,1] and S2 [1,1] significantly differ from S1[2,2] and S2[2,2] respectively.
 
@@ -73,12 +73,28 @@ S4 <- matrix(c(2, 1, 3, 2.137), nrow = 2, byrow = TRUE)
 g1 <- gipsmult(list(S3,S4), c(100,100), perm = perm1)
 g2 <- gipsmult(list(S3,S4), c(100,100), perm = perm2)
 log_posteriori_of_gipsmult(g1) # -148.6485
-#> Error in log_posteriori_of_gipsmult(g1): could not find function "log_posteriori_of_gipsmult"
+#> Warning: ℹ `project_matrix()` is designed for positive semi-definite matrices
+#> ✖ You provided `S` that is not positive semi-definite matrix
+#> • `gips` can still project this matrix on the provided permutation
+#> ℹ Did You provide the wrong `S` matrix?
+#> [1] -148.6485
 log_posteriori_of_gipsmult(g2) # -145.3019, this is the MAP Estimator
-#> Error in log_posteriori_of_gipsmult(g2): could not find function "log_posteriori_of_gipsmult"
+#> Warning: ℹ `project_matrix()` is designed for positive semi-definite matrices
+#> ✖ You provided `S` that is not positive semi-definite matrix
+#> • `gips` can still project this matrix on the provided permutation
+#> ℹ Did You provide the wrong `S` matrix?
+#> [1] -145.3019
 
 exp(log_posteriori_of_gipsmult(g2) - log_posteriori_of_gipsmult(g1)) # 28.406
-#> Error in log_posteriori_of_gipsmult(g2): could not find function "log_posteriori_of_gipsmult"
+#> Warning: ℹ `project_matrix()` is designed for positive semi-definite matrices
+#> ✖ You provided `S` that is not positive semi-definite matrix
+#> • `gips` can still project this matrix on the provided permutation
+#> ℹ Did You provide the wrong `S` matrix?
+#> Warning: ℹ `project_matrix()` is designed for positive semi-definite matrices
+#> ✖ You provided `S` that is not positive semi-definite matrix
+#> • `gips` can still project this matrix on the provided permutation
+#> ℹ Did You provide the wrong `S` matrix?
+#> [1] 28.406
 # g2 is 28.406 times more likely than g1.
 # This is the expected outcome because S1[1,1] and S2 [1,1] are very close to S1[2,2] and S2[2,2] respectively.
 ```

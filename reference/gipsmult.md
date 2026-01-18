@@ -155,15 +155,17 @@ Ss <- lapply(1:n_matrices, function(x) Ss[, , x])
 g <- gipsmult(Ss, numbers_of_observations)
 
 g_map <- find_MAP(g, show_progress_bar = FALSE, optimizer = "brute_force")
-#> Error in find_MAP(g, show_progress_bar = FALSE, optimizer = "brute_force"): could not find function "find_MAP"
 g_map
-#> Error: object 'g_map' not found
+#> The permutation (1,2,5,3,4):
+#>  - was found after 67 posteriori calculations;
+#>  - is 1.132e+22 times more likely than the () permutation.
 
 print(g_map)
-#> Error: object 'g_map' not found
+#> The permutation (1,2,5,3,4):
+#>  - was found after 67 posteriori calculations;
+#>  - is 1.132e+22 times more likely than the () permutation.
 
 if (require("graphics")) {
   plot(g_map, type = "MLE", logarithmic_x = TRUE)
 }
-#> Error: object 'g_map' not found
 ```

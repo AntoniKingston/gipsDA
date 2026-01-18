@@ -143,9 +143,35 @@ Iris <- data.frame(rbind(iris3[,,1], iris3[,,2], iris3[,,3]),
                    Sp = rep(c("s","c","v"), rep(50,3)))
 train <- sample(1:150, 75)
 z <- gipslda(Sp ~ ., Iris, prior = c(1,1,1)/3, subset = train)
-#> Error in gipslda(Sp ~ ., Iris, prior = c(1, 1, 1)/3, subset = train): could not find function "gipslda"
 predict(z, Iris[-train, ])$class
-#> Error: object 'z' not found
+#>  [1] s s s s s s s s s s s s s s s s s s s s s s s s s c c c c c c c c c c c c c
+#> [39] c c c v c c c c c c v v v v v v v v v v v v v v v c v v v v v v v v v v v
+#> Levels: c s v
 (z1 <- update(z, . ~ . - Petal.W.))
-#> Error: object 'z' not found
+#> Call:
+#> gipslda(Sp ~ Sepal.L. + Sepal.W. + Petal.L., data = Iris, prior = c(1, 
+#>     1, 1)/3, subset = train)
+#> 
+#> Prior probabilities of groups:
+#>         c         s         v 
+#> 0.3333333 0.3333333 0.3333333 
+#> 
+#> Group means:
+#>   Sepal.L. Sepal.W. Petal.L.
+#> c 5.885185 2.766667 4.166667
+#> s 5.020000 3.476000 1.452000
+#> v 6.630435 2.952174 5.508696
+#> 
+#> Coefficients of linear discriminants:
+#>                 LD1       LD2
+#> Sepal.L.  0.5096716 -1.145938
+#> Sepal.W.  1.0822205  3.458572
+#> Petal.L. -2.5577491  0.969699
+#> 
+#> Proportion of trace:
+#>    LD1    LD2 
+#> 0.9884 0.0116 
+#> 
+#> Permutations with their estimated probabilities:
+#> [1] (23)
 ```
