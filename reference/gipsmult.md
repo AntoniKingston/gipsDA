@@ -31,10 +31,34 @@ new_gipsmult(
 
 ## Arguments
 
+- Ss:
+
+  A list of matrices; empirical covariance matrices. When `Z` is the
+  observed data from single class:
+
+  - if one does not know the theoretical mean and has to estimate it
+    with the observed mean, use `S = cov(Z)`, and leave parameter
+    `was_mean_estimated = TRUE` as default;
+
+  - if one know the theoretical mean is 0, use
+    `S = (t(Z) %*% Z) / number_of_observations`, and set parameter
+    `was_mean_estimated = FALSE`.
+
+- numbers_of_observations:
+
+  Numbers of data points that `Ss` is based on.
+
 - delta:
 
   A number, hyper-parameter of a Bayesian model. It has to be strictly
   bigger than 1. See the **Hyperparameters** section below.
+
+- D_matrices:
+
+  A list of symmetric, positive-definite matrices of the same size as
+  matrices in `Ss`. Hyper-parameter of a Bayesian model. When `NULL`,
+  the (hopefully) reasonable one is derived from the data. For more
+  details, see the **Hyperparameters** section below.
 
 - was_mean_estimated:
 
@@ -64,29 +88,6 @@ new_gipsmult(
 
   For internal use only. `NULL` or the list with information about the
   optimization process.
-
-- S:
-
-  A matrix; empirical covariance matrix. When `Z` is the observed data:
-
-  - if one does not know the theoretical mean and has to estimate it
-    with the observed mean, use `S = cov(Z)`, and leave parameter
-    `was_mean_estimated = TRUE` as default;
-
-  - if one know the theoretical mean is 0, use
-    `S = (t(Z) %*% Z) / number_of_observations`, and set parameter
-    `was_mean_estimated = FALSE`.
-
-- number_of_observations:
-
-  A number of data points that `S` is based on.
-
-- D_matrix:
-
-  Symmetric, positive-definite matrix of the same size as `S`.
-  Hyper-parameter of a Bayesian model. When `NULL`, the (hopefully)
-  reasonable one is derived from the data. For more details, see the
-  **Hyperparameters** section below.
 
 ## Value
 

@@ -50,7 +50,7 @@ structure using the gips framework.</p>
 <span></span>
 <span><span class="co"># Default S3 method</span></span>
 <span><span class="fu">gipslda</span><span class="op">(</span><span class="va">x</span>, <span class="va">grouping</span>, prior <span class="op">=</span> <span class="va">proportions</span>,</span>
-<span>  tol <span class="op">=</span> <span class="fl">1e-4</span>, nu <span class="op">=</span> <span class="fl">5</span>, weighted_avg <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  tol <span class="op">=</span> <span class="fl">1e-4</span>, weighted_avg <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  MAP <span class="op">=</span> <span class="cn">TRUE</span>, optimizer <span class="op">=</span> <span class="cn">NULL</span>, max_iter <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'data.frame'</span></span>
@@ -123,6 +123,12 @@ gips projection of the covariance matrix.</p></dd>
 <dt id="arg-max-iter">max_iter<a class="anchor" aria-label="anchor" href="#arg-max-iter"></a></dt>
 <dd><p>Maximum number of iterations for the optimizer.</p></dd>
 
+
+<dt id="arg-weighted-avg">weighted_avg<a class="anchor" aria-label="anchor" href="#arg-weighted-avg"></a></dt>
+<dd><p>Logical; Wheter to compute scatter from all classes
+at once or to compute them within classes and comptue the main one as
+average weighted by class proportions.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -161,8 +167,7 @@ Journal of Statistical Software, <strong>112</strong>(7), 1–38.
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/MASS/man/lda.html" class="external-link">lda</a></code>,
-<code>predict.gipslda</code>,
-<code>gips</code></p></div>
+<code><a href="https://przechoj.github.io/gips/reference/gips.html" class="external-link">gips</a></code></p></div>
     </div>
 
     <div class="section level2">

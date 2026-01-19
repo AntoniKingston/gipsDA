@@ -14,7 +14,7 @@ gipslda(formula, data, ..., subset, na.action)
 
 # Default S3 method
 gipslda(x, grouping, prior = proportions,
-  tol = 1e-4, nu = 5, weighted_avg = FALSE,
+  tol = 1e-4, weighted_avg = FALSE,
   MAP = TRUE, optimizer = NULL, max_iter = NULL, ...)
 
 # S3 method for class 'data.frame'
@@ -85,6 +85,12 @@ gipslda(x, grouping, ..., subset, na.action)
 
   Maximum number of iterations for the optimizer.
 
+- weighted_avg:
+
+  Logical; Wheter to compute scatter from all classes at once or to
+  compute them within classes and comptue the main one as average
+  weighted by class proportions.
+
 ## Value
 
 An object of class `"gipslda"` containing:
@@ -133,8 +139,8 @@ Gaussian Vector with gips in R*. Journal of Statistical Software,
 
 ## See also
 
-[`lda`](https://rdrr.io/pkg/MASS/man/lda.html), `predict.gipslda`,
-`gips`
+[`lda`](https://rdrr.io/pkg/MASS/man/lda.html),
+[`gips`](https://przechoj.github.io/gips/reference/gips.html)
 
 ## Examples
 

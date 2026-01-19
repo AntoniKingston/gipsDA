@@ -73,10 +73,33 @@ the <code><a href="find_MAP.html">find_MAP()</a></code> function to do it. See t
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-delta">delta<a class="anchor" aria-label="anchor" href="#arg-delta"></a></dt>
+<dl><dt id="arg-ss">Ss<a class="anchor" aria-label="anchor" href="#arg-ss"></a></dt>
+<dd><p>A list of matrices; empirical covariance matrices.
+When <code>Z</code> is the observed data from single class:</p><ul><li><p>if one does not know the theoretical mean and has to
+estimate it with the observed mean, use <code>S = cov(Z)</code>,
+and leave parameter <code>was_mean_estimated = TRUE</code> as default;</p></li>
+<li><p>if one know the theoretical mean is 0, use
+<code>S = (t(Z) %*% Z) / number_of_observations</code>, and set
+parameter <code>was_mean_estimated = FALSE</code>.</p></li>
+</ul></dd>
+
+
+<dt id="arg-numbers-of-observations">numbers_of_observations<a class="anchor" aria-label="anchor" href="#arg-numbers-of-observations"></a></dt>
+<dd><p>Numbers of data points
+that <code>Ss</code> is based on.</p></dd>
+
+
+<dt id="arg-delta">delta<a class="anchor" aria-label="anchor" href="#arg-delta"></a></dt>
 <dd><p>A number, hyper-parameter of a Bayesian model.
 It has to be strictly bigger than 1.
 See the <strong>Hyperparameters</strong> section below.</p></dd>
+
+
+<dt id="arg-d-matrices">D_matrices<a class="anchor" aria-label="anchor" href="#arg-d-matrices"></a></dt>
+<dd><p>A list of symmetric, positive-definite matrices of the same size as matrices in <code>Ss</code>.
+Hyper-parameter of a Bayesian model.
+When <code>NULL</code>, the (hopefully) reasonable one is derived from the data.
+For more details, see the <strong>Hyperparameters</strong> section below.</p></dd>
 
 
 <dt id="arg-was-mean-estimated">was_mean_estimated<a class="anchor" aria-label="anchor" href="#arg-was-mean-estimated"></a></dt>
@@ -103,29 +126,6 @@ a <code>gips_perm</code> class. The base object for the <code>gipsmult</code> ob
 <dt id="arg-optimization-info">optimization_info<a class="anchor" aria-label="anchor" href="#arg-optimization-info"></a></dt>
 <dd><p>For internal use only. <code>NULL</code> or the list with
 information about the optimization process.</p></dd>
-
-
-<dt id="arg-s">S<a class="anchor" aria-label="anchor" href="#arg-s"></a></dt>
-<dd><p>A matrix; empirical covariance matrix.
-When <code>Z</code> is the observed data:</p><ul><li><p>if one does not know the theoretical mean and has to
-estimate it with the observed mean, use <code>S = cov(Z)</code>,
-and leave parameter <code>was_mean_estimated = TRUE</code> as default;</p></li>
-<li><p>if one know the theoretical mean is 0, use
-<code>S = (t(Z) %*% Z) / number_of_observations</code>, and set
-parameter <code>was_mean_estimated = FALSE</code>.</p></li>
-</ul></dd>
-
-
-<dt id="arg-number-of-observations">number_of_observations<a class="anchor" aria-label="anchor" href="#arg-number-of-observations"></a></dt>
-<dd><p>A number of data points
-that <code>S</code> is based on.</p></dd>
-
-
-<dt id="arg-d-matrix">D_matrix<a class="anchor" aria-label="anchor" href="#arg-d-matrix"></a></dt>
-<dd><p>Symmetric, positive-definite matrix of the same size as <code>S</code>.
-Hyper-parameter of a Bayesian model.
-When <code>NULL</code>, the (hopefully) reasonable one is derived from the data.
-For more details, see the <strong>Hyperparameters</strong> section below.</p></dd>
 
 </dl></div>
     <div class="section level2">
