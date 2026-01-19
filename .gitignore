@@ -352,3 +352,4 @@ cython_debug/
 # csv files in data folder
 data/*.csv
 
+docs
