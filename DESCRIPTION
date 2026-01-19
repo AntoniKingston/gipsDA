@@ -16,7 +16,7 @@ Description: Extends classical linear and quadratic discriminant analysis
     analysis variants are provided, including pooled and class-specific
     covariance models, as well as multi-class extensions with shared or
     independent symmetry structures.
-License: GPL-3
+License: GPL-3 + file LICENSE
 Imports:
     dplyr,
     ggplot2,
