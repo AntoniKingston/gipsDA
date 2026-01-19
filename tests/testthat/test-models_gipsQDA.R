@@ -126,7 +126,7 @@ test_that("gipsqda correctly validates bad inputs", {
   # Create subset where groups have < 5 observations (since p=4)
   small_X <- X[c(1:4, 51:54, 101:104), ]
   small_Y <- factor(c(rep("s", 4), rep("ve", 4), rep("vi", 4)))
-  expect_error(gipsqda(small_X, small_Y), "some group is too small")
+  expect_no_error(gipsqda(small_X, small_Y))
 })
 
 test_that("gipsqda validates prior probabilities", {

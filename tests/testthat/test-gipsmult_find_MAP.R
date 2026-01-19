@@ -193,7 +193,7 @@ test_that("BF stops working if too big permutation size", {
 
 test_that("find_MAP works with combined gips objects", {
 
-  g_combined <- combine_gips(g, g)
+  g_combined <- combine_gipsmult(g, g)
 
   g_map <- find_MAP(g_combined, optimizer = "BF", show_progress_bar = FALSE)
 
@@ -202,7 +202,7 @@ test_that("find_MAP works with combined gips objects", {
   expect_equal(opt_info$optimization_algorithm_used, "brute_force")
 })
 
-test_that("combine_gips warns on inconsistent visited_perms", {
+test_that("combine_gipsmult warns on inconsistent visited_perms", {
   # --- SETUP ---
   S <- matrix(c(1, 0.5, 0.5, 1), nrow = 2, byrow = TRUE)
   g <- gipsmult(list(S), c(10))
@@ -242,19 +242,19 @@ test_that("combine_gips warns on inconsistent visited_perms", {
 
   # --- TEST 3: Warning (Mismatch) ---
   expect_warning(
-    combine_gips(g1, g2),
+    combine_gipsmult(g1, g2),
     regexp = "You wanted to save visited_perms"
   )
 
   g3 <- g
   attr(g3, "optimization_info") <- opt_info_empty
-  expect_warning(combine_gips(g1, g3))
+  expect_warning(combine_gipsmult(g1, g3))
 
   g4 <- g
   opt_info_full2 <- opt_info_full
   opt_info_full2$best_perm_log_posteriori <- -50
   opt_info_full2$optimization_algorithm_used <- "BF"
   attr(g4, "optimization_info") <- opt_info_full2
-  expect_no_error(combine_gips(g4, g1))
+  expect_no_error(combine_gipsmult(g4, g1))
 })
 

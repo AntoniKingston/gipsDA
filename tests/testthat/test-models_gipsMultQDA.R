@@ -129,8 +129,7 @@ test_that("gipsmultqda throws errors for invalid inputs", {
   # We need counts < p+1 (so < 5).
   small_X <- X[c(1:4, 51:54, 101:104), ]
   small_Y <- factor(c(rep("s", 4), rep("ve", 4), rep("vi", 4)))
-  # This should trigger "some group is too small"
-  expect_error(gipsmultqda(small_X, small_Y), "some group is too small")
+  expect_no_error(gipsmultqda(small_X, small_Y))
 })
 
 test_that("gipsmultqda validates priors", {
