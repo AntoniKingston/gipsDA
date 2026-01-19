@@ -347,15 +347,6 @@ Metropolis_Hastings_optimizer <- function(Ss,
     start_perm <- permutations::id
   }
 
-  # check_correctness_of_arguments(
-  #   Ss = Ss, numbers_of_observations = numbers_of_observations,
-  #   max_iter = max_iter, start_perm = start_perm,
-  #   delta = delta, D_matrices = D_matrices, was_mean_estimated = FALSE,
-  #   return_probabilities = return_probabilities,
-  #   save_all_perms = save_all_perms,
-  #   show_progress_bar = show_progress_bar
-  # )
-
   if (!inherits(start_perm, "gips_perm")) {
     start_perm <- gips::gips_perm(start_perm, nrow(Ss[[1]])) # now we know the `Ss` is a matrix
   }
@@ -497,14 +488,6 @@ hill_climbing_optimizer <- function(Ss,
   if (is.null(start_perm)) {
     start_perm <- permutations::id
   }
-
-  # check_correctness_of_arguments(
-  #   Ss = Ss, numbers_of_observations = numbers_of_observations,
-  #   max_iter = max_iter, start_perm = start_perm,
-  #   delta = delta, D_matrices = D_matrices, was_mean_estimated = FALSE,
-  #   return_probabilities = FALSE, save_all_perms = save_all_perms,
-  #   show_progress_bar = show_progress_bar
-  # )
 
   if (!inherits(start_perm, "gips_perm")) {
     start_perm <- gips::gips_perm(start_perm, nrow(Ss[[1]])) # now we know the `S` is a matrix
@@ -652,13 +635,6 @@ brute_force_optimizer <- function(
     delta = 3, D_matrices = NULL,
     return_probabilities = return_probabilities,
     save_all_perms = FALSE, show_progress_bar = TRUE) {
-  # check_correctness_of_arguments(
-  #   Ss = Ss, numbers_of_observations = numbers_of_observations,
-  #   max_iter = 5, start_perm = permutations::id, # max_iter, was_mean_estimated and start_perm are not important for optimization with brute_force
-  #   delta = delta, D_matrices = D_matrices, was_mean_estimated = FALSE,
-  #   return_probabilities = return_probabilities, save_all_perms = save_all_perms,
-  #   show_progress_bar = show_progress_bar
-  # )
 
   perm_size <- dim(Ss[[1]])[1]
 
