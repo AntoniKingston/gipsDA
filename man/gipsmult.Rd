@@ -25,9 +25,28 @@ new_gipsmult(
 )
 }
 \arguments{
+\item{Ss}{A list of matrices; empirical covariance matrices.
+When \code{Z} is the observed data from single class:
+\itemize{
+\item if one does not know the theoretical mean and has to
+estimate it with the observed mean, use \code{S = cov(Z)},
+and leave parameter \code{was_mean_estimated = TRUE} as default;
+\item if one know the theoretical mean is 0, use
+\code{S = (t(Z) \%*\% Z) / number_of_observations}, and set
+parameter \code{was_mean_estimated = FALSE}.
+}}
+
+\item{numbers_of_observations}{Numbers of data points
+that \code{Ss} is based on.}
+
 \item{delta}{A number, hyper-parameter of a Bayesian model.
 It has to be strictly bigger than 1.
 See the \strong{Hyperparameters} section below.}
+
+\item{D_matrices}{A list of symmetric, positive-definite matrices of the same size as matrices in \code{Ss}.
+Hyper-parameter of a Bayesian model.
+When \code{NULL}, the (hopefully) reasonable one is derived from the data.
+For more details, see the \strong{Hyperparameters} section below.}
 
 \item{was_mean_estimated}{A boolean.
 \itemize{
@@ -48,25 +67,6 @@ a \code{gips_perm} class. The base object for the \code{gipsmult} object.}
 
 \item{optimization_info}{For internal use only. \code{NULL} or the list with
 information about the optimization process.}
-
-\item{S}{A matrix; empirical covariance matrix.
-When \code{Z} is the observed data:
-\itemize{
-\item if one does not know the theoretical mean and has to
-estimate it with the observed mean, use \code{S = cov(Z)},
-and leave parameter \code{was_mean_estimated = TRUE} as default;
-\item if one know the theoretical mean is 0, use
-\code{S = (t(Z) \%*\% Z) / number_of_observations}, and set
-parameter \code{was_mean_estimated = FALSE}.
-}}
-
-\item{number_of_observations}{A number of data points
-that \code{S} is based on.}
-
-\item{D_matrix}{Symmetric, positive-definite matrix of the same size as \code{S}.
-Hyper-parameter of a Bayesian model.
-When \code{NULL}, the (hopefully) reasonable one is derived from the data.
-For more details, see the \strong{Hyperparameters} section below.}
 }
 \value{
 \code{gipsmult()} returns an object of

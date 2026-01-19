@@ -18,7 +18,7 @@ gipslda(x, ...)
 \method{gipslda}{formula}(formula, data, ..., subset, na.action)
 
 \method{gipslda}{default}(x, grouping, prior = proportions,
-  tol = 1e-4, nu = 5, weighted_avg = FALSE,
+  tol = 1e-4, weighted_avg = FALSE,
   MAP = TRUE, optimizer = NULL, max_iter = NULL, ...)
 
 \method{gipslda}{data.frame}(x, ...)
@@ -61,6 +61,10 @@ gips projection of the covariance matrix.}
 (e.g. \code{"BF"} or \code{"MH"}).}
 
 \item{max_iter}{Maximum number of iterations for the optimizer.}
+
+\item{weighted_avg}{Logical; Wheter to compute scatter from all classes
+at once or to compute them within classes and comptue the main one as
+average weighted by class proportions.}
 }
 \value{
 An object of class \code{"gipslda"} containing:
@@ -113,7 +117,6 @@ Journal of Statistical Software, \strong{112}(7), 1--38.
 }
 \seealso{
 \code{\link[MASS]{lda}},
-\code{\link{predict.gipslda}},
-\code{\link{gips}}
+\code{\link[gips]{gips}}
 }
 \keyword{multivariate}

@@ -182,5 +182,3 @@ desingularize <- function(A, target = 0.05) {
 
   return((A + diag(s, nrow(A))) / (1 + s))
 }
-
-

@@ -44,7 +44,7 @@ Printing function for a \code{gipsmult} class.
 \examples{
 Ss <- list(matrix(c(1, 0.5, 0.5, 2), nrow = 2, byrow = TRUE), matrix(c(2, 1, 3, 7), nrow = 2, byrow = TRUE))
 noo <- c(10,13)
-g <- gipsmult(S, noo, perm = "(12)")
+g <- gipsmult(Ss, noo, perm = "(12)")
 print(g, digits = 4, oneline = TRUE)
 }
 \seealso{

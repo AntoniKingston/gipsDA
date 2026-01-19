@@ -6,20 +6,20 @@
 #' It will not perform optimization. One must call
 #' the [find_MAP()] function to do it. See the examples below.
 #'
-#' @param S A matrix; empirical covariance matrix.
-#'     When `Z` is the observed data:
+#' @param Ss A list of matrices; empirical covariance matrices.
+#'     When `Z` is the observed data from single class:
 #' * if one does not know the theoretical mean and has to
 #'     estimate it with the observed mean, use `S = cov(Z)`,
 #'     and leave parameter `was_mean_estimated = TRUE` as default;
 #' * if one know the theoretical mean is 0, use
 #'     `S = (t(Z) %*% Z) / number_of_observations`, and set
 #'     parameter `was_mean_estimated = FALSE`.
-#' @param number_of_observations A number of data points
-#'     that `S` is based on.
+#' @param numbers_of_observations Numbers of data points
+#'     that `Ss` is based on.
 #' @param delta A number, hyper-parameter of a Bayesian model.
 #'     It has to be strictly bigger than 1.
 #'     See the **Hyperparameters** section below.
-#' @param D_matrix Symmetric, positive-definite matrix of the same size as `S`.
+#' @param D_matrices A list of symmetric, positive-definite matrices of the same size as matrices in `Ss`.
 #'     Hyper-parameter of a Bayesian model.
 #'     When `NULL`, the (hopefully) reasonable one is derived from the data.
 #'     For more details, see the **Hyperparameters** section below.
@@ -193,7 +193,7 @@ new_gipsmult <- function(list_of_gips_perm, Ss, numbers_of_observations,
 #' @examples
 #' Ss <- list(matrix(c(1, 0.5, 0.5, 2), nrow = 2, byrow = TRUE), matrix(c(2, 1, 3, 7), nrow = 2, byrow = TRUE))
 #' noo <- c(10,13)
-#' g <- gipsmult(S, noo, perm = "(12)")
+#' g <- gipsmult(Ss, noo, perm = "(12)")
 #' print(g, digits = 4, oneline = TRUE)
 print.gipsmult <- function(x, digits = 3, compare_to_original = TRUE,
                        log_value = FALSE, oneline = FALSE, ...) {

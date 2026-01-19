@@ -14,7 +14,7 @@
 #' \method{gipslda}{formula}(formula, data, ..., subset, na.action)
 #'
 #' \method{gipslda}{default}(x, grouping, prior = proportions,
-#'   tol = 1e-4, nu = 5, weighted_avg = FALSE,
+#'   tol = 1e-4, weighted_avg = FALSE,
 #'   MAP = TRUE, optimizer = NULL, max_iter = NULL, ...)
 #'
 #' \method{gipslda}{data.frame}(x, ...)
@@ -47,6 +47,10 @@
 #'   (e.g. \code{"BF"} or \code{"MH"}).
 #'
 #' @param max_iter Maximum number of iterations for the optimizer.
+#'
+#' @param weighted_avg Logical; Wheter to compute scatter from all classes
+#' at once or to compute them within classes and comptue the main one as
+#' average weighted by class proportions.
 
 #' @param ... Arguments passed to or from other methods.
 #'
@@ -87,8 +91,7 @@
 #'
 #' @seealso
 #' \code{\link[MASS]{lda}},
-#' \code{\link{predict.gipslda}},
-#' \code{\link{gips}}
+#' \code{\link[gips]{gips}}
 #'
 #' @examples
 #' Iris <- data.frame(rbind(iris3[,,1], iris3[,,2], iris3[,,3]),
@@ -161,7 +164,7 @@ gipslda.matrix <- function(x, grouping, ..., subset, na.action)
 #' @exportS3Method
 gipslda.default <-
 function(x, grouping, prior = proportions, tol = 1.0e-4,
-       nu = 5, weighted_avg = FALSE, MAP = TRUE, optimizer = NULL, max_iter = NULL, ...) {
+         weighted_avg = FALSE, MAP = TRUE, optimizer = NULL, max_iter = NULL, ...) {
     if(is.null(dim(x))) stop("'x' is not a matrix")
     x <- as.matrix(x)
     if(any(!is.finite(x)))
