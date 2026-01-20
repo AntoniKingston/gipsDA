@@ -64,7 +64,8 @@ log_posteriori_of_gipsmult(g2) # -380.0079
 exp(log_posteriori_of_gipsmult(g1) - log_posteriori_of_gipsmult(g2)) # 127131902082
 #> [1] 127131902082
 # g1 is 127131902082 times more likely than g2.
-# This is the expected outcome because S1[1,1] and S2 [1,1] significantly differ from S1[2,2] and S2[2,2] respectively.
+# This is the expected outcome because S1[1,1] and S2[1,1]
+# differ significantly from S1[2,2] and S2[2,2] respectively.
 
 # ========================================================================
 
@@ -96,5 +97,6 @@ exp(log_posteriori_of_gipsmult(g2) - log_posteriori_of_gipsmult(g1)) # 28.406
 #> ℹ Did You provide the wrong `S` matrix?
 #> [1] 28.406
 # g2 is 28.406 times more likely than g1.
-# This is the expected outcome because S1[1,1] and S2 [1,1] are very close to S1[2,2] and S2[2,2] respectively.
+# This is the expected outcome because S1[1,1] and S2[1,1]
+# are very close to S1[2,2] and S2[2,2] respectively.
 ```
