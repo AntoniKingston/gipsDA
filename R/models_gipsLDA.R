@@ -464,7 +464,7 @@ function(data, g, nbins = 25, h, x0 = -h/1000, breaks,
     if(type == "density" || type == "both"){
         xd <- vector("list", length(groups))
         for (grp in groups){
-            if(missing(width)) width <- width.SJ(data[g == grp])
+            if(missing(width)) width <- stats::bw.SJ(data[g == grp])
             xd1 <- density(data[g == grp], n = 200L, width = width,
                            from = xlim[1L], to = xlim[2L])
             ymax <- max(ymax, xd1$y)

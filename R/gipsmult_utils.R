@@ -101,7 +101,7 @@ plot_single_gg <- function(my_projected_matrix, perm) {
 #' Plots single matrix assuming one does not have  ggplot2 installed.
 #'
 #' @noRd
-plot_single_stats <- function(my_projected_matrix) {
+plot_single_stats <- function(my_projected_matrix, color, ...) {
   if (is.null(color)) { # Setting col = NA or col = NULL turns off the whole plot.
         stats::heatmap(my_projected_matrix,
           symm = TRUE,

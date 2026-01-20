@@ -26,13 +26,13 @@ Imports:
     patchwork,
     permutations,
     rlang,
-    roxygen2,
     tibble,
-    tidyr
+    tidyr,
+    MASS
 Suggests:
-    MASS,
     mockery,
-    testthat
+    testthat,
+    roxygen2
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3

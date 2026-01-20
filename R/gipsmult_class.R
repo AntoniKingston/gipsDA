@@ -191,7 +191,8 @@ new_gipsmult <- function(list_of_gips_perm, Ss, numbers_of_observations,
 #' @export
 #'
 #' @examples
-#' Ss <- list(matrix(c(1, 0.5, 0.5, 2), nrow = 2, byrow = TRUE), matrix(c(2, 1, 3, 7), nrow = 2, byrow = TRUE))
+#' Ss <- list(matrix(c(1, 0.5, 0.5, 2), nrow = 2, byrow = TRUE),
+#' matrix(c(2, 1, 3, 7), nrow = 2, byrow = TRUE))
 #' noo <- c(10,13)
 #' g <- gipsmult(Ss, noo, perm = "(12)")
 #' print(g, digits = 4, oneline = TRUE)
@@ -467,7 +468,7 @@ plot.gipsmult <- function(x, type = NA,
     if (type == "block_heatmap") {
       my_projected_matrices <- get_diagonalized_matrices_for_heatmap(x)
     } else {
-      my_projected_matrices <- mapply(gips:::project_matrix,attr(x, "Ss"), MoreArgs = list(x[[1]]), SIMPLIFY = FALSE)
+      my_projected_matrices <- mapply(gips::project_matrix,attr(x, "Ss"), MoreArgs = list(x[[1]]), SIMPLIFY = FALSE)
     }
     n_Sd3 <- as.integer(ceiling(length(my_projected_matrices)/3))
     if (rlang::is_installed(c("dplyr", "tidyr", "tibble", "ggplot2", "patchwork"))) {
@@ -479,7 +480,7 @@ plot.gipsmult <- function(x, type = NA,
     } else { # use the basic plot in R, package `graphics`
       par(mfrow = c(n_Sd3, 3))
       for (matrix in my_projected_matrices) {
-        plot_single_stats(matrix)
+        plot_single_stats(matrix, color, ...)
       }
     }
   }
@@ -702,7 +703,8 @@ plot.gipsmult <- function(x, type = NA,
 #'     `find_MAP(return_probabilities = TRUE, save_all_perms = TRUE)`.
 #'
 #' @examples
-#' Ss <- list(matrix(c(1, 0.5, 0.5, 2), nrow = 2, byrow = TRUE), matrix(c(2, 1, 3, 7), nrow = 2, byrow = TRUE))
+#' Ss <- list(matrix(c(1, 0.5, 0.5, 2), nrow = 2, byrow = TRUE),
+#' matrix(c(2, 1, 3, 7), nrow = 2, byrow = TRUE))
 #' noo <- c(10,13)
 #' g <- gipsmult(Ss, noo)
 #' g_map <- find_MAP(g,

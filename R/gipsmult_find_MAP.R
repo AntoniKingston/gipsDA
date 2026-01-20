@@ -799,7 +799,7 @@ combine_gipsmult <- function(g1, g2, show_progress_bar = FALSE) {
 
   if (all(optimization_algorithm_used == "Metropolis_Hastings") &&
     !is.null(optimization_info2[["post_probabilities"]])) {
-    post_probabilities <- estimate_probabilities(visited_perms, show_progress_bar)
+    post_probabilities <- gips:::estimate_probabilities(visited_perms, show_progress_bar)
   } else {
     post_probabilities <- NULL
   }
