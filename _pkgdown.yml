@@ -12,5 +12,13 @@ navbar:
       href: https://github.com/antonikingston/gipsDA
     left: [reference, articles, news]
 
+authors:
+  sidebar:
+    roles: [aut, cre, ctb, fnd]
+
+home:
+  sidebar:
+    structure: [links, authors, license, citation, dev]
+
 
 
