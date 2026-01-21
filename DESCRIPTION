@@ -7,6 +7,8 @@ Authors@R: c(
     person(c("Adam", "Przemysław"), "Chojecki", , "adam.prze.choj@gmail.com", role = "ctb",
            comment = c(ORCID = "0009-0008-2902-4096"))
   )
+URL: https://github.com/antonikingston/gipsDA, https://antonikingston.github.io/gipsDA/
+BugReports: https://github.com/antonikingston/gipsDA/issues
 Description: Extends classical linear and quadratic discriminant analysis
     by incorporating permutation group symmetries into covariance matrix
     estimation. The package leverages methodology from the ‘gips’
