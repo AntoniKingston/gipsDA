@@ -3,13 +3,6 @@
 > **WORK IN PROGRESS** This package is currently under active
 > development. The API may change, and features are still being added.
 
-[![Codecov test
-coverage](https://codecov.io/gh/AntoniKingston/gipsDA/graph/badge.svg)](https://app.codecov.io/gh/AntoniKingston/gipsDA)
-[![Build
-Status](https://img.shields.io/travis/com/your_username/gipsDA.svg?style=flat-square)](https://travis-ci.com/your_username/gipsDA)
-[![License:
-GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg?style=flat-square)](https://www.gnu.org/licenses/gpl-3.0.html)
-
 An R package for discriminant analysis classification using covariance
 matrices with permutation symmetries.
 
