@@ -90,8 +90,10 @@ test_that("predict.gipslda works correctly", {
   # Check row sums (probabilities sum to 1)
   row_sums <- rowSums(pred$posterior)
   # expect_equal handles tolerance automatically for doubles
-  expect_equal(unname(row_sums), rep(1, nrow(iris)), tolerance = 1e-6,
-               ignore_attr = TRUE)
+  expect_equal(unname(row_sums), rep(1, nrow(iris)),
+    tolerance = 1e-6,
+    ignore_attr = TRUE
+  )
 })
 
 test_that("predict.gipslda works on new subset", {
@@ -223,14 +225,18 @@ test_that("predict catches invalid arguments", {
   expect_error(predict(fit, newdata = X[, 1:2]), "wrong number of variables")
 
   # Invalid prior length
-  expect_error(predict(fit, newdata = X, prior = c(0.5, 0.5)),
-               "'prior' is of incorrect length")
+  expect_error(
+    predict(fit, newdata = X, prior = c(0.5, 0.5)),
+    "'prior' is of incorrect length"
+  )
 
   # Variable name mismatch warning
   X_bad <- X
   colnames(X_bad) <- c("A", "B", "C", "D")
-  expect_warning(predict(fit, newdata = X_bad),
-                 "variable names in 'newdata' do not match")
+  expect_warning(
+    predict(fit, newdata = X_bad),
+    "variable names in 'newdata' do not match"
+  )
 })
 
 test_that("predict reconstructs data when newdata is missing (Subset logic)", {

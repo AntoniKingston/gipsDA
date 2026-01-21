@@ -16,7 +16,7 @@ test_that("log_posteriori_of_gipsmult returns a valid scalar", {
   val <- log_posteriori_of_gipsmult(g)
 
   # Assertions
-  expect_type(val, "double")  # check for numeric type
+  expect_type(val, "double") # check for numeric type
   expect_length(val, 1)
   expect_true(is.finite(val))
 })

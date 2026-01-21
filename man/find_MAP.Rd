@@ -150,13 +150,13 @@ sigma2 <- matrix(
   nrow = perm_size, byrow = TRUE
 )
 # sigma1 and sigma2 are matrices invariant under permutation (1,2,3,4,5,6)
-numbers_of_observations <- c(21,37)
+numbers_of_observations <- c(21, 37)
 Z1 <- MASS::mvrnorm(numbers_of_observations[1], mu = mu1, Sigma = sigma1)
 Z2 <- MASS::mvrnorm(numbers_of_observations[2], mu = mu2, Sigma = sigma2)
 S1 <- cov(Z1)
 S2 <- cov(Z2) # Assume we have to estimate the mean
 
-g <- gipsmult(list(S1,S2), numbers_of_observations)
+g <- gipsmult(list(S1, S2), numbers_of_observations)
 
 g_map <- find_MAP(g, max_iter = 5, show_progress_bar = FALSE, optimizer = "Metropolis_Hastings")
 g_map

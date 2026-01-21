@@ -13,7 +13,6 @@ g <- gipsmult(Ss, ns)
 # ==============================================================================
 
 test_that("find_MAP works with different optimizers", {
-
   # --- Brute Force (BF) ---
   g_bf <- find_MAP(g, optimizer = "BF", show_progress_bar = FALSE)
 
@@ -56,7 +55,8 @@ test_that("find_MAP works with different optimizers", {
   g_null <- g_mh
   attr(g_null, "optimization_info") <- NULL
   expect_error(find_MAP(g_null, optimizer = "continue", max_iter = 5),
-               regexp = "problem identified with the provided arguments")
+    regexp = "problem identified with the provided arguments"
+  )
 
   g_mh <- g_mh
   opt_info <- attr(g_mh, "optimization_info")
@@ -71,15 +71,19 @@ test_that("find_MAP works with different optimizers", {
 
   opt_info[["optimization_algorithm_used"]][last_index] <- "MH"
   attr(g_mh, "optimization_info") <- opt_info
-  expect_no_error(find_MAP(g_mh, optimizer = "continue",
-                           max_iter = 5, show_progress_bar = FALSE))
+  expect_no_error(find_MAP(g_mh,
+    optimizer = "continue",
+    max_iter = 5, show_progress_bar = FALSE
+  ))
 
   # --- was_mean_estimated FALSE ---
   g_no_mean <- g
   attr(g_no_mean, "was_mean_estimated") <- FALSE
   expect_no_error(
-    find_MAP(g_no_mean, optimizer = "MH",
-             max_iter = 5, show_progress_bar = FALSE)
+    find_MAP(g_no_mean,
+      optimizer = "MH",
+      max_iter = 5, show_progress_bar = FALSE
+    )
   )
 })
 
@@ -88,7 +92,6 @@ test_that("find_MAP works with different optimizers", {
 # ==============================================================================
 
 test_that("probability calculations work correctly", {
-
   # Success case
   g_probs <- find_MAP(g, optimizer = "BF", return_probabilities = TRUE, show_progress_bar = FALSE)
   probs <- get_probabilities_from_gipsmult(g_probs)
@@ -109,7 +112,6 @@ test_that("probability calculations work correctly", {
 # ==============================================================================
 
 test_that("find_MAP catches invalid arguments", {
-
   expect_error(
     find_MAP(g, optimizer = "NON_EXISTENT"),
     regexp = "must be one of"
@@ -143,12 +145,15 @@ test_that("find_MAP warns about missing stringi package and disables return_prob
   mockery::stub(target_func, "rlang::check_installed", function(...) TRUE)
 
   # --- TESTING ---
-  expect_warning(result <- target_func(g,
-                                       optimizer = "MH",
-                                       max_iter = 5,
-                                       return_probabilities = TRUE,
-                                       show_progress_bar = FALSE),
-                 regexp = "Package `stringi` is required")
+  expect_warning(
+    result <- target_func(g,
+      optimizer = "MH",
+      max_iter = 5,
+      return_probabilities = TRUE,
+      show_progress_bar = FALSE
+    ),
+    regexp = "Package `stringi` is required"
+  )
 
   expect_s3_class(result, "gipsmult")
 })
@@ -192,7 +197,6 @@ test_that("BF stops working if too big permutation size", {
 # ==============================================================================
 
 test_that("find_MAP works with combined gips objects", {
-
   g_combined <- combine_gipsmult(g, g)
 
   g_map <- find_MAP(g_combined, optimizer = "BF", show_progress_bar = FALSE)
@@ -257,4 +261,3 @@ test_that("combine_gipsmult warns on inconsistent visited_perms", {
   attr(g4, "optimization_info") <- opt_info_full2
   expect_no_error(combine_gipsmult(g4, g1))
 })
-

@@ -86,8 +86,10 @@ test_that("predict.gipsqda works correctly", {
   row_sums <- rowSums(pred$posterior)
 
   # expect_equal with a vector handles tolerance automatically
-  expect_equal(unname(row_sums), rep(1, nrow(iris)), tolerance = 1e-6,
-               ignore_attr = TRUE)
+  expect_equal(unname(row_sums), rep(1, nrow(iris)),
+    tolerance = 1e-6,
+    ignore_attr = TRUE
+  )
 })
 
 test_that("predict.gipsqda works on new subset", {
@@ -225,21 +227,27 @@ test_that("predict catches invalid arguments", {
   fit <- gipsqda(X, Y)
 
   # Forbidden combination: looCV + newdata
-  expect_error(predict(fit, newdata = X, method = "looCV"),
-               "cannot have leave-one-out CV with 'newdata'")
+  expect_error(
+    predict(fit, newdata = X, method = "looCV"),
+    "cannot have leave-one-out CV with 'newdata'"
+  )
 
   # Wrong dimensions
   expect_error(predict(fit, newdata = X[, 1:2]), "wrong number of variables")
 
   # Invalid prior length
-  expect_error(predict(fit, newdata = X, prior = c(0.5, 0.5)),
-               "'prior' is of incorrect length")
+  expect_error(
+    predict(fit, newdata = X, prior = c(0.5, 0.5)),
+    "'prior' is of incorrect length"
+  )
 
   # Variable name mismatch warning
   X_bad <- X
   colnames(X_bad) <- c("A", "B", "C", "D")
-  expect_warning(predict(fit, newdata = X_bad),
-                 "variable names in 'newdata' do not match")
+  expect_warning(
+    predict(fit, newdata = X_bad),
+    "variable names in 'newdata' do not match"
+  )
 })
 
 test_that("predict reconstructs data from subset when newdata is missing", {

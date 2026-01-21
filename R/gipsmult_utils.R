@@ -4,11 +4,11 @@
 #'
 #' @noRd
 list_of_matrices_check <- function(x) {
-  if(!is.list(x)) {
+  if (!is.list(x)) {
     return(FALSE)
   }
-  for(y in x) {
-    if(!is.matrix(y)) {
+  for (y in x) {
+    if (!is.matrix(y)) {
       return(FALSE)
     }
   }
@@ -26,7 +26,7 @@ SDN_compatibility_check <- function(Ss, D_matrices, numbers_of_observations) {
   if (length(Ss) != n | length(D_matrices) != n) {
     return(FALSE)
   }
-  if(!all(dim(D_matrices[[1]]) == dim(Ss[[1]]))) {
+  if (!all(dim(D_matrices[[1]]) == dim(Ss[[1]]))) {
     return(FALSE)
   }
   return(TRUE)
@@ -37,8 +37,8 @@ SDN_compatibility_check <- function(Ss, D_matrices, numbers_of_observations) {
 #' Checks wheter all elements of provided argument are whole numbers or not.
 #'
 #' @noRd
-noo_check <- function(numbers_of_observations){
-  return(all(gips:::is.wholenumber(numbers_of_observations)))
+noo_check <- function(numbers_of_observations) {
+  return(all(is.wholenumber(numbers_of_observations)))
 }
 #' Plot single gg
 #'
@@ -103,25 +103,25 @@ plot_single_gg <- function(my_projected_matrix, perm) {
 #' @noRd
 plot_single_stats <- function(my_projected_matrix, color, ...) {
   if (is.null(color)) { # Setting col = NA or col = NULL turns off the whole plot.
-        stats::heatmap(my_projected_matrix,
-          symm = TRUE,
-          Rowv = NA, Colv = NA, ...
-        )
-      } else {
-        stats::heatmap(my_projected_matrix,
-          symm = TRUE,
-          Rowv = NA, Colv = NA, col = color, ...
-        )
-      }
+    stats::heatmap(my_projected_matrix,
+      symm = TRUE,
+      Rowv = NA, Colv = NA, ...
+    )
+  } else {
+    stats::heatmap(my_projected_matrix,
+      symm = TRUE,
+      Rowv = NA, Colv = NA, col = color, ...
+    )
+  }
 }
 
 
 #' Get diagonalized matrices for heatmap
 #'
-#' Applies gips:::get_diagonalized_matrix_for_heatmap() to a list od matrices of a gipsmult object.
+#' Applies get_diagonalized_matrix_for_heatmap() to a list od matrices of a gipsmult object.
 #'
 #' @noRd
 get_diagonalized_matrices_for_heatmap <- function(x) {
   Ss <- attr(x, "Ss")
-  lapply(Ss, gips:::get_diagonalized_matrix_for_heatmap)
+  lapply(Ss, get_diagonalized_matrix_for_heatmap)
 }

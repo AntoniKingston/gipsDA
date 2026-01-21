@@ -86,8 +86,10 @@ test_that("predict.gipsmultqda works correctly", {
   row_sums <- rowSums(pred$posterior)
 
   # expect_equal with a vector handles tolerance automatically
-  expect_equal(unname(row_sums), rep(1, nrow(iris)), tolerance = 1e-6,
-               ignore_attr = TRUE)
+  expect_equal(unname(row_sums), rep(1, nrow(iris)),
+    tolerance = 1e-6,
+    ignore_attr = TRUE
+  )
 })
 
 test_that("predict.gipsmultqda works on new subset", {
@@ -117,8 +119,10 @@ test_that("gipsmultqda throws errors for invalid inputs", {
   expect_error(gipsmultqda(X_inf, Y), "infinite, NA or NaN values in 'x'")
 
   # 2. Test dimension mismatch
-  expect_error(gipsmultqda(X[1:10, ], Y),
-               "nrow\\(x\\) and length\\(grouping\\) are different")
+  expect_error(
+    gipsmultqda(X[1:10, ], Y),
+    "nrow\\(x\\) and length\\(grouping\\) are different"
+  )
 
   # 3. Test 'x' is not a matrix (passed as vector without dim)
   expect_error(gipsmultqda.default(1:10, rep(1, 10)), "'x' is not a matrix")
@@ -140,8 +144,10 @@ test_that("gipsmultqda validates priors", {
   expect_error(gipsmultqda(X, Y, prior = c(1.2, -0.1, -0.1)), "invalid 'prior'")
 
   # 3. Incorrect length
-  expect_error(gipsmultqda(X, Y, prior = c(0.5, 0.5)),
-               "'prior' is of incorrect length")
+  expect_error(
+    gipsmultqda(X, Y, prior = c(0.5, 0.5)),
+    "'prior' is of incorrect length"
+  )
 })
 
 # ==============================================================================
@@ -210,21 +216,27 @@ test_that("predict throws errors for invalid scenarios", {
   fit <- gipsmultqda(X, Y)
 
   # 1. looCV with newdata provided (should fail)
-  expect_error(predict(fit, newdata = X, method = "looCV"),
-               "cannot have leave-one-out CV with 'newdata'")
+  expect_error(
+    predict(fit, newdata = X, method = "looCV"),
+    "cannot have leave-one-out CV with 'newdata'"
+  )
 
   # 2. Wrong dimensions in newdata (e.g., only 2 columns instead of 4)
   expect_error(predict(fit, newdata = X[, 1:2]), "wrong number of variables")
 
   # 3. Invalid prior in predict
-  expect_error(predict(fit, newdata = X, prior = c(0.5, 0.5)),
-               "'prior' is of incorrect length")
+  expect_error(
+    predict(fit, newdata = X, prior = c(0.5, 0.5)),
+    "'prior' is of incorrect length"
+  )
 
   # 4. Variable name mismatch warning
   X_bad_names <- X
   colnames(X_bad_names) <- c("A", "B", "C", "D")
-  expect_warning(predict(fit, newdata = X_bad_names),
-                 "variable names in 'newdata' do not match those in 'object'")
+  expect_warning(
+    predict(fit, newdata = X_bad_names),
+    "variable names in 'newdata' do not match those in 'object'"
+  )
 })
 
 test_that("predict works without newdata (re-substitution)", {

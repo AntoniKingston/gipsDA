@@ -93,12 +93,12 @@
 gipsmult <- function(Ss, numbers_of_observations, delta = 3, D_matrices = NULL,
                      was_mean_estimated = TRUE, perm = "") {
   if (inherits(perm, "gips")) {
-      gips::validate_gips(perm)
-      perm <- perm[[1]]
-    }
+    gips::validate_gips(perm)
+    perm <- perm[[1]]
+  }
   if (inherits(perm, "gipsmult")) {
-      perm <- perm[[1]]
-    }
+    perm <- perm[[1]]
+  }
   if (!inherits(perm, c("gips_perm", "permutation"))) {
     perm <- permutations::permutation(perm)
   }
@@ -111,18 +111,16 @@ gipsmult <- function(Ss, numbers_of_observations, delta = 3, D_matrices = NULL,
 
   if (is.null(D_matrices)) {
     D_matrices <- lapply(Ss, function(y) diag(x = mean(diag(y)), nrow = ncol(y)))
-
   }
 
   new_gipsmult(
     list(gips_perm_object),
-    Ss, numbers_of_observations, delta = delta,
+    Ss, numbers_of_observations,
+    delta = delta,
     D_matrices = D_matrices,
     was_mean_estimated = was_mean_estimated,
     optimization_info = NULL
   )
-
-
 }
 
 #' @describeIn gipsmult Constructor. It is only intended for low-level use.
@@ -137,7 +135,7 @@ gipsmult <- function(Ss, numbers_of_observations, delta = 3, D_matrices = NULL,
 #'
 #' @export
 new_gipsmult <- function(list_of_gips_perm, Ss, numbers_of_observations,
-                     delta, D_matrices, was_mean_estimated, optimization_info) {
+                         delta, D_matrices, was_mean_estimated, optimization_info) {
   if (!is.list(list_of_gips_perm) ||
     !inherits(list_of_gips_perm[[1]], "gips_perm") ||
     !list_of_matrices_check(Ss) ||
@@ -152,13 +150,13 @@ new_gipsmult <- function(list_of_gips_perm, Ss, numbers_of_observations,
 
 
   structure(list_of_gips_perm,
-            Ss = Ss,
-            numbers_of_observations = numbers_of_observations,
-            delta = delta,
-            D_matrices = D_matrices,
-            was_mean_estimated = was_mean_estimated,
-            optimization_info = optimization_info,
-            class = c("gipsmult")
+    Ss = Ss,
+    numbers_of_observations = numbers_of_observations,
+    delta = delta,
+    D_matrices = D_matrices,
+    was_mean_estimated = was_mean_estimated,
+    optimization_info = optimization_info,
+    class = c("gipsmult")
   )
 }
 
@@ -191,14 +189,15 @@ new_gipsmult <- function(list_of_gips_perm, Ss, numbers_of_observations,
 #' @export
 #'
 #' @examples
-#' Ss <- list(matrix(c(1, 0.5, 0.5, 2), nrow = 2, byrow = TRUE),
-#' matrix(c(2, 1, 3, 7), nrow = 2, byrow = TRUE))
-#' noo <- c(10,13)
+#' Ss <- list(
+#'   matrix(c(1, 0.5, 0.5, 2), nrow = 2, byrow = TRUE),
+#'   matrix(c(2, 1, 3, 7), nrow = 2, byrow = TRUE)
+#' )
+#' noo <- c(10, 13)
 #' g <- gipsmult(Ss, noo, perm = "(12)")
 #' print(g, digits = 4, oneline = TRUE)
 print.gipsmult <- function(x, digits = 3, compare_to_original = TRUE,
-                       log_value = FALSE, oneline = FALSE, ...) {
-
+                           log_value = FALSE, oneline = FALSE, ...) {
   printing_text <- paste0("The permutation ", as.character(x[[1]]))
 
   if (is.null(attr(x, "optimization_info"))) { # it is unoptimized gipsmult object
@@ -223,7 +222,7 @@ print.gipsmult <- function(x, digits = 3, compare_to_original = TRUE,
       printing_text <- c(
         printing_text,
         paste0(
-          "is ", gips:::convert_log_diff_to_str(log_posteriori - log_posteriori_id, digits),
+          "is ", convert_log_diff_to_str(log_posteriori - log_posteriori_id, digits),
           " times more likely than the () permutation"
         )
       )
@@ -254,7 +253,7 @@ print.gipsmult <- function(x, digits = 3, compare_to_original = TRUE,
 
     if (compare_to_original) {
       printing_text <- c(printing_text, paste0(
-        "is ", gips:::convert_log_diff_to_str(log_posteriori - log_posteriori_original, digits),
+        "is ", convert_log_diff_to_str(log_posteriori - log_posteriori_original, digits),
         " times more likely than the ",
         as.character(x_original[[1]]), " permutation"
       ))
@@ -368,13 +367,13 @@ print.gipsmult <- function(x, digits = 3, compare_to_original = TRUE,
 #'   nrow = perm_size, byrow = TRUE
 #' )
 #' # sigma1 and sigma2 are matrices invariant under permutation (1,2,3,4,5,6)
-#' numbers_of_observations <- c(21,37)
+#' numbers_of_observations <- c(21, 37)
 #' Z1 <- MASS::mvrnorm(numbers_of_observations[1], mu = mu1, Sigma = sigma1)
 #' Z2 <- MASS::mvrnorm(numbers_of_observations[2], mu = mu2, Sigma = sigma2)
 #' S1 <- cov(Z1)
 #' S2 <- cov(Z2) # Assume we have to estimate the mean
 #'
-#' g <- gipsmult(list(S1,S2), numbers_of_observations)
+#' g <- gipsmult(list(S1, S2), numbers_of_observations)
 #' if (require("graphics")) {
 #'   plot(g, type = "MLE")
 #' }
@@ -388,19 +387,19 @@ print.gipsmult <- function(x, digits = 3, compare_to_original = TRUE,
 #'   plot(g_map, type = "MLE")
 #' }
 #' # Now, the output is (most likely) different because the permutation
-#'   # `g_map[[1]]` is (most likely) not an identity permutation.
+#' # `g_map[[1]]` is (most likely) not an identity permutation.
 #'
 #' g_map_MH <- find_MAP(g, max_iter = 30, show_progress_bar = FALSE, optimizer = "MH")
 #' if (require("graphics")) {
 #'   plot(g_map_MH, type = "n0")
 #' }
 plot.gipsmult <- function(x, type = NA,
-                      logarithmic_y = TRUE, logarithmic_x = FALSE,
-                      color = NULL,
-                      title_text = "Convergence plot",
-                      xlabel = NULL, ylabel = NULL,
-                      show_legend = TRUE,
-                      ylim = NULL, xlim = NULL, ...) {
+                          logarithmic_y = TRUE, logarithmic_x = FALSE,
+                          color = NULL,
+                          title_text = "Convergence plot",
+                          xlabel = NULL, ylabel = NULL,
+                          show_legend = TRUE,
+                          ylim = NULL, xlim = NULL, ...) {
   # checking the correctness of the arguments:
   if (!requireNamespace("graphics", quietly = TRUE)) {
     rlang::abort(c("There was a problem identified with the provided arguments:",
@@ -468,14 +467,14 @@ plot.gipsmult <- function(x, type = NA,
     if (type == "block_heatmap") {
       my_projected_matrices <- get_diagonalized_matrices_for_heatmap(x)
     } else {
-      my_projected_matrices <- mapply(gips::project_matrix,attr(x, "Ss"), MoreArgs = list(x[[1]]), SIMPLIFY = FALSE)
+      my_projected_matrices <- mapply(gips::project_matrix, attr(x, "Ss"), MoreArgs = list(x[[1]]), SIMPLIFY = FALSE)
     }
-    n_Sd3 <- as.integer(ceiling(length(my_projected_matrices)/3))
+    n_Sd3 <- as.integer(ceiling(length(my_projected_matrices) / 3))
     if (rlang::is_installed(c("dplyr", "tidyr", "tibble", "ggplot2", "patchwork"))) {
-      plots <- lapply(my_projected_matrices, function(mat){
+      plots <- lapply(my_projected_matrices, function(mat) {
         plot_single_gg(mat, x[[1]])
       })
-      combined_plots <- patchwork::wrap_plots(plots, ncol=3)
+      combined_plots <- patchwork::wrap_plots(plots, ncol = 3)
       return(combined_plots)
     } else { # use the basic plot in R, package `graphics`
       par(mfrow = c(n_Sd3, 3))
@@ -667,16 +666,14 @@ plot.gipsmult <- function(x, type = NA,
       lwd <- c(3, 3)
 
       graphics::legend("topright",
-                       inset = .002,
-                       legend = legend_text,
-                       col = color,
-                       lty = lty, lwd = lwd,
-                       cex = 0.7, box.lty = 0
+        inset = .002,
+        legend = legend_text,
+        col = color,
+        lty = lty, lwd = lwd,
+        cex = 0.7, box.lty = 0
       )
     }
   }
-
-
 }
 
 
@@ -703,9 +700,11 @@ plot.gipsmult <- function(x, type = NA,
 #'     `find_MAP(return_probabilities = TRUE, save_all_perms = TRUE)`.
 #'
 #' @examples
-#' Ss <- list(matrix(c(1, 0.5, 0.5, 2), nrow = 2, byrow = TRUE),
-#' matrix(c(2, 1, 3, 7), nrow = 2, byrow = TRUE))
-#' noo <- c(10,13)
+#' Ss <- list(
+#'   matrix(c(1, 0.5, 0.5, 2), nrow = 2, byrow = TRUE),
+#'   matrix(c(2, 1, 3, 7), nrow = 2, byrow = TRUE)
+#' )
+#' noo <- c(10, 13)
 #' g <- gipsmult(Ss, noo)
 #' g_map <- find_MAP(g,
 #'   optimizer = "BF", show_progress_bar = FALSE,
@@ -714,8 +713,7 @@ plot.gipsmult <- function(x, type = NA,
 #'
 #' get_probabilities_from_gipsmult(g_map)
 get_probabilities_from_gipsmult <- function(g) {
-
-    if (is.null(attr(g, "optimization_info"))) {
+  if (is.null(attr(g, "optimization_info"))) {
     rlang::abort(c("There was a problem identified with the provided arguments:",
       "i" = "`gipsmult` objects has to be optimized with `find_MAP(return_probabilities=TRUE)` to use `get_probabilities_from_gipsmult()` function.",
       "x" = "You did not optimized `g`.",

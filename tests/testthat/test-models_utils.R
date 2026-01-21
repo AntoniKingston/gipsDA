@@ -112,10 +112,12 @@ test_that("gipsDA_to_json and gipsDA_from_json perform full file round-trip", {
 # ==============================================================================
 
 test_that("project_matrix_multiperm returns weighted average matrix", {
-  emp_cov <- matrix(c(4, 2, 0, 1,
-                      2, 3, 1, 0,
-                      0, 1, 2, 1,
-                      1, 0, 1, 5), nrow = 4, byrow = TRUE)
+  emp_cov <- matrix(c(
+    4, 2, 0, 1,
+    2, 3, 1, 0,
+    0, 1, 2, 1,
+    1, 0, 1, 5
+  ), nrow = 4, byrow = TRUE)
   probs <- c("(1,2,3)" = 0.5, "(2,3,4)" = 0.5)
 
   res <- project_matrix_multiperm(emp_cov, probs)

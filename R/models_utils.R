@@ -4,24 +4,23 @@
 #'
 #' @noRd
 project_covs <- function(emp_covs, ns_obs, MAP = TRUE, optimizer, max_iter, tol = 1e-3) {
-    gg <- gipsmult(emp_covs, ns_obs, was_mean_estimated = TRUE)
-    if (MAP) {
-        gg <- find_MAP(gg, optimizer = optimizer, max_iter = max_iter, show_progress_bar = FALSE)
-        perm <- gg[[1]]
-        return(list(covs = lapply(emp_covs, function(x) gips::project_matrix(x, perm)), opt_info = perm))
-    }
-    gg <- find_MAP(gg, optimizer = optimizer, max_iter = max_iter, return_probabilities = TRUE, save_all_perms = TRUE, show_progress_bar = FALSE)
-    probs <- get_probabilities_from_gipsmult(gg)
-    if (all(probs <= tol)) {
-        warning("There are no perms with estimated probability above threshold, projecting onto MAP")
-        probs <- probs[1]
-    }
-    else {
-        probs <- probs[probs > tol]
-    }
+  gg <- gipsmult(emp_covs, ns_obs, was_mean_estimated = TRUE)
+  if (MAP) {
+    gg <- find_MAP(gg, optimizer = optimizer, max_iter = max_iter, show_progress_bar = FALSE)
+    perm <- gg[[1]]
+    return(list(covs = lapply(emp_covs, function(x) gips::project_matrix(x, perm)), opt_info = perm))
+  }
+  gg <- find_MAP(gg, optimizer = optimizer, max_iter = max_iter, return_probabilities = TRUE, save_all_perms = TRUE, show_progress_bar = FALSE)
+  probs <- get_probabilities_from_gipsmult(gg)
+  if (all(probs <= tol)) {
+    warning("There are no perms with estimated probability above threshold, projecting onto MAP")
+    probs <- probs[1]
+  } else {
+    probs <- probs[probs > tol]
+  }
 
 
-    return(list(covs = lapply(emp_covs, function(x) project_matrix_multiperm(x, probs)), opt_info = probs))
+  return(list(covs = lapply(emp_covs, function(x) project_matrix_multiperm(x, probs)), opt_info = probs))
 }
 
 
@@ -31,12 +30,12 @@ project_covs <- function(emp_covs, ns_obs, MAP = TRUE, optimizer, max_iter, tol 
 #'
 #' @noRd
 project_matrix_multiperm <- function(emp_cov, probs) {
-    perms <- names(probs)
-    projected_matrix <- matrix(0, nrow = dim(emp_cov), dim(emp_cov))
-    for (i in 1:length(probs)) {
-        projected_matrix <- projected_matrix + probs[[i]] * gips::project_matrix(emp_cov, perms[i])
-    }
-    return(projected_matrix / sum(probs))
+  perms <- names(probs)
+  projected_matrix <- matrix(0, nrow = dim(emp_cov), dim(emp_cov))
+  for (i in 1:length(probs)) {
+    projected_matrix <- projected_matrix + probs[[i]] * gips::project_matrix(emp_cov, perms[i])
+  }
+  return(projected_matrix / sum(probs))
 }
 
 

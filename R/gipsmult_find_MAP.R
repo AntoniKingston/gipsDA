@@ -140,13 +140,13 @@
 #'   nrow = perm_size, byrow = TRUE
 #' )
 #' # sigma1 and sigma2 are matrices invariant under permutation (1,2,3,4,5,6)
-#' numbers_of_observations <- c(21,37)
+#' numbers_of_observations <- c(21, 37)
 #' Z1 <- MASS::mvrnorm(numbers_of_observations[1], mu = mu1, Sigma = sigma1)
 #' Z2 <- MASS::mvrnorm(numbers_of_observations[2], mu = mu2, Sigma = sigma2)
 #' S1 <- cov(Z1)
 #' S2 <- cov(Z2) # Assume we have to estimate the mean
 #'
-#' g <- gipsmult(list(S1,S2), numbers_of_observations)
+#' g <- gipsmult(list(S1, S2), numbers_of_observations)
 #'
 #' g_map <- find_MAP(g, max_iter = 5, show_progress_bar = FALSE, optimizer = "Metropolis_Hastings")
 #' g_map
@@ -162,7 +162,6 @@ find_MAP <- function(g, max_iter = NA, optimizer = NA,
                      show_progress_bar = TRUE,
                      save_all_perms = FALSE,
                      return_probabilities = FALSE) {
-
   possible_optimizers <- c(
     "MH", "Metropolis_Hastings", "HC", "hill_climbing",
     "BF", "brute_force", "full", "continue"
@@ -339,7 +338,8 @@ find_MAP <- function(g, max_iter = NA, optimizer = NA,
 }
 
 
-Metropolis_Hastings_optimizer <- function(Ss,
+Metropolis_Hastings_optimizer <- function(
+    Ss,
     numbers_of_observations, max_iter, start_perm = NULL,
     delta = 3, D_matrices = NULL, return_probabilities = FALSE,
     save_all_perms = FALSE, show_progress_bar = TRUE) {
@@ -395,7 +395,7 @@ Metropolis_Hastings_optimizer <- function(Ss,
     visited_perms <- NA
   }
   current_perm <- start_perm
-  all_n0[1] <- gips:::get_n0_from_perm(current_perm, was_mean_estimated = FALSE) # was_mean_estimated will be corrected in find_MAP()
+  all_n0[1] <- get_n0_from_perm(current_perm, was_mean_estimated = FALSE) # was_mean_estimated will be corrected in find_MAP()
 
   if (show_progress_bar) {
     progressBar <- utils::txtProgressBar(min = 0, max = max_iter, initial = 1)
@@ -413,8 +413,8 @@ Metropolis_Hastings_optimizer <- function(Ss,
       utils::setTxtProgressBar(progressBar, i)
     }
 
-    e <- gips:::runif_transposition(perm_size)
-    perm_proposal <- gips:::compose_with_transposition(current_perm, e)
+    e <- runif_transposition(perm_size)
+    perm_proposal <- compose_with_transposition(current_perm, e)
 
     goal_function_perm_proposal <- my_goal_function(perm_proposal, i)
 
@@ -426,7 +426,7 @@ Metropolis_Hastings_optimizer <- function(Ss,
       }
       log_posteriori_values[i + 1] <- goal_function_perm_proposal
       acceptance[i] <- TRUE
-      all_n0[i+1] <- gips:::get_n0_from_perm(current_perm, was_mean_estimated = FALSE) # was_mean_estimated will be corrected in find_MAP()
+      all_n0[i + 1] <- get_n0_from_perm(current_perm, was_mean_estimated = FALSE) # was_mean_estimated will be corrected in find_MAP()
 
       if (found_perm_log_posteriori < log_posteriori_values[i + 1]) {
         found_perm_log_posteriori <- log_posteriori_values[i + 1]
@@ -437,7 +437,7 @@ Metropolis_Hastings_optimizer <- function(Ss,
         visited_perms[[i + 1]] <- current_perm
       }
       log_posteriori_values[i + 1] <- log_posteriori_values[i]
-      all_n0[i+1] <- all_n0[i]
+      all_n0[i + 1] <- all_n0[i]
     }
   }
 
@@ -450,7 +450,7 @@ Metropolis_Hastings_optimizer <- function(Ss,
   # visited_perms are already either a list of things or a `NULL` object
 
   if (return_probabilities) {
-    probabilities <- gips:::estimate_probabilities(visited_perms, show_progress_bar)
+    probabilities <- estimate_probabilities(visited_perms, show_progress_bar)
   } else {
     probabilities <- NULL
   }
@@ -481,7 +481,8 @@ Metropolis_Hastings_optimizer <- function(Ss,
 }
 
 
-hill_climbing_optimizer <- function(Ss,
+hill_climbing_optimizer <- function(
+    Ss,
     numbers_of_observations, max_iter = 5,
     start_perm = NULL, delta = 3, D_matrices = NULL,
     save_all_perms = FALSE, show_progress_bar = TRUE) {
@@ -560,7 +561,7 @@ hill_climbing_optimizer <- function(Ss,
     best_neighbour_value <- -Inf
     for (i in 1:(perm_size - 1)) {
       for (j in (i + 1):perm_size) {
-        neighbour <- gips:::compose_with_transposition(current_perm, c(i, j))
+        neighbour <- compose_with_transposition(current_perm, c(i, j))
         neighbour_value <- my_goal_function(neighbour, iteration)
         log_posteriori_values[length(log_posteriori_values) + 1] <- neighbour_value
 
@@ -635,7 +636,6 @@ brute_force_optimizer <- function(
     delta = 3, D_matrices = NULL,
     return_probabilities = return_probabilities,
     save_all_perms = FALSE, show_progress_bar = TRUE) {
-
   perm_size <- dim(Ss[[1]])[1]
 
   if (perm_size > 18) {
@@ -665,7 +665,7 @@ brute_force_optimizer <- function(
       # Only the generators are interesting for us:
       # We precalculated perm_group_generators only for up to perm_size = 9
       # See ISSUE#21 for more information
-      gips:::OEIS_A051625[perm_size]
+      OEIS_A051625[perm_size]
     } else {
       prod(1:perm_size)
     }
@@ -704,7 +704,7 @@ brute_force_optimizer <- function(
     # Only the generators are interesting for us:
     # perm_group_generators are calculated only for up to perm_size = 9
     # See ISSUE#21 for more information
-    all_perms_list <- all_perms_list[gips:::perm_group_generators_list[[perm_size - 2]]]
+    all_perms_list <- all_perms_list[perm_group_generators_list[[perm_size - 2]]]
   }
   log_posteriori_values <- sapply(1:length(all_perms_list), function(i) {
     if (show_progress_bar) {
@@ -719,7 +719,7 @@ brute_force_optimizer <- function(
   }
 
   if (return_probabilities) { # calculate exact probabilities
-    probabilities <- gips:::calculate_probabilities(all_perms_list, log_posteriori_values, show_progress_bar)
+    probabilities <- calculate_probabilities(all_perms_list, log_posteriori_values, show_progress_bar)
   } else {
     probabilities <- NULL
   }
@@ -799,7 +799,7 @@ combine_gipsmult <- function(g1, g2, show_progress_bar = FALSE) {
 
   if (all(optimization_algorithm_used == "Metropolis_Hastings") &&
     !is.null(optimization_info2[["post_probabilities"]])) {
-    post_probabilities <- gips:::estimate_probabilities(visited_perms, show_progress_bar)
+    post_probabilities <- estimate_probabilities(visited_perms, show_progress_bar)
   } else {
     post_probabilities <- NULL
   }

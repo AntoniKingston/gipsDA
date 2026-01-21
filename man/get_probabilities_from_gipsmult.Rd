@@ -23,9 +23,11 @@ the \code{find_MAP(return_probabilities = TRUE)} function, then
 those calculated probabilities can be extracted with this function.
 }
 \examples{
-Ss <- list(matrix(c(1, 0.5, 0.5, 2), nrow = 2, byrow = TRUE),
-matrix(c(2, 1, 3, 7), nrow = 2, byrow = TRUE))
-noo <- c(10,13)
+Ss <- list(
+  matrix(c(1, 0.5, 0.5, 2), nrow = 2, byrow = TRUE),
+  matrix(c(2, 1, 3, 7), nrow = 2, byrow = TRUE)
+)
+noo <- c(10, 13)
 g <- gipsmult(Ss, noo)
 g_map <- find_MAP(g,
   optimizer = "BF", show_progress_bar = FALSE,

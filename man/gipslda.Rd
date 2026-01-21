@@ -101,10 +101,11 @@ a drop-in replacement. The covariance estimator, optimization
 procedure, and returned object differ substantially.
 }
 \examples{
-Iris <- data.frame(rbind(iris3[,,1], iris3[,,2], iris3[,,3]),
-                   Sp = rep(c("s","c","v"), rep(50,3)))
+Iris <- data.frame(rbind(iris3[, , 1], iris3[, , 2], iris3[, , 3]),
+  Sp = rep(c("s", "c", "v"), rep(50, 3))
+)
 train <- sample(1:150, 75)
-z <- gipslda(Sp ~ ., Iris, prior = c(1,1,1)/3, subset = train)
+z <- gipslda(Sp ~ ., Iris, prior = c(1, 1, 1) / 3, subset = train)
 predict(z, Iris[-train, ])$class
 (z1 <- update(z, . ~ . - Petal.W.))
 

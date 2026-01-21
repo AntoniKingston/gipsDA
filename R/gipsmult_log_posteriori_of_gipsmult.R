@@ -36,8 +36,8 @@
 #' perm2 <- permutations::as.cycle("(1,2)")
 #' S1 <- matrix(c(1, 0.5, 0.5, 2), nrow = 2, byrow = TRUE)
 #' S2 <- matrix(c(2, 1, 3, 7), nrow = 2, byrow = TRUE)
-#' g1 <- gipsmult(list(S1,S2), c(100,100), perm = perm1)
-#' g2 <- gipsmult(list(S1,S2), c(100,100), perm = perm2)
+#' g1 <- gipsmult(list(S1, S2), c(100, 100), perm = perm1)
+#' g2 <- gipsmult(list(S1, S2), c(100, 100), perm = perm2)
 #' log_posteriori_of_gipsmult(g1) # -354.4394, this is the MAP Estimator
 #' log_posteriori_of_gipsmult(g2) # -380.0079
 #'
@@ -50,8 +50,8 @@
 #'
 #' S3 <- matrix(c(1, 0.5, 0.5, 1.1), nrow = 2, byrow = TRUE)
 #' S4 <- matrix(c(2, 1, 3, 2.137), nrow = 2, byrow = TRUE)
-#' g1 <- gipsmult(list(S3,S4), c(100,100), perm = perm1)
-#' g2 <- gipsmult(list(S3,S4), c(100,100), perm = perm2)
+#' g1 <- gipsmult(list(S3, S4), c(100, 100), perm = perm1)
+#' g2 <- gipsmult(list(S3, S4), c(100, 100), perm = perm2)
 #' log_posteriori_of_gipsmult(g1) # -148.6485
 #' log_posteriori_of_gipsmult(g2) # -145.3019, this is the MAP Estimator
 #'
@@ -60,7 +60,6 @@
 #' # This is the expected outcome because S1[1,1] and S2[1,1]
 #' # are very close to S1[2,2] and S2[2,2] respectively.
 log_posteriori_of_gipsmult <- function(g) {
-
   numbers_of_observations <- attr(g, "numbers_of_observations")
   was_mean_estimated <- attr(g, "was_mean_estimated")
 
@@ -84,10 +83,10 @@ log_posteriori_of_gipsmult <- function(g) {
 #'
 #' @noRd
 log_posteriori_of_perm <- function(perm_proposal, Ss, numbers_of_observations,
-                                         delta, D_matrices){
+                                   delta, D_matrices) {
   log_values <- mapply(
     function(S, n_obs, D_matrix) {
-      gips:::log_posteriori_of_perm(perm_proposal, S, n_obs, delta, D_matrix)
+      log_posteriori_of_perm_gips(perm_proposal, S, n_obs, delta, D_matrix)
     },
     Ss,
     numbers_of_observations,
@@ -95,5 +94,4 @@ log_posteriori_of_perm <- function(perm_proposal, Ss, numbers_of_observations,
   )
 
   sum(log_values)
-
 }

@@ -59,7 +59,7 @@ test_that("gipsmult constructor handles various inputs", {
   # Internal helper: list_of_matrices_check
   expect_false(gipsDA:::list_of_matrices_check("not_a_list"))
   expect_false(gipsDA:::list_of_matrices_check(list("not_matrix")))
-  expect_true(gipsDA:::list_of_matrices_check(list(matrix(1), matrix(1,2,2))))
+  expect_true(gipsDA:::list_of_matrices_check(list(matrix(1), matrix(1, 2, 2))))
   expect_true(gipsDA:::list_of_matrices_check(list(matrix(1), matrix(2))))
 
   # Internal helper: SDN_compatibility_check
@@ -78,22 +78,22 @@ test_that("plot.gipsmult executes all plot types", {
   attr(opt_g, "optimization_info") <- info
 
   pdf(NULL) # Prevent graphics device output
-    expect_no_error(plot(g, type = NA))
-    expect_no_error(plot(opt_g, type = NA))
+  expect_no_error(plot(g, type = NA))
+  expect_no_error(plot(opt_g, type = NA))
 
-    if (rlang::is_installed("ggplot2")) {
-      expect_no_error(plot(opt_g, type = "heatmap"))
-      try(plot(opt_g, type = "block_heatmap"), silent = TRUE)
-      expect_no_error(plot(opt_g, type = "MLE"))
-    }
+  if (rlang::is_installed("ggplot2")) {
+    expect_no_error(plot(opt_g, type = "heatmap"))
+    try(plot(opt_g, type = "block_heatmap"), silent = TRUE)
+    expect_no_error(plot(opt_g, type = "MLE"))
+  }
 
-    expect_no_error(plot(opt_g, type = "best"))
-    expect_no_error(plot(opt_g, type = "all"))
-    expect_no_error(plot(opt_g, type = "both"))
-    expect_no_error(plot(opt_g, type = "n0"))
+  expect_no_error(plot(opt_g, type = "best"))
+  expect_no_error(plot(opt_g, type = "all"))
+  expect_no_error(plot(opt_g, type = "both"))
+  expect_no_error(plot(opt_g, type = "n0"))
 
-    # Check parameters passed to plot
-    expect_no_error(plot(opt_g, type="both", logarithmic_x=TRUE, logarithmic_y=FALSE, color="purple"))
+  # Check parameters passed to plot
+  expect_no_error(plot(opt_g, type = "both", logarithmic_x = TRUE, logarithmic_y = FALSE, color = "purple"))
   dev.off()
 })
 

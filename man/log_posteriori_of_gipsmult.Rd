@@ -32,8 +32,8 @@ perm1 <- permutations::as.cycle("(1)(2)")
 perm2 <- permutations::as.cycle("(1,2)")
 S1 <- matrix(c(1, 0.5, 0.5, 2), nrow = 2, byrow = TRUE)
 S2 <- matrix(c(2, 1, 3, 7), nrow = 2, byrow = TRUE)
-g1 <- gipsmult(list(S1,S2), c(100,100), perm = perm1)
-g2 <- gipsmult(list(S1,S2), c(100,100), perm = perm2)
+g1 <- gipsmult(list(S1, S2), c(100, 100), perm = perm1)
+g2 <- gipsmult(list(S1, S2), c(100, 100), perm = perm2)
 log_posteriori_of_gipsmult(g1) # -354.4394, this is the MAP Estimator
 log_posteriori_of_gipsmult(g2) # -380.0079
 
@@ -46,8 +46,8 @@ exp(log_posteriori_of_gipsmult(g1) - log_posteriori_of_gipsmult(g2)) # 127131902
 
 S3 <- matrix(c(1, 0.5, 0.5, 1.1), nrow = 2, byrow = TRUE)
 S4 <- matrix(c(2, 1, 3, 2.137), nrow = 2, byrow = TRUE)
-g1 <- gipsmult(list(S3,S4), c(100,100), perm = perm1)
-g2 <- gipsmult(list(S3,S4), c(100,100), perm = perm2)
+g1 <- gipsmult(list(S3, S4), c(100, 100), perm = perm1)
+g2 <- gipsmult(list(S3, S4), c(100, 100), perm = perm2)
 log_posteriori_of_gipsmult(g1) # -148.6485
 log_posteriori_of_gipsmult(g2) # -145.3019, this is the MAP Estimator
 
