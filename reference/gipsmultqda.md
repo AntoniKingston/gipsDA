@@ -143,11 +143,11 @@ documented in the `gipsmult` package.
 
 ``` r
 tr <- sample(1:50, 25)
-train <- rbind(iris3[tr,,1], iris3[tr,,2], iris3[tr,,3])
-test <- rbind(iris3[-tr,,1], iris3[-tr,,2], iris3[-tr,,3])
-cl <- factor(c(rep("s",25), rep("c",25), rep("v",25)))
+train <- rbind(iris3[tr, , 1], iris3[tr, , 2], iris3[tr, , 3])
+test <- rbind(iris3[-tr, , 1], iris3[-tr, , 2], iris3[-tr, , 3])
+cl <- factor(c(rep("s", 25), rep("c", 25), rep("v", 25)))
 z <- gipsmultqda(train, cl)
-predict(z,test)$class
+predict(z, test)$class
 #>  [1] s s s s s s s s s s s s s s s s s s s s s s s s s c c c c c c c c c c c c c
 #> [39] c c c c c c c c c c c c v v v v v v v v v v v v v v v v v v v v v v v v v
 #> Levels: c s v

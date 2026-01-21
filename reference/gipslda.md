@@ -145,10 +145,11 @@ Gaussian Vector with gips in R*. Journal of Statistical Software,
 ## Examples
 
 ``` r
-Iris <- data.frame(rbind(iris3[,,1], iris3[,,2], iris3[,,3]),
-                   Sp = rep(c("s","c","v"), rep(50,3)))
+Iris <- data.frame(rbind(iris3[, , 1], iris3[, , 2], iris3[, , 3]),
+  Sp = rep(c("s", "c", "v"), rep(50, 3))
+)
 train <- sample(1:150, 75)
-z <- gipslda(Sp ~ ., Iris, prior = c(1,1,1)/3, subset = train)
+z <- gipslda(Sp ~ ., Iris, prior = c(1, 1, 1) / 3, subset = train)
 predict(z, Iris[-train, ])$class
 #>  [1] s s s s s s s s s s s s s s s s s s s s s s s s s c c c c c c c c c c c c c
 #> [39] c c c v c c c c c c v v v v v v v v v v v v v v v c v v v v v v v v v v v
