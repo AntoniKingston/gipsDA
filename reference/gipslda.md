@@ -87,8 +87,8 @@ gipslda(x, grouping, ..., subset, na.action)
 
 - weighted_avg:
 
-  Logical; Wheter to compute scatter from all classes at once or to
-  compute them within classes and comptue the main one as average
+  Logical; Whether to compute scatter from all classes at once or to
+  compute them within classes and compute the main one as average
   weighted by class proportions.
 
 ## Value
