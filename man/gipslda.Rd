@@ -80,11 +80,15 @@ An object of class \code{"gipslda"} containing:
 }
 }
 \description{
-A modification of Linear Discriminant Analysis (LDA) in which the
-within-class covariance matrix is projected onto a permutation-invariant
-structure using the gips framework.
+Linear discriminant analysis (LDA) using covariance matrices projected
+via the \emph{gips} framework to enforce permutation symmetry and improve
+numerical stability.
 }
 \details{
+This function is a minor modification of \code{\link[MASS]{lda}}, replacing
+the classical sample covariance estimators by projected covariance matrices
+obtained using \code{project_covs()}.
+
 Unlike classical LDA, the within-class covariance matrix is first
 projected onto a permutation-invariant structure using the gips
 framework. This can stabilize covariance estimation in high dimensions

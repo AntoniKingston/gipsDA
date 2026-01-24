@@ -1,9 +1,12 @@
 #' Linear Discriminant Analysis with gips Covariance Projection
 #'
-#' A modification of Linear Discriminant Analysis (LDA) in which the
-#' within-class covariance matrix is projected onto a permutation-invariant
-#' structure using the gips framework.
+#' Linear discriminant analysis (LDA) using covariance matrices projected
+#' via the \emph{gips} framework to enforce permutation symmetry and improve
+#' numerical stability.
 #'
+#' This function is a minor modification of \code{\link[MASS]{lda}}, replacing
+#' the classical sample covariance estimators by projected covariance matrices
+#' obtained using \code{project_covs()}.
 #' @name gipslda
 #' @aliases gipslda.default gipslda.data.frame gipslda.formula gipslda.matrix
 #'   model.frame.gipslda print.gipslda coef.gipslda plot.gipslda pairs.gipslda

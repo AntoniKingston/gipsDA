@@ -76,10 +76,10 @@ log_posteriori_of_gipsmult <- function(g) {
   )
 }
 
-#' We recommend to use the `log_posteriori_of_gips()` function.
+#' We recommend to use the `log_posteriori_of_gipsmult()` function.
 #'
 #' If You really want to use `log_posteriori_of_perm()`, remember
-#'  to edit `number_of_observations` if the mean was estimated!
+#'  to edit `numbers_of_observations` if the mean was estimated!
 #'
 #' @noRd
 log_posteriori_of_perm <- function(perm_proposal, Ss, numbers_of_observations,

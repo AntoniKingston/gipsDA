@@ -294,16 +294,16 @@ print.gipsmult <- function(x, digits = 3, compare_to_original = TRUE,
 #' @param x Object of a `gipsmult` class.
 #' @param type A character vector of length 1. One of
 #'     `c("heatmap", "MLE", "best", "all", "both", "n0", "block_heatmap")`:
-#'   * `"heatmap"`, `"MLE"` - Plots a heatmap of the Maximum Likelihood
-#'       Estimator of the covariance matrix given the permutation.
-#'       That is, the `S` matrix inside the `gipsmult` object
+#'   * `"heatmap"`, `"MLE"` - Plots heatmaps of the Maximum Likelihood
+#'       Estimator of the covariance matrices given the permutation.
+#'       That is, the `Ss` matrices inside the `gipsmult` object
 #'       projected on the permutation in the `gipsmult` object.
 #'   * `"best"` - Plots the line of the biggest a posteriori found over time.
 #'   * `"all"` - Plots the line of a posteriori for all visited states.
 #'   * `"both"` - Plots both lines from "all" and "best".
 #'   * `"n0"` - Plots the line of `n0`s that were spotted during optimization
 #'       (only for "MH" optimization).
-#'   * `"block_heatmap"` - Plots a heatmap of diagonally block representation of `S`.
+#'   * `"block_heatmap"` - Plots heatmaps of diagonally block representation of `Ss`.
 #'       Non-block entries (equal to 0) are white for better clarity.
 #'
 #' The default value is `NA`, which will be changed to "heatmap" for
@@ -312,7 +312,7 @@ print.gipsmult <- function(x, digits = 3, compare_to_original = TRUE,
 #'     All other arguments are ignored for
 #'     the `type = "heatmap"`, `type = "MLE"`, or `type = "block_heatmap"`.
 #' @param logarithmic_y,logarithmic_x A boolean.
-#'     Sets the axis of the plot in logarithmic scale.
+#'     Sets the axis of the plots in logarithmic scale.
 #' @param color Vector of colors to be used to plot lines.
 #' @param title_text Text to be in the title of the plot.
 #' @param xlabel Text to be on the bottom of the plot.

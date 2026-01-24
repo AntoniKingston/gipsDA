@@ -17,7 +17,9 @@ Description: Extends classical linear and quadratic discriminant analysis
     settings with symmetric or exchangeable features. Several discriminant
     analysis variants are provided, including pooled and class-specific
     covariance models, as well as multi-class extensions with shared or
-    independent symmetry structures.
+    independent symmetry structures. For more details about gips methodology see
+    and Graczyk et al. (2022) <doi:10.1214/22-AOS2174> and Chojecki, Morgen,
+    Kołodziejek (2025, <doi:10.18637/jss.v112.i07>).
 License: GPL-3 + file LICENSE
 Imports:
     dplyr,

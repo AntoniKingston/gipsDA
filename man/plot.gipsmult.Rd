@@ -25,16 +25,16 @@
 \item{type}{A character vector of length 1. One of
 \code{c("heatmap", "MLE", "best", "all", "both", "n0", "block_heatmap")}:
 \itemize{
-\item \code{"heatmap"}, \code{"MLE"} - Plots a heatmap of the Maximum Likelihood
-Estimator of the covariance matrix given the permutation.
-That is, the \code{S} matrix inside the \code{gipsmult} object
+\item \code{"heatmap"}, \code{"MLE"} - Plots heatmaps of the Maximum Likelihood
+Estimator of the covariance matrices given the permutation.
+That is, the \code{Ss} matrices inside the \code{gipsmult} object
 projected on the permutation in the \code{gipsmult} object.
 \item \code{"best"} - Plots the line of the biggest a posteriori found over time.
 \item \code{"all"} - Plots the line of a posteriori for all visited states.
 \item \code{"both"} - Plots both lines from "all" and "best".
 \item \code{"n0"} - Plots the line of \code{n0}s that were spotted during optimization
 (only for "MH" optimization).
-\item \code{"block_heatmap"} - Plots a heatmap of diagonally block representation of \code{S}.
+\item \code{"block_heatmap"} - Plots heatmaps of diagonally block representation of \code{Ss}.
 Non-block entries (equal to 0) are white for better clarity.
 }
 
@@ -45,7 +45,7 @@ All other arguments are ignored for
 the \code{type = "heatmap"}, \code{type = "MLE"}, or \code{type = "block_heatmap"}.}
 
 \item{logarithmic_y, logarithmic_x}{A boolean.
-Sets the axis of the plot in logarithmic scale.}
+Sets the axis of the plots in logarithmic scale.}
 
 \item{color}{Vector of colors to be used to plot lines.}
 
