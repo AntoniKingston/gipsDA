@@ -3,8 +3,7 @@
 Use one of the optimization algorithms to find the permutation that
 maximizes a posteriori probability based on observed data. Not all
 optimization algorithms will always find the MAP, but they try to find a
-significant value. More information can be found in the "**Possible
-algorithms to use as optimizers**" section below.
+significant value.
 
 ## Usage
 
@@ -97,11 +96,6 @@ Returns an optimized object of a `gipsmult` class.
 
 ## Possible algorithms to use as optimizers
 
-For an in-depth explanation, see in the
-[`vignette("Optimizers", package = "gips")`](https://przechoj.github.io/gips/articles/Optimizers.html)
-or in its [pkgdown
-page](https://przechoj.github.io/gips/articles/Optimizers.html).
-
 For every algorithm, there are some aliases available.
 
 - `"brute_force"`, `"BF"`, `"full"` - use the **Brute Force** algorithm
@@ -116,10 +110,9 @@ For every algorithm, there are some aliases available.
   The algorithm will draw a random transposition in every iteration and
   consider changing the current state (permutation). When the `max_iter`
   is reached, the algorithm will return the best permutation calculated
-  as the MAP Estimator. This implements the [*Second approach* from
-  references, section 4.1.2](https://arxiv.org/abs/2004.03503). This
-  algorithm used in this context is a special case of the **Simulated
-  Annealing** the user may be more familiar with; [see
+  as the MAP Estimator. This algorithm used in this context is a special
+  case of the **Simulated Annealing** the user may be more familiar
+  with; [see
   Wikipedia](https://en.wikipedia.org/wiki/Simulated_annealing).
 
 - `"hill_climbing"`, `"HC"` - use the **hill climbing** algorithm; [see
@@ -132,14 +125,6 @@ For every algorithm, there are some aliases available.
   `find_MAP()` with `optimizer = "continue"`; see examples. Remember
   that `p*(p-1)/2` transpositions will be checked in every iteration.
   For bigger `p`, this may be costly.
-
-## References
-
-Piotr Graczyk, Hideyuki Ishi, Bartosz Kołodziejek, Hélène Massam. "Model
-selection in the space of Gaussian models invariant by symmetry." The
-Annals of Statistics, 50(3) 1747-1774 June 2022. [arXiv
-link](https://arxiv.org/abs/2004.03503);
-[doi:10.1214/22-AOS2174](https://doi.org/10.1214/22-AOS2174)
 
 ## See also
 

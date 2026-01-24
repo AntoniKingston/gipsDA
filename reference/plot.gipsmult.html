@@ -71,16 +71,16 @@ The plot depends on the <code>type</code> argument.</p>
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
 <dd><p>A character vector of length 1. One of
-<code>c("heatmap", "MLE", "best", "all", "both", "n0", "block_heatmap")</code>:</p><ul><li><p><code>"heatmap"</code>, <code>"MLE"</code> - Plots a heatmap of the Maximum Likelihood
-Estimator of the covariance matrix given the permutation.
-That is, the <code>S</code> matrix inside the <code>gipsmult</code> object
+<code>c("heatmap", "MLE", "best", "all", "both", "n0", "block_heatmap")</code>:</p><ul><li><p><code>"heatmap"</code>, <code>"MLE"</code> - Plots heatmaps of the Maximum Likelihood
+Estimator of the covariance matrices given the permutation.
+That is, the <code>Ss</code> matrices inside the <code>gipsmult</code> object
 projected on the permutation in the <code>gipsmult</code> object.</p></li>
 <li><p><code>"best"</code> - Plots the line of the biggest a posteriori found over time.</p></li>
 <li><p><code>"all"</code> - Plots the line of a posteriori for all visited states.</p></li>
 <li><p><code>"both"</code> - Plots both lines from "all" and "best".</p></li>
 <li><p><code>"n0"</code> - Plots the line of <code>n0</code>s that were spotted during optimization
 (only for "MH" optimization).</p></li>
-<li><p><code>"block_heatmap"</code> - Plots a heatmap of diagonally block representation of <code>S</code>.
+<li><p><code>"block_heatmap"</code> - Plots heatmaps of diagonally block representation of <code>Ss</code>.
 Non-block entries (equal to 0) are white for better clarity.</p></li>
 </ul><p>The default value is <code>NA</code>, which will be changed to "heatmap" for
 non-optimized <code>gipsmult</code> objects and to "both" for optimized ones.
@@ -91,7 +91,7 @@ the <code>type = "heatmap"</code>, <code>type = "MLE"</code>, or <code>type = "b
 
 <dt id="arg-logarithmic-y-logarithmic-x">logarithmic_y, logarithmic_x<a class="anchor" aria-label="anchor" href="#arg-logarithmic-y-logarithmic-x"></a></dt>
 <dd><p>A boolean.
-Sets the axis of the plot in logarithmic scale.</p></dd>
+Sets the axis of the plots in logarithmic scale.</p></dd>
 
 
 <dt id="arg-color">color<a class="anchor" aria-label="anchor" href="#arg-color"></a></dt>

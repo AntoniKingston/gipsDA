@@ -1,8 +1,8 @@
 # Linear Discriminant Analysis with gips Covariance Projection
 
-A modification of Linear Discriminant Analysis (LDA) in which the
-within-class covariance matrix is projected onto a permutation-invariant
-structure using the gips framework.
+Linear discriminant analysis (LDA) using covariance matrices projected
+via the *gips* framework to enforce permutation symmetry and improve
+numerical stability.
 
 ## Usage
 
@@ -112,6 +112,11 @@ An object of class `"gipslda"` containing:
 - `call`: matched call
 
 ## Details
+
+This function is a minor modification of
+[`lda`](https://rdrr.io/pkg/MASS/man/lda.html), replacing the classical
+sample covariance estimators by projected covariance matrices obtained
+using `project_covs()`.
 
 Unlike classical LDA, the within-class covariance matrix is first
 projected onto a permutation-invariant structure using the gips
