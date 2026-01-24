@@ -51,8 +51,8 @@
 #'
 #' @param max_iter Maximum number of iterations for the optimizer.
 #'
-#' @param weighted_avg Logical; Wheter to compute scatter from all classes
-#' at once or to compute them within classes and comptue the main one as
+#' @param weighted_avg Logical; Whether to compute scatter from all classes
+#' at once or to compute them within classes and compute the main one as
 #' average weighted by class proportions.
 
 #' @param ... Arguments passed to or from other methods.
