@@ -1,5 +1,5 @@
 Package: gipsDA
-Title: Training DA Models Utilizing gips
+Title: Training DA Models Utilizing 'gips'
 Version: 0.1
 Authors@R: c(
     person(c("Antoni", "Zbigniew"), "Kingston", , "qqtrol@gmail.com", role = "aut"),
@@ -17,10 +17,10 @@ Description: Extends classical linear and quadratic discriminant analysis
     settings with symmetric or exchangeable features. Several discriminant
     analysis variants are provided, including pooled and class-specific
     covariance models, as well as multi-class extensions with shared or
-    independent symmetry structures. For more details about gips methodology see
+    independent symmetry structures. For more details about 'gips' methodology see
     and Graczyk et al. (2022) <doi:10.1214/22-AOS2174> and Chojecki, Morgen,
     Kołodziejek (2025, <doi:10.18637/jss.v112.i07>).
-License: GPL-3 + file LICENSE
+License: GPL-3
 Imports:
     dplyr,
     ggplot2,
