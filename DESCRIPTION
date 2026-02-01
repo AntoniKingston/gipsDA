@@ -1,6 +1,6 @@
 Package: gipsDA
 Title: Training DA Models Utilizing 'gips'
-Version: 0.1
+Version: 0.1.2
 Authors@R: c(
     person(c("Antoni", "Zbigniew"), "Kingston", , "qqtrol@gmail.com", role = "aut"),
     person(c("Norbert", "Maksymilian"), "Frydrysiak", , "norbert.frydrysiak@proton.me", role = c("aut", "cre")),
@@ -11,7 +11,7 @@ URL: https://AntoniKingston.github.io/gipsDA/, https://github.com/AntoniKingston
 BugReports: https://github.com/AntoniKingston/gipsDA/issues
 Description: Extends classical linear and quadratic discriminant analysis
     by incorporating permutation group symmetries into covariance matrix
-    estimation. The package leverages methodology from the ‘gips’
+    estimation. The package leverages methodology from the 'gips'
     framework to identify and impose permutation structures that act as a
     form of regularization, improving stability and interpretability in
     settings with symmetric or exchangeable features. Several discriminant

@@ -477,6 +477,8 @@ plot.gipsmult <- function(x, type = NA,
       combined_plots <- patchwork::wrap_plots(plots, ncol = 3)
       return(combined_plots)
     } else { # use the basic plot in R, package `graphics`
+      oldpar <- par(no.readonly = TRUE)
+      on.exit(par(oldpar))
       par(mfrow = c(n_Sd3, 3))
       for (matrix in my_projected_matrices) {
         plot_single_stats(matrix, color, ...)
