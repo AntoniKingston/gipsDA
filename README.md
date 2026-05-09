@@ -1,6 +1,3 @@
-> **WORK IN PROGRESS**
-> This package is currently under active development. The API may change, and features are still being added.
-
 # gipsDA
 <!-- badges: start -->
 [![Codecov test coverage](https://codecov.io/gh/AntoniKingston/gipsDA/graph/badge.svg)](https://app.codecov.io/gh/AntoniKingston/gipsDA)
