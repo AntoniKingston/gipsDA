@@ -182,8 +182,8 @@ Journal of Statistical Software, <strong>112</strong>(7), 1–38.
 <span class="r-in"><span><span class="va">train</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">150</span>, <span class="fl">75</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu">gipslda</span><span class="op">(</span><span class="va">Sp</span> <span class="op">~</span> <span class="va">.</span>, <span class="va">Iris</span>, prior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">/</span> <span class="fl">3</span>, subset <span class="op">=</span> <span class="va">train</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">z</span>, <span class="va">Iris</span><span class="op">[</span><span class="op">-</span><span class="va">train</span>, <span class="op">]</span><span class="op">)</span><span class="op">$</span><span class="va">class</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] s s s s s s s s s s s s s s s s s s s s s s s s s c c c c c c c c c c c c c</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [39] c c c v c c c c c c v v v v v v v v v v v v v v v c v v v v v v v v v v v</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] s s s s s s s s s s s s s s s s s s s s s s s c c c c c c c c c c c c c c c</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [39] v c c c c c c c c c v v v v v v v v v v v v v v v v v v v v v v v v v v v</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Levels: c s v</span>
 <span class="r-in"><span><span class="op">(</span><span class="va">z1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">z</span>, <span class="va">.</span> <span class="op">~</span> <span class="va">.</span> <span class="op">-</span> <span class="va">Petal.W.</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
@@ -196,19 +196,19 @@ Journal of Statistical Software, <strong>112</strong>(7), 1–38.
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Group means:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.L. Sepal.W. Petal.L.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> c 5.885185 2.766667 4.166667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> s 5.020000 3.476000 1.452000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> v 6.630435 2.952174 5.508696</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> c 5.868000 2.744000 4.152000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> s 5.007407 3.488889 1.444444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> v 6.565217 3.034783 5.565217</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients of linear discriminants:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 LD1       LD2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.L.  0.5096716 -1.145938</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.W.  1.0822205  3.458572</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.L. -2.5577491  0.969699</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.L.  0.5648806 -1.627696</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.W.  1.0528936  3.676328</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.L. -2.6956889  1.109858</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Proportion of trace:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    LD1    LD2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.9884 0.0116 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.9802 0.0198 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Permutations with their estimated probabilities:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] (23)</span>

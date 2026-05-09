@@ -185,9 +185,9 @@ g <- gipsmult(list(S1, S2), numbers_of_observations)
 
 g_map <- find_MAP(g, max_iter = 5, show_progress_bar = FALSE, optimizer = "Metropolis_Hastings")
 g_map
-#> The permutation ():
+#> The permutation (2,5):
 #>  - was found after 5 posteriori calculations;
-#>  - is 1 times more likely than the () permutation.
+#>  - is 183.596 times more likely than the () permutation.
 
 g_map2 <- find_MAP(g_map, max_iter = 5, show_progress_bar = FALSE, optimizer = "continue")
 

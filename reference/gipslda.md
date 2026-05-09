@@ -156,8 +156,8 @@ Iris <- data.frame(rbind(iris3[, , 1], iris3[, , 2], iris3[, , 3]),
 train <- sample(1:150, 75)
 z <- gipslda(Sp ~ ., Iris, prior = c(1, 1, 1) / 3, subset = train)
 predict(z, Iris[-train, ])$class
-#>  [1] s s s s s s s s s s s s s s s s s s s s s s s s s c c c c c c c c c c c c c
-#> [39] c c c v c c c c c c v v v v v v v v v v v v v v v c v v v v v v v v v v v
+#>  [1] s s s s s s s s s s s s s s s s s s s s s s s c c c c c c c c c c c c c c c
+#> [39] v c c c c c c c c c v v v v v v v v v v v v v v v v v v v v v v v v v v v
 #> Levels: c s v
 (z1 <- update(z, . ~ . - Petal.W.))
 #> Call:
@@ -170,19 +170,19 @@ predict(z, Iris[-train, ])$class
 #> 
 #> Group means:
 #>   Sepal.L. Sepal.W. Petal.L.
-#> c 5.885185 2.766667 4.166667
-#> s 5.020000 3.476000 1.452000
-#> v 6.630435 2.952174 5.508696
+#> c 5.868000 2.744000 4.152000
+#> s 5.007407 3.488889 1.444444
+#> v 6.565217 3.034783 5.565217
 #> 
 #> Coefficients of linear discriminants:
 #>                 LD1       LD2
-#> Sepal.L.  0.5096716 -1.145938
-#> Sepal.W.  1.0822205  3.458572
-#> Petal.L. -2.5577491  0.969699
+#> Sepal.L.  0.5648806 -1.627696
+#> Sepal.W.  1.0528936  3.676328
+#> Petal.L. -2.6956889  1.109858
 #> 
 #> Proportion of trace:
 #>    LD1    LD2 
-#> 0.9884 0.0116 
+#> 0.9802 0.0198 
 #> 
 #> Permutations with their estimated probabilities:
 #> [1] (23)

@@ -159,12 +159,12 @@ g_map <- find_MAP(g, show_progress_bar = FALSE, optimizer = "brute_force")
 g_map
 #> The permutation (1,2,5,3,4):
 #>  - was found after 67 posteriori calculations;
-#>  - is 1.132e+22 times more likely than the () permutation.
+#>  - is 8.528e+22 times more likely than the () permutation.
 
 print(g_map)
 #> The permutation (1,2,5,3,4):
 #>  - was found after 67 posteriori calculations;
-#>  - is 1.132e+22 times more likely than the () permutation.
+#>  - is 8.528e+22 times more likely than the () permutation.
 
 if (require("graphics")) {
   plot(g_map, type = "MLE", logarithmic_x = TRUE)

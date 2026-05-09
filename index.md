@@ -1,8 +1,5 @@
 # gipsDA
 
-> **WORK IN PROGRESS** This package is currently under active
-> development. The API may change, and features are still being added.
-
 An R package for discriminant analysis classification using covariance
 matrices with permutation symmetries.
 
