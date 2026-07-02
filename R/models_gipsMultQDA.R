@@ -10,9 +10,7 @@
 #'
 #' @name gipsmultqda
 #' @aliases
-#'   gipsmultqda gipsmultqda.default gipsmultqda.formula
-#'   gipsmultqda.data.frame gipsmultqda.matrix
-#'   predict.gipsmultqda print.gipsmultqda model.frame.gipsmultqda
+#'   gipsmultqda gipsmultqda.default gipsmultqda.formula gipsmultqda.data.frame gipsmultqda.matrix predict.gipsmultqda print.gipsmultqda model.frame.gipsmultqda
 #'
 #' @usage
 #' gipsmultqda(x, ...)
@@ -398,6 +396,7 @@ print.gipsmultqda <- function(x, ...) {
   print(x$optimization_info)
   invisible(x)
 }
+
 
 #' @exportS3Method
 model.frame.gipsmultqda <- model.frame.gipslda

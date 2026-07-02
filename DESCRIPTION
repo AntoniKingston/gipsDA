@@ -1,6 +1,6 @@
 Package: gipsDA
 Title: Training DA Models Utilizing 'gips'
-Version: 0.1.2
+Version: 1.0.0
 Authors@R: c(
     person(c("Antoni", "Zbigniew"), "Kingston", , "qqtrol@gmail.com", role = "aut"),
     person(c("Norbert", "Maksymilian"), "Frydrysiak", , "norbert.frydrysiak@proton.me", role = c("aut", "cre")),
@@ -22,19 +22,10 @@ Description: Extends classical linear and quadratic discriminant analysis
     Kołodziejek (2025, <doi:10.18637/jss.v112.i07>).
 License: GPL-3
 Imports:
-    dplyr,
-    ggplot2,
     gips,
     jsonlite,
     lattice,
-    patchwork,
-    permutations,
-    rlang,
-    tibble,
-    tidyr,
     MASS,
-    numbers,
-    stringi
 Suggests:
     mockery,
     testthat,
@@ -43,4 +34,4 @@ Depends:
     R (>= 2.10)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
+RoxygenNote: 8.0.0

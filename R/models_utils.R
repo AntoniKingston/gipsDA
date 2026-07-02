@@ -4,14 +4,14 @@
 #'
 #' @noRd
 project_covs <- function(emp_covs, ns_obs, MAP = TRUE, optimizer, max_iter, tol = 1e-3) {
-  gg <- gipsmult(emp_covs, ns_obs, was_mean_estimated = TRUE)
+  gg <- gips::gips(emp_covs, ns_obs, was_mean_estimated = TRUE)
   if (MAP) {
-    gg <- find_MAP(gg, optimizer = optimizer, max_iter = max_iter, show_progress_bar = FALSE)
+    gg <- gips::find_MAP(gg, optimizer = optimizer, max_iter = max_iter, show_progress_bar = FALSE)
     perm <- gg[[1]]
     return(list(covs = lapply(emp_covs, function(x) gips::project_matrix(x, perm)), opt_info = perm))
   }
-  gg <- find_MAP(gg, optimizer = optimizer, max_iter = max_iter, return_probabilities = TRUE, save_all_perms = TRUE, show_progress_bar = FALSE)
-  probs <- get_probabilities_from_gipsmult(gg)
+  gg <- gips::find_MAP(gg, optimizer = optimizer, max_iter = max_iter, return_probabilities = TRUE, save_all_perms = TRUE, show_progress_bar = FALSE)
+  probs <- gips::get_probabilities_from_gips(gg)
   if (all(probs <= tol)) {
     warning("There are no perms with estimated probability above threshold, projecting onto MAP")
     probs <- probs[1]

@@ -10,8 +10,7 @@
 #'
 #' @name gipsqda
 #' @aliases
-#'   gipsqda gipsqda.default gipsqda.formula gipsqda.data.frame gipsqda.matrix
-#'   predict.gipsqda print.gipsqda model.frame.gipsqda
+#'   gipsqda gipsqda.default gipsqda.formula gipsqda.data.frame gipsqda.matrix predict.gipsqda print.gipsqda model.frame.gipsqda
 #'
 #' @usage
 #' gipsqda(x, ...)

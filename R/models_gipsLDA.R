@@ -8,8 +8,7 @@
 #' the classical sample covariance estimators by projected covariance matrices
 #' obtained using \code{project_covs()}.
 #' @name gipslda
-#' @aliases gipslda.default gipslda.data.frame gipslda.formula gipslda.matrix
-#'   model.frame.gipslda print.gipslda coef.gipslda plot.gipslda pairs.gipslda
+#' @aliases gipslda.default gipslda.data.frame gipslda.formula gipslda.matrix model.frame.gipslda print.gipslda coef.gipslda plot.gipslda pairs.gipslda
 #'
 #' @usage
 #' gipslda(x, ...)
