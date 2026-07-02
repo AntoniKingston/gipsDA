@@ -196,10 +196,10 @@ test_that("optimizer logic and warnings work", {
     "MH optimizer set but 'max_iter' argument is unspecified"
   )
 
-  # # No warning when explicitly set
-  # expect_no_warning(
-  #   gipsqda(X, Y, optimizer = "MH", max_iter = 10)
-  # )
+  # No warning when explicitly set
+  expect_no_warning(
+    gipsqda(X, Y, optimizer = "MH", max_iter = 10)
+  )
 })
 
 # ==============================================================================

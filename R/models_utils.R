@@ -4,7 +4,17 @@
 #'
 #' @noRd
 project_covs <- function(emp_covs, ns_obs, MAP = TRUE, optimizer, max_iter, tol = 1e-3) {
+  if (is.list(emp_covs) && length(emp_covs) == 1) {
+    print(emp_covs)
+    emp_covs <- as.matrix(emp_covs[[1]])
+    print(emp_covs)
+    print(is.matrix(emp_covs))
+    print(class(emp_covs))
+  }
   gg <- gips::gips(emp_covs, ns_obs, was_mean_estimated = TRUE)
+  if (!is.list(emp_covs)){
+    emp_covs <- list(emp_covs)
+  }
   if (MAP) {
     gg <- gips::find_MAP(gg, optimizer = optimizer, max_iter = max_iter, show_progress_bar = FALSE)
     perm <- gg[[1]]
