@@ -6,11 +6,12 @@ Authors@R:
 Description: What the package does (one paragraph).
 License: GPL (>= 3)
 Imports:
-    gips,
+    gips (>= 1.2.3.9000),
     jsonlite,
     lattice,
     MASS,
-    stats
+    stats,
+    stringi
 Suggests:
     mockery,
     testthat (>= 3.0.0),
@@ -22,3 +23,5 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 8.0.0
 Config/testthat/edition: 3
+Remotes:
+    PrzeChoj/gips@5f9cb5715fe5d33c7f75bd6f05725a04cba7b651
