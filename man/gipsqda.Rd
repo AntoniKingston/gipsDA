@@ -6,7 +6,6 @@
 \alias{gipsqda.formula}
 \alias{gipsqda.data.frame}
 \alias{gipsqda.matrix}
-\alias{predict.gipsqda}
 \alias{print.gipsqda}
 \alias{model.frame.gipsqda}
 \title{Quadratic Discriminant Analysis with gips covariance projection}
@@ -39,13 +38,15 @@ specified in \code{formula} are preferentially taken.}
 a factor specifying the class for each observation.}
 
 \item{prior}{The prior probabilities of class membership.
-Must sum to one and have length equal to the number of groups.}
+If omitted, training-set class proportions are used. Supplied values must
+sum to one and match the number of groups.}
 
-\item{nu}{Degrees of freedom parameter used internally by covariance
-projection.}
+\item{nu}{Reserved for compatibility with related QDA interfaces; it is not
+currently used by the covariance projection.}
 
 \item{MAP}{Logical; if \code{TRUE}, maximum a posteriori covariance projection
-is used.}
+is used. If \code{FALSE}, projections are averaged using retained
+posterior permutation probabilities.}
 
 \item{optimizer}{Character string specifying the optimization method used
 for covariance projection. If \code{NULL}, a default choice depending on
@@ -71,8 +72,10 @@ projected covariance matrices
 \item \code{lev}: class labels
 \item \code{N}: total number of observations
 \item \code{optimization_info}: information returned by the covariance
-projection optimizer
+projection optimizer for the final class projection
 \item \code{call}: the matched call
+\item Formula fits additionally contain \code{terms}, \code{contrasts},
+\code{xlevels}, and any recorded \code{na.action}.
 }
 }
 \description{
@@ -83,7 +86,7 @@ numerical stability.
 \details{
 This function is a minor modification of \code{\link[MASS]{qda}}, replacing
 the classical sample covariance estimators by projected covariance matrices
-obtained using \code{project_covs()}.
+obtained using the \code{\link[gips]{gips}} framework.
 
 Quadratic discriminant analysis models each class with its own covariance
 matrix. In \code{gipsqda}, these covariance matrices are projected using the

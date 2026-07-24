@@ -6,9 +6,9 @@
 #'
 #' This function is a minor modification of \code{\link[MASS]{lda}}, replacing
 #' the classical sample covariance estimators by projected covariance matrices
-#' obtained using \code{project_covs()}.
+#' obtained using the \code{\link[gips]{gips}} framework.
 #' @name gipslda
-#' @aliases gipslda.default gipslda.data.frame gipslda.formula gipslda.matrix model.frame.gipslda print.gipslda coef.gipslda plot.gipslda pairs.gipslda
+#' @aliases gipslda.default gipslda.data.frame gipslda.formula gipslda.matrix model.frame.gipslda print.gipslda
 #'
 #' @usage
 #' gipslda(x, ...)
@@ -39,21 +39,18 @@
 #' @param subset An index vector specifying the cases to be used in the training
 #'   sample. (NOTE: must be named.)
 #' @param na.action A function specifying the action for \code{NA}s.
-#' #' @param weighted_avg Logical; if TRUE, uses a weighted average of
-#'   class-specific covariance matrices instead of the pooled covariance.
-#'
 #' @param MAP Logical; whether to compute a Maximum A Posteriori
-#'   gips projection of the covariance matrix.
+#'   gips projection. If \code{FALSE}, projected matrices are averaged using
+#'   retained posterior permutation probabilities.
 #'
 #' @param optimizer Character; optimization method used by gips
 #'   (e.g. \code{"BF"} or \code{"MH"}).
 #'
 #' @param max_iter Maximum number of iterations for the optimizer.
 #'
-#' @param weighted_avg Logical; Whether to compute scatter from all classes
-#' at once or to compute them within classes and compute the main one as
-#' average weighted by class proportions.
-
+#' @param weighted_avg Logical; if \code{FALSE}, use the pooled within-class
+#'   scatter matrix. If \code{TRUE}, use a class-proportion-weighted average
+#'   of class-specific covariance matrices.
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @return
@@ -62,11 +59,14 @@
 #'   \item \code{prior}: prior class probabilities
 #'   \item \code{counts}: number of observations per class
 #'   \item \code{means}: group means
-#'   \item \code{scaling}: linear discriminant coefficients
+#'   \item \code{scaling}: transformation matrix of linear discriminants
+#'   \item \code{lev}: class labels
 #'   \item \code{svd}: singular values of the between-class scatter
 #'   \item \code{N}: number of observations
 #'   \item \code{optimization_info}: information about the gips optimization
 #'   \item \code{call}: matched call
+#'   \item Formula fits additionally contain \code{terms}, \code{contrasts},
+#'     \code{xlevels}, and any recorded \code{na.action}.
 #' }
 #'
 #' @details
@@ -290,6 +290,26 @@ gipslda.default <-
     )
   }
 
+#' Predict from a gips LDA model
+#'
+#' Computes class assignments, posterior probabilities, and linear
+#' discriminant coordinates for new observations.
+#'
+#' @param object A fitted \code{"gipslda"} object.
+#' @param newdata An optional matrix or data frame of observations. If omitted,
+#'   the training data are reconstructed from the fitted call.
+#' @param prior Prior class probabilities used for prediction.
+#' @param dimen Number of discriminant dimensions to use. The default uses all
+#'   dimensions available in \code{object}.
+#' @param method Prediction rule: \code{"plug-in"}, \code{"predictive"}, or
+#'   \code{"debiased"}.
+#' @param ... Further arguments passed to or from methods.
+#'
+#' @return A list with \code{class} (predicted classes), \code{posterior}
+#'   (posterior class probabilities), and \code{x} (linear discriminant
+#'   coordinates).
+#'
+#' @seealso \code{\link{gipslda}}, \code{\link[MASS]{predict.lda}}
 #' @exportS3Method
 predict.gipslda <- function(object, newdata, prior = object$prior, dimen,
                             method = c("plug-in", "predictive", "debiased"), ...) {
@@ -408,6 +428,22 @@ print.gipslda <- function(x, ...) {
   invisible(x)
 }
 
+#' Plot a fitted gips LDA model
+#'
+#' Displays training observations in discriminant space. One discriminant
+#' dimension is shown as class-wise histograms or densities, two dimensions
+#' as an equal-scale scatter plot, and higher dimensions as a pairs plot.
+#'
+#' @param x A fitted \code{"gipslda"} object.
+#' @param panel Panel function used for scatter plots.
+#' @param ... Additional graphical arguments.
+#' @param cex Character expansion used by the default panel.
+#' @param dimen Maximum number of discriminant dimensions to display.
+#' @param abbrev Logical or integer controlling abbreviation of class labels.
+#' @param xlab,ylab Axis labels.
+#'
+#' @return Invisibly returns \code{NULL}.
+#' @seealso \code{\link{gipslda}}, \code{\link{pairs.gipslda}}
 #' @exportS3Method
 plot.gipslda <- function(x, panel = panel.gipslda, ..., cex = 0.7,
                          dimen, abbrev = FALSE,
@@ -526,6 +562,23 @@ ldahist <-
     invisible()
   }
 
+#' Pairs plot for a fitted gips LDA model
+#'
+#' Displays discriminant coordinates using either base graphics or a lattice
+#' scatterplot matrix.
+#'
+#' @param x A fitted \code{"gipslda"} object.
+#' @param labels Labels for discriminant dimensions.
+#' @param panel Panel function used by base graphics.
+#' @param dimen Maximum number of discriminant dimensions to display.
+#' @param abbrev Logical or integer controlling abbreviation of class labels.
+#' @param ... Additional graphical arguments.
+#' @param cex Character expansion used by the default panel.
+#' @param type Either \code{"std"} for base graphics or \code{"trellis"} for
+#'   a lattice display.
+#'
+#' @return Invisibly returns \code{NULL}.
+#' @seealso \code{\link{gipslda}}, \code{\link{plot.gipslda}}
 #' @exportS3Method
 pairs.gipslda <- function(x, labels = colnames(x), panel = panel.gipslda,
                           dimen, abbrev = FALSE, ..., cex = 0.7,
@@ -598,5 +651,12 @@ model.frame.gipslda <- function(formula, ...) {
   eval(oc, env)
 }
 
+#' Extract gips LDA discriminant coefficients
+#'
+#' @param object A fitted \code{"gipslda"} object.
+#' @param ... Unused.
+#'
+#' @return The linear discriminant transformation matrix.
+#' @seealso \code{\link{gipslda}}
 #' @exportS3Method
 coef.gipslda <- function(object, ...) object$scaling

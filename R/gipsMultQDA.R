@@ -1,8 +1,8 @@
 #' Quadratic Discriminant Analysis with multiple gips-projected covariances
 #'
 #' Quadratic Discriminant Analysis (QDA) in which each class covariance matrix
-#' is projected using the \emph{gipsmult} framework, allowing for structured
-#' permutation symmetry across multiple covariance matrices.
+#' participates in one joint \emph{gips} projection, allowing the covariance
+#' matrices to share an estimated permutation symmetry.
 #'
 #' This function is a modification of \code{\link[MASS]{qda}} in which the
 #' class-specific covariance matrices are jointly projected to improve
@@ -10,7 +10,7 @@
 #'
 #' @name gipsmultqda
 #' @aliases
-#'   gipsmultqda gipsmultqda.default gipsmultqda.formula gipsmultqda.data.frame gipsmultqda.matrix predict.gipsmultqda print.gipsmultqda model.frame.gipsmultqda
+#'   gipsmultqda gipsmultqda.default gipsmultqda.formula gipsmultqda.data.frame gipsmultqda.matrix print.gipsmultqda model.frame.gipsmultqda
 #'
 #' @usage
 #' gipsmultqda(x, ...)
@@ -31,12 +31,15 @@
 #'   specified in \code{formula} are preferentially taken.
 #' @param x (required if no formula is given as the principal argument)
 #'   a matrix or data frame containing the explanatory variables.
-#' @param grouping A factor specifying the class for each observation.
-#' @param prior Prior probabilities of class membership. Must sum to one.
-#' @param nu Degrees of freedom parameter used internally during covariance
-#'   projection.
+#' @param grouping (required if no formula is given) a factor specifying the
+#'   class for each observation.
+#' @param prior Prior probabilities of class membership. If omitted,
+#'   training-set class proportions are used. Supplied values must sum to one.
+#' @param nu Reserved for compatibility with related QDA interfaces; it is not
+#'   currently used by the covariance projection.
 #' @param MAP Logical; if \code{TRUE}, a maximum a posteriori covariance
-#'   projection is used.
+#'   projection is used. If \code{FALSE}, projections are averaged using
+#'   retained posterior permutation probabilities.
 #' @param optimizer Character string specifying the optimization method used
 #'   for covariance projection. If \code{NULL}, a default choice is made
 #'   based on the problem dimension.
@@ -59,14 +62,16 @@
 #'   \item \code{lev}: class labels
 #'   \item \code{N}: total number of observations
 #'   \item \code{optimization_info}: information returned by the covariance
-#'     projection optimizer
+#'     optimizer for the joint projection
 #'   \item \code{call}: the matched call
+#'   \item Formula fits additionally contain \code{terms}, \code{contrasts},
+#'     \code{xlevels}, and any recorded \code{na.action}.
 #' }
 #'
 #' @details
 #' In contrast to classical QDA, which estimates each class covariance matrix
 #' independently, \code{gipsmultqda} performs a joint projection of all class
-#' covariance matrices using the \emph{gipsmult} framework. This allows the
+#' covariance matrices using \code{\link[gips]{gips}}. This allows the
 #' incorporation of shared permutation symmetries and can improve classification
 #' performance in high-dimensional or small-sample regimes.
 #'
@@ -79,8 +84,8 @@
 #' The covariance estimation, returned object, and classification rules
 #' differ substantially.
 #'
-#' The theoretical background and details of the covariance projection are
-#' documented in the \code{gipsmult} package.
+#' The theoretical background and details of covariance projection are
+#' documented by \code{\link[gips]{gips}} and Chojecki et al. (2025).
 #'
 #' @seealso
 #' \code{\link[MASS]{qda}}, \code{\link{predict.gipsmultqda}},
@@ -234,6 +239,25 @@ gipsmultqda.default <-
     res
   }
 
+#' Predict from a joint-projection gips QDA model
+#'
+#' Computes class assignments and posterior probabilities from a fitted
+#' \code{"gipsmultqda"} model. Prediction rules match those of
+#' \code{\link{predict.gipsqda}}; the fitted covariance estimates differ
+#' because they were projected jointly.
+#'
+#' @param object A fitted \code{"gipsmultqda"} object.
+#' @param newdata An optional matrix or data frame of observations. Omit this
+#'   argument when using \code{method = "looCV"}.
+#' @param prior Prior class probabilities used for prediction.
+#' @param method Prediction rule: \code{"plug-in"}, \code{"predictive"},
+#'   \code{"debiased"}, or \code{"looCV"}. Leave-one-out prediction classifies
+#'   the reconstructed training observations.
+#' @param ... Further arguments passed to or from methods.
+#'
+#' @return A list with \code{class} (predicted classes) and \code{posterior}
+#'   (posterior class probabilities).
+#' @seealso \code{\link{gipsmultqda}}, \code{\link{predict.gipsqda}}
 #' @exportS3Method
 predict.gipsmultqda <- function(object, newdata, prior = object$prior,
                                 method = c(

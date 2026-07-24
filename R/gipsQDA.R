@@ -6,11 +6,11 @@
 #'
 #' This function is a minor modification of \code{\link[MASS]{qda}}, replacing
 #' the classical sample covariance estimators by projected covariance matrices
-#' obtained using \code{project_covs()}.
+#' obtained using the \code{\link[gips]{gips}} framework.
 #'
 #' @name gipsqda
 #' @aliases
-#'   gipsqda gipsqda.default gipsqda.formula gipsqda.data.frame gipsqda.matrix predict.gipsqda print.gipsqda model.frame.gipsqda
+#'   gipsqda gipsqda.default gipsqda.formula gipsqda.data.frame gipsqda.matrix print.gipsqda model.frame.gipsqda
 #'
 #' @usage
 #' gipsqda(x, ...)
@@ -34,11 +34,13 @@
 #' @param grouping (required if no formula is given)
 #'   a factor specifying the class for each observation.
 #' @param prior The prior probabilities of class membership.
-#'   Must sum to one and have length equal to the number of groups.
-#' @param nu Degrees of freedom parameter used internally by covariance
-#'   projection.
+#'   If omitted, training-set class proportions are used. Supplied values must
+#'   sum to one and match the number of groups.
+#' @param nu Reserved for compatibility with related QDA interfaces; it is not
+#'   currently used by the covariance projection.
 #' @param MAP Logical; if \code{TRUE}, maximum a posteriori covariance projection
-#'   is used.
+#'   is used. If \code{FALSE}, projections are averaged using retained
+#'   posterior permutation probabilities.
 #' @param optimizer Character string specifying the optimization method used
 #'   for covariance projection. If \code{NULL}, a default choice depending on
 #'   the problem dimension is used.
@@ -61,8 +63,10 @@
 #'   \item \code{lev}: class labels
 #'   \item \code{N}: total number of observations
 #'   \item \code{optimization_info}: information returned by the covariance
-#'     projection optimizer
+#'     projection optimizer for the final class projection
 #'   \item \code{call}: the matched call
+#'   \item Formula fits additionally contain \code{terms}, \code{contrasts},
+#'     \code{xlevels}, and any recorded \code{na.action}.
 #' }
 #'
 #' @details
@@ -241,6 +245,23 @@ gipsqda.default <-
     res
   }
 
+#' Predict from a gips QDA model
+#'
+#' Computes class assignments and posterior probabilities from a fitted
+#' \code{"gipsqda"} model.
+#'
+#' @param object A fitted \code{"gipsqda"} object.
+#' @param newdata An optional matrix or data frame of observations. Omit this
+#'   argument when using \code{method = "looCV"}.
+#' @param prior Prior class probabilities used for prediction.
+#' @param method Prediction rule: \code{"plug-in"}, \code{"predictive"},
+#'   \code{"debiased"}, or \code{"looCV"}. Leave-one-out prediction classifies
+#'   the reconstructed training observations.
+#' @param ... Further arguments passed to or from methods.
+#'
+#' @return A list with \code{class} (predicted classes) and \code{posterior}
+#'   (posterior class probabilities).
+#' @seealso \code{\link{gipsqda}}, \code{\link[MASS]{predict.qda}}
 #' @exportS3Method
 predict.gipsqda <- function(object, newdata, prior = object$prior,
                             method = c(
@@ -401,4 +422,5 @@ print.gipsqda <- function(x, ...) {
   print(x$optimization_info)
   invisible(x)
 }
+#' @exportS3Method
 model.frame.gipsqda <- model.frame.gipslda

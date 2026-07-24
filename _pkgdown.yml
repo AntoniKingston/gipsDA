@@ -1,0 +1,21 @@
+url: https://antonikingston.github.io/gipsDA/
+
+template:
+  bootstrap: 5
+
+reference:
+  - title: Model fitting
+    contents:
+      - gipslda
+      - gipsqda
+      - gipsmultqda
+  - title: Prediction
+    contents:
+      - predict.gipslda
+      - predict.gipsqda
+      - predict.gipsmultqda
+  - title: LDA diagnostics
+    contents:
+      - coef.gipslda
+      - plot.gipslda
+      - pairs.gipslda

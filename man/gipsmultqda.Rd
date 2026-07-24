@@ -6,7 +6,6 @@
 \alias{gipsmultqda.formula}
 \alias{gipsmultqda.data.frame}
 \alias{gipsmultqda.matrix}
-\alias{predict.gipsmultqda}
 \alias{print.gipsmultqda}
 \alias{model.frame.gipsmultqda}
 \title{Quadratic Discriminant Analysis with multiple gips-projected covariances}
@@ -35,15 +34,18 @@ the (non-factor) discriminators.}
 \item{data}{An optional data frame, list or environment from which variables
 specified in \code{formula} are preferentially taken.}
 
-\item{grouping}{A factor specifying the class for each observation.}
+\item{grouping}{(required if no formula is given) a factor specifying the
+class for each observation.}
 
-\item{prior}{Prior probabilities of class membership. Must sum to one.}
+\item{prior}{Prior probabilities of class membership. If omitted,
+training-set class proportions are used. Supplied values must sum to one.}
 
-\item{nu}{Degrees of freedom parameter used internally during covariance
-projection.}
+\item{nu}{Reserved for compatibility with related QDA interfaces; it is not
+currently used by the covariance projection.}
 
 \item{MAP}{Logical; if \code{TRUE}, a maximum a posteriori covariance
-projection is used.}
+projection is used. If \code{FALSE}, projections are averaged using
+retained posterior permutation probabilities.}
 
 \item{optimizer}{Character string specifying the optimization method used
 for covariance projection. If \code{NULL}, a default choice is made
@@ -69,14 +71,16 @@ from the projected covariance matrices
 \item \code{lev}: class labels
 \item \code{N}: total number of observations
 \item \code{optimization_info}: information returned by the covariance
-projection optimizer
+optimizer for the joint projection
 \item \code{call}: the matched call
+\item Formula fits additionally contain \code{terms}, \code{contrasts},
+\code{xlevels}, and any recorded \code{na.action}.
 }
 }
 \description{
 Quadratic Discriminant Analysis (QDA) in which each class covariance matrix
-is projected using the \emph{gipsmult} framework, allowing for structured
-permutation symmetry across multiple covariance matrices.
+participates in one joint \emph{gips} projection, allowing the covariance
+matrices to share an estimated permutation symmetry.
 }
 \details{
 This function is a modification of \code{\link[MASS]{qda}} in which the
@@ -85,7 +89,7 @@ numerical stability and exploit shared symmetry assumptions.
 
 In contrast to classical QDA, which estimates each class covariance matrix
 independently, \code{gipsmultqda} performs a joint projection of all class
-covariance matrices using the \emph{gipsmult} framework. This allows the
+covariance matrices using \code{\link[gips]{gips}}. This allows the
 incorporation of shared permutation symmetries and can improve classification
 performance in high-dimensional or small-sample regimes.
 
@@ -98,8 +102,8 @@ This function is not a drop-in replacement for \code{\link[MASS]{qda}}.
 The covariance estimation, returned object, and classification rules
 differ substantially.
 
-The theoretical background and details of the covariance projection are
-documented in the \code{gipsmult} package.
+The theoretical background and details of covariance projection are
+documented by \code{\link[gips]{gips}} and Chojecki et al. (2025).
 }
 \examples{
 tr <- sample(1:50, 25)

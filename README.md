@@ -1,6 +1,7 @@
 # gipsDA
 
 [![Test coverage](https://github.com/AntoniKingston/gipsDA/actions/workflows/test-coverage.yaml/badge.svg?branch=nomult_from_scratch)](https://github.com/AntoniKingston/gipsDA/actions/workflows/test-coverage.yaml)
+[![pkgdown](https://github.com/AntoniKingston/gipsDA/actions/workflows/pkgdown.yaml/badge.svg?branch=nomult_from_scratch)](https://antonikingston.github.io/gipsDA/)
 [![Codecov](https://codecov.io/gh/AntoniKingston/gipsDA/branch/nomult_from_scratch/graph/badge.svg)](https://app.codecov.io/gh/AntoniKingston/gipsDA)
 [![License: GPL-3](https://img.shields.io/badge/license-GPL--3-blue.svg)](LICENSE.md)
 

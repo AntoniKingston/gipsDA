@@ -8,9 +8,6 @@
 \alias{gipslda.matrix}
 \alias{model.frame.gipslda}
 \alias{print.gipslda}
-\alias{coef.gipslda}
-\alias{plot.gipslda}
-\alias{pairs.gipslda}
 \title{Linear Discriminant Analysis with gips Covariance Projection}
 \usage{
 gipslda(x, ...)
@@ -50,21 +47,20 @@ variance is less than \code{tol^2} are rejected.}
 \item{subset}{An index vector specifying the cases to be used in the training
 sample. (NOTE: must be named.)}
 
-\item{na.action}{A function specifying the action for \code{NA}s.
-#' @param weighted_avg Logical; if TRUE, uses a weighted average of
-class-specific covariance matrices instead of the pooled covariance.}
+\item{na.action}{A function specifying the action for \code{NA}s.}
 
 \item{MAP}{Logical; whether to compute a Maximum A Posteriori
-gips projection of the covariance matrix.}
+gips projection. If \code{FALSE}, projected matrices are averaged using
+retained posterior permutation probabilities.}
 
 \item{optimizer}{Character; optimization method used by gips
 (e.g. \code{"BF"} or \code{"MH"}).}
 
 \item{max_iter}{Maximum number of iterations for the optimizer.}
 
-\item{weighted_avg}{Logical; Whether to compute scatter from all classes
-at once or to compute them within classes and compute the main one as
-average weighted by class proportions.}
+\item{weighted_avg}{Logical; if \code{FALSE}, use the pooled within-class
+scatter matrix. If \code{TRUE}, use a class-proportion-weighted average
+of class-specific covariance matrices.}
 }
 \value{
 An object of class \code{"gipslda"} containing:
@@ -72,11 +68,14 @@ An object of class \code{"gipslda"} containing:
 \item \code{prior}: prior class probabilities
 \item \code{counts}: number of observations per class
 \item \code{means}: group means
-\item \code{scaling}: linear discriminant coefficients
+\item \code{scaling}: transformation matrix of linear discriminants
+\item \code{lev}: class labels
 \item \code{svd}: singular values of the between-class scatter
 \item \code{N}: number of observations
 \item \code{optimization_info}: information about the gips optimization
 \item \code{call}: matched call
+\item Formula fits additionally contain \code{terms}, \code{contrasts},
+\code{xlevels}, and any recorded \code{na.action}.
 }
 }
 \description{
@@ -87,7 +86,7 @@ numerical stability.
 \details{
 This function is a minor modification of \code{\link[MASS]{lda}}, replacing
 the classical sample covariance estimators by projected covariance matrices
-obtained using \code{project_covs()}.
+obtained using the \code{\link[gips]{gips}} framework.
 
 Unlike classical LDA, the within-class covariance matrix is first
 projected onto a permutation-invariant structure using the gips

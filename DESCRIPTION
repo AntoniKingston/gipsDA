@@ -1,10 +1,16 @@
 Package: gipsDA
-Title: What the Package Does (One Line, Title Case)
+Title: Discriminant Analysis with Permutation-Invariant Covariance Projection
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+    person("Antoni", "Kingston", , "qqtrol@gmail.com", role = c("aut", "cre"))
+Description: Fits linear and quadratic discriminant analysis models using
+    covariance matrices projected onto permutation-invariant structures
+    estimated by the 'gips' framework. Formula, matrix, and data-frame
+    interfaces are provided together with multiple prediction rules.
 License: GPL (>= 3)
+URL: https://github.com/AntoniKingston/gipsDA,
+    https://antonikingston.github.io/gipsDA/
+BugReports: https://github.com/AntoniKingston/gipsDA/issues
 Imports:
     gips (>= 1.2.3.9000),
     jsonlite,
@@ -23,5 +29,6 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 8.0.0
 Config/testthat/edition: 3
+Config/Needs/website: pkgdown
 Remotes:
     PrzeChoj/gips@5f9cb5715fe5d33c7f75bd6f05725a04cba7b651
