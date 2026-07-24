@@ -1,0 +1,13 @@
+^gipsDA\.Rproj$
+^\.Rproj\.user$
+^\.idea$
+^\.git$
+.*\.md
+.gitignore
+
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
+^codecov\.yml$
+^LICENSE\.md$
