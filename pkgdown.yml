@@ -1,8 +1,9 @@
 pandoc: 3.8.3
-pkgdown: 2.2.0
+pkgdown: 2.2.1
 pkgdown_sha: ~
-articles: {}
-last_built: 2026-05-09T14:34Z
+articles:
+  manual-test: manual-test.html
+last_built: 2026-07-27T18:39Z
 urls:
-  reference: https://AntoniKingston.github.io/gipsDA/reference
-  article: https://AntoniKingston.github.io/gipsDA/articles
+  reference: https://antonikingston.github.io/gipsDA/reference
+  article: https://antonikingston.github.io/gipsDA/articles

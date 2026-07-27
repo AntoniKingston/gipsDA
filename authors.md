@@ -14,14 +14,14 @@
 Source:
 [`DESCRIPTION`](https://github.com/AntoniKingston/gipsDA/blob/main/DESCRIPTION)
 
-Kingston AZ, Frydrysiak NM (2026). *gipsDA: Training DA Models Utilizing
-'gips'*. R package version 0.1.2,
-<https://AntoniKingston.github.io/gipsDA/>.
+Kingston AZ, Frydrysiak NM (2026). *gipsDA: Discriminant Analysis with
+Permutation-Invariant Covariance Models*. R package version 0.1.2.9000,
+<https://antonikingston.github.io/gipsDA/>.
 
     @Manual{,
-      title = {gipsDA: Training DA Models Utilizing 'gips'},
+      title = {gipsDA: Discriminant Analysis with Permutation-Invariant Covariance Models},
       author = {Antoni Zbigniew Kingston and Norbert Maksymilian Frydrysiak},
       year = {2026},
-      note = {R package version 0.1.2},
-      url = {https://AntoniKingston.github.io/gipsDA/},
+      note = {R package version 0.1.2.9000},
+      url = {https://antonikingston.github.io/gipsDA/},
     }

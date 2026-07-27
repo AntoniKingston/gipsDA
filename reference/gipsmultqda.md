@@ -1,8 +1,8 @@
 # Quadratic Discriminant Analysis with multiple gips-projected covariances
 
 Quadratic Discriminant Analysis (QDA) in which each class covariance
-matrix is projected using the *gipsmult* framework, allowing for
-structured permutation symmetry across multiple covariance matrices.
+matrix participates in one joint *gips* projection, allowing the
+covariance matrices to share an estimated permutation symmetry.
 
 ## Usage
 
@@ -47,21 +47,24 @@ gipsmultqda(x, grouping, ..., subset, na.action)
 
 - grouping:
 
-  A factor specifying the class for each observation.
+  (required if no formula is given) a factor specifying the class for
+  each observation.
 
 - prior:
 
-  Prior probabilities of class membership. Must sum to one.
+  Prior probabilities of class membership. If omitted, training-set
+  class proportions are used. Supplied values must sum to one.
 
 - nu:
 
-  Degrees of freedom parameter used internally during covariance
-  projection.
+  Reserved for compatibility with related QDA interfaces; it is not
+  currently used by the covariance projection.
 
 - MAP:
 
   Logical; if `TRUE`, a maximum a posteriori covariance projection is
-  used.
+  used. If `FALSE`, projections are averaged using retained posterior
+  permutation probabilities.
 
 - optimizer:
 
@@ -101,10 +104,13 @@ An object of class `"gipsmultqda"` containing:
 
 - `N`: total number of observations
 
-- `optimization_info`: information returned by the covariance projection
-  optimizer
+- `optimization_info`: information returned by the covariance optimizer
+  for the joint projection
 
 - `call`: the matched call
+
+- Formula fits additionally contain `terms`, `contrasts`, `xlevels`, and
+  any recorded `na.action`.
 
 ## Details
 
@@ -115,11 +121,14 @@ numerical stability and exploit shared symmetry assumptions.
 
 In contrast to classical QDA, which estimates each class covariance
 matrix independently, `gipsmultqda` performs a joint projection of all
-class covariance matrices using the *gipsmult* framework. This allows
-the incorporation of shared permutation symmetries and can improve
-classification performance in high-dimensional or small-sample regimes.
+class covariance matrices using
+[`gips`](https://przechoj.github.io/gips/reference/gips.html). This
+allows the incorporation of shared permutation symmetries and can
+improve classification performance in high-dimensional or small-sample
+regimes.
 
-Several classification rules are available via `predict.gipsmultqda`,
+Several classification rules are available via
+[`predict.gipsmultqda`](https://antonikingston.github.io/gipsDA/reference/predict.gipsmultqda.md),
 including plug-in, predictive, debiased, and leave-one-out
 cross-validation.
 
@@ -130,14 +139,17 @@ This function is not a drop-in replacement for
 estimation, returned object, and classification rules differ
 substantially.
 
-The theoretical background and details of the covariance projection are
-documented in the `gipsmult` package.
+The theoretical background and details of covariance projection are
+documented by
+[`gips`](https://przechoj.github.io/gips/reference/gips.html) and
+Chojecki et al. (2025).
 
 ## See also
 
-[`qda`](https://rdrr.io/pkg/MASS/man/qda.html), `predict.gipsmultqda`,
-[`gipsqda`](https://AntoniKingston.github.io/gipsDA/reference/gipsqda.md),
-[`gipslda`](https://AntoniKingston.github.io/gipsDA/reference/gipslda.md)
+[`qda`](https://rdrr.io/pkg/MASS/man/qda.html),
+[`predict.gipsmultqda`](https://antonikingston.github.io/gipsDA/reference/predict.gipsmultqda.md),
+[`gipsqda`](https://antonikingston.github.io/gipsDA/reference/gipsqda.md),
+[`gipslda`](https://antonikingston.github.io/gipsDA/reference/gipslda.md)
 
 ## Examples
 
@@ -148,7 +160,7 @@ test <- rbind(iris3[-tr, , 1], iris3[-tr, , 2], iris3[-tr, , 3])
 cl <- factor(c(rep("s", 25), rep("c", 25), rep("v", 25)))
 z <- gipsmultqda(train, cl)
 predict(z, test)$class
-#>  [1] s s s s s s s s s s s s s s s s s s s s s s s s s c c c c c c c c c c v c c
-#> [39] c c c c c v c c c c c c v v v v v v v v v v v v v v v v v v c v v v v v v
+#>  [1] s s s s s s s s s s s s s s s s s s s s s s s s s c c c c c c c c c c c c c
+#> [39] c c c c c c c c c c c c v v v v v v v v v v v c v v v v v v v c v v v v v
 #> Levels: c s v
 ```

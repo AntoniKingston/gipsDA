@@ -68,14 +68,13 @@ gipslda(x, grouping, ..., subset, na.action)
 
 - na.action:
 
-  A function specifying the action for `NA`s. \#' @param weighted_avg
-  Logical; if TRUE, uses a weighted average of class-specific covariance
-  matrices instead of the pooled covariance.
+  A function specifying the action for `NA`s.
 
 - MAP:
 
-  Logical; whether to compute a Maximum A Posteriori gips projection of
-  the covariance matrix.
+  Logical; whether to compute a Maximum A Posteriori gips projection. If
+  `FALSE`, projected matrices are averaged using retained posterior
+  permutation probabilities.
 
 - optimizer:
 
@@ -87,9 +86,9 @@ gipslda(x, grouping, ..., subset, na.action)
 
 - weighted_avg:
 
-  Logical; Whether to compute scatter from all classes at once or to
-  compute them within classes and compute the main one as average
-  weighted by class proportions.
+  Logical; if `FALSE`, use the pooled within-class scatter matrix. If
+  `TRUE`, use a class-proportion-weighted average of class-specific
+  covariance matrices.
 
 ## Value
 
@@ -101,7 +100,9 @@ An object of class `"gipslda"` containing:
 
 - `means`: group means
 
-- `scaling`: linear discriminant coefficients
+- `scaling`: transformation matrix of linear discriminants
+
+- `lev`: class labels
 
 - `svd`: singular values of the between-class scatter
 
@@ -111,12 +112,16 @@ An object of class `"gipslda"` containing:
 
 - `call`: matched call
 
+- Formula fits additionally contain `terms`, `contrasts`, `xlevels`, and
+  any recorded `na.action`.
+
 ## Details
 
 This function is a minor modification of
 [`lda`](https://rdrr.io/pkg/MASS/man/lda.html), replacing the classical
 sample covariance estimators by projected covariance matrices obtained
-using `project_covs()`.
+using the [`gips`](https://przechoj.github.io/gips/reference/gips.html)
+framework.
 
 Unlike classical LDA, the within-class covariance matrix is first
 projected onto a permutation-invariant structure using the gips
@@ -156,8 +161,8 @@ Iris <- data.frame(rbind(iris3[, , 1], iris3[, , 2], iris3[, , 3]),
 train <- sample(1:150, 75)
 z <- gipslda(Sp ~ ., Iris, prior = c(1, 1, 1) / 3, subset = train)
 predict(z, Iris[-train, ])$class
-#>  [1] s s s s s s s s s s s s s s s s s s s s s s s c c c c c c c c c c c c c c c
-#> [39] v c c c c c c c c c v v v v v v v v v v v v v v v v v v v v v v v v v v v
+#>  [1] s s s s s s s s s s s s s s s s s s c c c c c c c c c c v c c c v c c c c c
+#> [39] c c c c c v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v
 #> Levels: c s v
 (z1 <- update(z, . ~ . - Petal.W.))
 #> Call:
@@ -170,19 +175,19 @@ predict(z, Iris[-train, ])$class
 #> 
 #> Group means:
 #>   Sepal.L. Sepal.W. Petal.L.
-#> c 5.868000 2.744000 4.152000
-#> s 5.007407 3.488889 1.444444
-#> v 6.565217 3.034783 5.565217
+#> c 6.032000 2.836000 4.304000
+#> s 4.978125 3.390625 1.468750
+#> v 6.666667 3.005556 5.566667
 #> 
 #> Coefficients of linear discriminants:
 #>                 LD1       LD2
-#> Sepal.L.  0.5648806 -1.627696
-#> Sepal.W.  1.0528936  3.676328
-#> Petal.L. -2.6956889  1.109858
+#> Sepal.L.  0.7733505 -1.425565
+#> Sepal.W.  0.8581570  3.839487
+#> Petal.L. -3.7433101  1.010818
 #> 
 #> Proportion of trace:
 #>    LD1    LD2 
-#> 0.9802 0.0198 
+#> 0.9949 0.0051 
 #> 
 #> Permutations with their estimated probabilities:
 #> [1] (23)
