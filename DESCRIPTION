@@ -42,5 +42,3 @@ RoxygenNote: 8.0.0
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Config/Needs/website: pkgdown
-Remotes:
-    PrzeChoj/gips@5f9cb5715fe5d33c7f75bd6f05725a04cba7b651
