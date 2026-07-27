@@ -1,49 +1,151 @@
 # gipsDA
+
 <!-- badges: start -->
-[![Codecov test coverage](https://codecov.io/gh/AntoniKingston/gipsDA/graph/badge.svg)](https://app.codecov.io/gh/AntoniKingston/gipsDA)
-[![Build Status](https://img.shields.io/travis/com/your_username/gipsDA.svg?style=flat-square)](https://travis-ci.com/your_username/gipsDA)
-[![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg?style=flat-square)](https://www.gnu.org/licenses/gpl-3.0.html)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![CRAN status](https://www.r-pkg.org/badges/version/gipsDA)](https://CRAN.R-project.org/package=gipsDA)
+[![R-CMD-check](https://github.com/AntoniKingston/gipsDA/actions/workflows/R-CMD-check.yaml/badge.svg?branch=nomult)](https://github.com/AntoniKingston/gipsDA/actions/workflows/R-CMD-check.yaml)
+[![Codecov](https://codecov.io/gh/AntoniKingston/gipsDA/branch/nomult/graph/badge.svg)](https://app.codecov.io/gh/AntoniKingston/gipsDA)
 <!-- badges: end -->
 
-An R package for discriminant analysis classification using covariance matrices with permutation symmetries.
+`gipsDA` provides linear and quadratic discriminant analysis with structured
+covariance estimation. It uses
+[`gips`](https://github.com/PrzeChoj/gips) to identify permutation-invariant
+covariance models, offering regularized estimates for data with symmetric or
+exchangeable features. Its formula, matrix, and data-frame interfaces follow
+the conventions of `MASS::lda()` and `MASS::qda()`.
 
-## About The Project
+## Models
 
-**gipsDA** is an R package that extends classical Linear Discriminant Analysis (LDA) and Quadratic Discriminant Analysis (QDA) by incorporating permutation group structures into the estimation of covariance matrices. By leveraging the methodology of the `gips` library, this package aims to improve classification performance in scenarios where features (variables) exhibit underlying symmetries.
+- `gipslda()` fits LDA using one projected within-class covariance matrix.
+- `gipsqda()` fits QDA by projecting each class covariance independently.
+- `gipsmultqda()` jointly projects all class covariance matrices, allowing
+  them to share an estimated permutation symmetry.
 
-The core idea is to find and impose a permutation symmetry on the covariance matrix, which acts as a form of regularization and can lead to more stable and interpretable models, especially in high-dimensional settings. The ultimate goal is to submit `gipsDA` to the Comprehensive R Archive Network (CRAN).
+All three functions support formula, matrix, and data-frame interfaces.
+Prediction methods provide posterior probabilities and class assignments.
+LDA additionally provides discriminant coordinates, coefficients, and
+visualization methods.
 
-### Key Features
+## Installation
 
-*   Implementation of four novel `gips`-based discriminant analysis classifiers.
-*   A flexible, user-friendly model API consistent with established machine learning libraries in R.
-*   A specialized `gipsmult` module for modeling class-specific covariances under a shared symmetry.
-*   Designed following best practices for R package development.
+Install the released package from CRAN:
 
-## R Package Structure
+```r
+install.packages("gipsDA")
+```
 
-To adopt the best practices of R package development, the repository is organized with the following standard structure:
+The current source package can also be installed directly from GitHub:
 
--   #### `R/`
-    This directory contains the core logic of the package. All source code files are located here. To ensure proper documentation, we use the `roxygen2` package, with documentation comments embedded directly above the function definitions. To maintain logical modularity within this flat directory structure, a file naming convention has been adopted, where files are prefixed to indicate their module affiliation:
-    -   `gipsmult_`: for files belonging to the `gipsmult` module.
-    -   `models_`: for files belonging to the `models` module.
+```r
+pak::pkg_install("AntoniKingston/gipsDA")
+```
 
--   #### `tests/`
-    This directory houses all testing scripts to ensure the reliability and correctness of the package. Automated unit tests are implemented using the `testthat` framework and are designed to verify the functionality of individual functions and methods within the modules.
+Required dependencies are installed automatically.
 
-## Available Models in `gipsDA`
+## Quick start
 
-The `gipsDA` object can be configured to run one of four different classification algorithms, each with different assumptions about the data structure.
+The example below creates a stratified train/test split of the iris data and
+fits all three models.
 
-1.  **`gipsLDA_weighted_average`**
-    In this approach, a separate covariance matrix is first estimated for each class. A final, single covariance matrix is then computed as a **weighted average** of these individual matrices. This pooled matrix is then processed by the `gips` library before being used for classification.
+```r
+library(gipsDA)
 
-2.  **`gipsLDA_classic`**
-    This model follows a more traditional approach by using the **classic pooled covariance estimator** standard in traditional LDA. This single, pooled matrix is then processed by the `gips` library to find the most probable permutation symmetry.
+set.seed(42)
+train_id <- unlist(
+  lapply(split(seq_len(nrow(iris)), iris$Species), sample, size = 35),
+  use.names = FALSE
+)
 
-3.  **`gipsMultQDA`**
-    This model leverages the `gipsmult` module. The process involves first identifying the single most probable **permutation structure that is common across all classes**. Subsequently, a separate covariance matrix is estimated for each class, with each matrix being projected onto this shared permutation.
+train <- iris[train_id, ]
+test <- iris[-train_id, ]
 
-4.  **`gipsQDA`**
-    This represents the most flexible model. The `gips` library is applied **independently to each class**. Consequently, each class can have its own uniquely estimated permutation structure and its own distinct covariance matrix. This is analogous to the classic QDA framework but with individualized symmetry discovery for each class.
+lda_fit <- gipslda(Species ~ ., train, optimizer = "BF")
+qda_fit <- gipsqda(Species ~ ., train, optimizer = "BF")
+joint_qda_fit <- gipsmultqda(Species ~ ., train, optimizer = "BF")
+
+lda_prediction <- predict(lda_fit, test)
+qda_prediction <- predict(qda_fit, test)
+joint_prediction <- predict(joint_qda_fit, test)
+
+mean(lda_prediction$class == test$Species)
+head(lda_prediction$posterior)
+```
+
+The equivalent matrix interface separates predictors from class labels:
+
+```r
+x <- as.matrix(iris[, 1:4])
+grouping <- iris$Species
+
+fit <- gipslda(x, grouping, optimizer = "BF")
+predict(fit, x[1:5, ])$class
+```
+
+## Projection options
+
+The principal projection arguments are shared across the models:
+
+- `MAP = TRUE` uses the maximum a posteriori permutation.
+- `MAP = FALSE` averages projections over retained permutations using their
+  posterior probabilities.
+- `optimizer = "BF"` performs deterministic brute-force optimization and is
+  suitable for smaller problems.
+- `optimizer = "MH"` uses Metropolis-Hastings optimization; use `max_iter` to
+  control its runtime.
+
+`gipslda()` also accepts `weighted_avg = TRUE`, which constructs the pooled
+scatter estimate from a class-proportion-weighted average of class covariance
+matrices.
+
+```r
+fit <- gipslda(
+  Species ~ .,
+  iris,
+  MAP = FALSE,
+  optimizer = "BF",
+  weighted_avg = TRUE
+)
+```
+
+## Prediction rules
+
+LDA supports plug-in, predictive, and debiased prediction:
+
+```r
+predict(lda_fit, test, method = "plug-in")
+predict(lda_fit, test, method = "predictive")
+predict(lda_fit, test, method = "debiased")
+```
+
+Both QDA variants additionally support leave-one-out cross-validation when
+`newdata` is omitted:
+
+```r
+predict(qda_fit, method = "looCV")
+predict(joint_qda_fit, method = "looCV")
+```
+
+## LDA diagnostics and visualization
+
+```r
+coef(lda_fit)
+plot(lda_fit)
+pairs(lda_fit, type = "std")
+pairs(lda_fit, type = "trellis")
+```
+
+## References
+
+Chojecki, A., et al. (2025). *Learning Permutation Symmetry of a Gaussian
+Vector with gips in R*. Journal of Statistical Software, 112(7), 1–38.
+[doi:10.18637/jss.v112.i07](https://doi.org/10.18637/jss.v112.i07)
+
+The discriminant-analysis implementations are based on the interfaces and
+algorithms in:
+
+Venables, W. N. and Ripley, B. D. (2002). *Modern Applied Statistics with S*.
+Fourth edition. Springer.
+
+## License
+
+`gipsDA` is licensed under GPL (>= 3).

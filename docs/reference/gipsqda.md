@@ -52,17 +52,20 @@ gipsqda(x, grouping, ..., subset, na.action)
 
 - prior:
 
-  The prior probabilities of class membership. Must sum to one and have
-  length equal to the number of groups.
+  The prior probabilities of class membership. If omitted, training-set
+  class proportions are used. Supplied values must sum to one and match
+  the number of groups.
 
 - nu:
 
-  Degrees of freedom parameter used internally by covariance projection.
+  Reserved for compatibility with related QDA interfaces; it is not
+  currently used by the covariance projection.
 
 - MAP:
 
   Logical; if `TRUE`, maximum a posteriori covariance projection is
-  used.
+  used. If `FALSE`, projections are averaged using retained posterior
+  permutation probabilities.
 
 - optimizer:
 
@@ -103,16 +106,20 @@ An object of class `"gipsqda"` containing the following components:
 - `N`: total number of observations
 
 - `optimization_info`: information returned by the covariance projection
-  optimizer
+  optimizer for the final class projection
 
 - `call`: the matched call
+
+- Formula fits additionally contain `terms`, `contrasts`, `xlevels`, and
+  any recorded `na.action`.
 
 ## Details
 
 This function is a minor modification of
 [`qda`](https://rdrr.io/pkg/MASS/man/qda.html), replacing the classical
 sample covariance estimators by projected covariance matrices obtained
-using `project_covs()`.
+using the [`gips`](https://przechoj.github.io/gips/reference/gips.html)
+framework.
 
 Quadratic discriminant analysis models each class with its own
 covariance matrix. In `gipsqda`, these covariance matrices are projected
@@ -121,7 +128,8 @@ mitigates singularity and overfitting in high-dimensional or
 small-sample settings.
 
 Classification can be performed using plug-in, predictive, debiased, or
-leave-one-out cross-validation rules via `predict.gipsqda`.
+leave-one-out cross-validation rules via
+[`predict.gipsqda`](https://antonikingston.github.io/gipsDA/reference/predict.gipsqda.md).
 
 ## Note
 
@@ -141,20 +149,21 @@ with S*. Fourth edition. Springer.
 
 ## See also
 
-[`qda`](https://rdrr.io/pkg/MASS/man/qda.html), `predict.gipsqda`,
-[`gipslda`](https://AntoniKingston.github.io/gipsDA/reference/gipslda.md),
+[`qda`](https://rdrr.io/pkg/MASS/man/qda.html),
+[`predict.gipsqda`](https://antonikingston.github.io/gipsDA/reference/predict.gipsqda.md),
+[`gipslda`](https://antonikingston.github.io/gipsDA/reference/gipslda.md),
 [`lda`](https://rdrr.io/pkg/MASS/man/lda.html)
 
 ## Examples
 
 ``` r
 tr <- sample(1:50, 25)
-train <- rbind(iris3[tr,,1], iris3[tr,,2], iris3[tr,,3])
-test <- rbind(iris3[-tr,,1], iris3[-tr,,2], iris3[-tr,,3])
-cl <- factor(c(rep("s",25), rep("c",25), rep("v",25)))
+train <- rbind(iris3[tr, , 1], iris3[tr, , 2], iris3[tr, , 3])
+test <- rbind(iris3[-tr, , 1], iris3[-tr, , 2], iris3[-tr, , 3])
+cl <- factor(c(rep("s", 25), rep("c", 25), rep("v", 25)))
 z <- gipsqda(train, cl)
-predict(z,test)$class
-#>  [1] s s s s s s s s s s s s s s s s s s s s s s s s s c c c c c c c c v c c c c
-#> [39] v c c c c c c c c c c c v v v v v v v v v v v v v v v v v v v v v v v v v
+predict(z, test)$class
+#>  [1] s s s s s s s s s s s s s s s s s s s s s s s s s c c c c c c c c c c c c c
+#> [39] c c v c c c c c c c c c v v v v v v v v v v v v v v v c v v v v v v v v v
 #> Levels: c s v
 ```

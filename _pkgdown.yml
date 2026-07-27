@@ -1,26 +1,43 @@
-url: https://AntoniKingston.github.io/gipsDA/
+url: https://antonikingston.github.io/gipsDA/
 
 template:
   bootstrap: 5
 
-navbar:
-  structure:
-    right: [search, github]
-  components:
-    github:
-      icon: fab fa-github fa-lg
-      href: https://github.com/antonikingston/gipsDA
-    left: [reference, articles, news]
+home:
+  sidebar:
+    structure: [dev, links, license, citation, authors]
 
 authors:
   sidebar:
-    roles: [aut, cre, ctb, fnd]
+    roles: [aut, cre, ctb]
 
-home:
-  sidebar:
-    structure: [links, authors, license, citation, dev]
+navbar:
+  structure:
+    left: [intro, reference, manual-test]
+    right: [search, github]
+  components:
+    manual-test:
+      text: Manual test
+      href: articles/manual-test.html
 
+articles:
+  - title: Validation
+    contents:
+      - manual-test
 
-
-
-
+reference:
+  - title: Model fitting
+    contents:
+      - gipslda
+      - gipsqda
+      - gipsmultqda
+  - title: Prediction
+    contents:
+      - predict.gipslda
+      - predict.gipsqda
+      - predict.gipsmultqda
+  - title: LDA diagnostics
+    contents:
+      - coef.gipslda
+      - plot.gipslda
+      - pairs.gipslda
