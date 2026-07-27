@@ -3,6 +3,28 @@ url: https://antonikingston.github.io/gipsDA/
 template:
   bootstrap: 5
 
+home:
+  sidebar:
+    structure: [dev, links, license, citation, authors]
+
+authors:
+  sidebar:
+    roles: [aut, cre, ctb]
+
+navbar:
+  structure:
+    left: [intro, reference, manual-test]
+    right: [search, github]
+  components:
+    manual-test:
+      text: Manual test
+      href: articles/manual-test.html
+
+articles:
+  - title: Validation
+    contents:
+      - manual-test
+
 reference:
   - title: Model fitting
     contents:

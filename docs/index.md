@@ -1,23 +1,13 @@
 # gipsDA
 
-[![Test
-coverage](https://github.com/AntoniKingston/gipsDA/actions/workflows/test-coverage.yaml/badge.svg?branch=nomult_from_scratch)](https://github.com/AntoniKingston/gipsDA/actions/workflows/test-coverage.yaml)
-[![pkgdown](https://github.com/AntoniKingston/gipsDA/actions/workflows/pkgdown.yaml/badge.svg?branch=nomult_from_scratch)](https://antonikingston.github.io/gipsDA/)
-[![Codecov](https://codecov.io/gh/AntoniKingston/gipsDA/branch/nomult_from_scratch/graph/badge.svg)](https://app.codecov.io/gh/AntoniKingston/gipsDA)
-[![License:
-GPL-3](https://img.shields.io/badge/license-GPL--3-blue.svg)](https://antonikingston.github.io/gipsDA/LICENSE.md)
-
 `gipsDA` provides linear and quadratic discriminant analysis with
-covariance matrices projected onto permutation-invariant structures
-estimated by [`gips`](https://github.com/PrzeChoj/gips). The package
-follows the familiar
+structured covariance estimation. It uses
+[`gips`](https://github.com/PrzeChoj/gips) to identify
+permutation-invariant covariance models, offering regularized estimates
+for data with symmetric or exchangeable features. Its formula, matrix,
+and data-frame interfaces follow the conventions of
 [`MASS::lda()`](https://rdrr.io/pkg/MASS/man/lda.html) and
-[`MASS::qda()`](https://rdrr.io/pkg/MASS/man/qda.html) interfaces while
-replacing their classical covariance estimates with structured
-projections.
-
-The package is under active development and is not currently available
-on CRAN.
+[`MASS::qda()`](https://rdrr.io/pkg/MASS/man/qda.html).
 
 ## Models
 
@@ -36,16 +26,19 @@ coefficients, and visualization methods.
 
 ## Installation
 
-Install the development version from GitHub with
-[`pak`](https://pak.r-lib.org/):
+Install the released package from CRAN:
 
 ``` r
-install.packages("pak")
+install.packages("gipsDA")
+```
+
+The current source package can also be installed directly from GitHub:
+
+``` r
 pak::pkg_install("AntoniKingston/gipsDA")
 ```
 
-The required development revision of `gips` is declared in `DESCRIPTION`
-and will be installed automatically.
+Required dependencies are installed automatically.
 
 ## Quick start
 
@@ -139,26 +132,6 @@ plot(lda_fit)
 pairs(lda_fit, type = "std")
 pairs(lda_fit, type = "trellis")
 ```
-
-## Development
-
-The test suite is divided into focused unit tests and broader
-integration validations:
-
-``` text
-tests/testthat/unit/
-tests/testthat/manual/
-```
-
-Run the complete suite and package checks with:
-
-``` r
-devtools::test()
-devtools::check()
-```
-
-Tests run automatically on pushes to the development branch through
-GitHub Actions.
 
 ## References
 
