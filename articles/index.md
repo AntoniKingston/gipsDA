@@ -1,5 +1,10 @@
 # Articles
 
+### Tutorials
+
+- [Getting started with
+  gipsDA](https://antonikingston.github.io/gipsDA/articles/getting-started.md):
+
 ### Validation
 
 - [Manual
