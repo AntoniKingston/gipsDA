@@ -13,14 +13,21 @@ authors:
 
 navbar:
   structure:
-    left: [intro, reference, manual-test]
+    left: [intro, reference, getting-started, manual-test]
     right: [search, github]
   components:
+    getting-started:
+      text: Getting started
+      href: articles/getting-started.html
     manual-test:
       text: Manual test
       href: articles/manual-test.html
 
 articles:
+  - title: Tutorials
+    contents:
+      - getting-started
+
   - title: Validation
     contents:
       - manual-test
@@ -31,11 +38,13 @@ reference:
       - gipslda
       - gipsqda
       - gipsmultqda
+
   - title: Prediction
     contents:
       - predict.gipslda
       - predict.gipsqda
       - predict.gipsmultqda
+
   - title: LDA diagnostics
     contents:
       - coef.gipslda
