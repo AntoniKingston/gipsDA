@@ -115,13 +115,13 @@ stratified train/test split.</p>
 <span></span>
 <span><span class="va">train</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">[</span><span class="va">train_id</span>, <span class="op">]</span></span>
 <span><span class="va">test</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">[</span><span class="op">-</span><span class="va">train_id</span>, <span class="op">]</span></span></code></pre></div>
-<p>Fit a <code><a href="../reference/gipsqda.html">gipsqda()</a></code> model using the formula interface.</p>
+<p>Fit a <code><a href="../reference/gipslda.html">gipslda()</a></code> model using the formula interface.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gipsqda.html">gipsqda</a></span><span class="op">(</span><span class="va">Species</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">train</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gipslda.html">gipslda</a></span><span class="op">(</span><span class="va">Species</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">train</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">fit</span></span>
 <span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; gipsqda(Species ~ ., data = train)</span></span>
+<span><span class="co">#&gt; gipslda(Species ~ ., data = train)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Prior probabilities of groups:</span></span>
 <span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
@@ -133,8 +133,19 @@ stratified train/test split.</p>
 <span><span class="co">#&gt; versicolor     5.911429    2.771429     4.302857   1.3371429</span></span>
 <span><span class="co">#&gt; virginica      6.725714    3.020000     5.654286   2.0685714</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients of linear discriminants:</span></span>
+<span><span class="co">#&gt;                     LD1        LD2</span></span>
+<span><span class="co">#&gt; Sepal.Length -0.2522284 -0.3624600</span></span>
+<span><span class="co">#&gt; Sepal.Width   2.3832685 -2.2995034</span></span>
+<span><span class="co">#&gt; Petal.Length -1.3623096  0.8891933</span></span>
+<span><span class="co">#&gt; Petal.Width  -3.5000941 -2.3792848</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Proportion of trace:</span></span>
+<span><span class="co">#&gt;    LD1    LD2 </span></span>
+<span><span class="co">#&gt; 0.9888 0.0112 </span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
-<span><span class="co">#&gt; [1] (13)(24)</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] (1243)</span></span></code></pre></div>
 <p>Predict classes for the test set.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">test</span><span class="op">)</span></span>
@@ -144,12 +155,12 @@ stratified train/test split.</p>
 <span><span class="co">#&gt; Levels: setosa versicolor virginica</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pred</span><span class="op">$</span><span class="va">posterior</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    setosa   versicolor    virginica</span></span>
-<span><span class="co">#&gt; 6       1 2.909134e-18 1.033310e-27</span></span>
-<span><span class="co">#&gt; 9       1 1.075425e-13 1.166576e-19</span></span>
-<span><span class="co">#&gt; 14      1 2.143385e-16 2.068832e-22</span></span>
-<span><span class="co">#&gt; 16      1 2.508036e-24 3.982454e-36</span></span>
-<span><span class="co">#&gt; 17      1 4.556129e-22 4.934051e-32</span></span>
-<span><span class="co">#&gt; 19      1 4.873816e-18 2.042588e-29</span></span>
+<span><span class="co">#&gt; 6       1 7.906717e-22 4.776377e-41</span></span>
+<span><span class="co">#&gt; 9       1 2.674459e-16 1.730922e-35</span></span>
+<span><span class="co">#&gt; 14      1 1.353910e-20 1.978581e-41</span></span>
+<span><span class="co">#&gt; 16      1 3.431995e-28 5.926915e-49</span></span>
+<span><span class="co">#&gt; 17      1 3.146059e-24 3.515450e-44</span></span>
+<span><span class="co">#&gt; 19      1 8.270729e-22 2.610171e-41</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">pred</span><span class="op">$</span><span class="va">class</span> <span class="op">==</span> <span class="va">test</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.9777778</span></span></code></pre></div>
@@ -278,8 +289,6 @@ posterior-weighted averaging</td>
 <div class="section level2">
 <h2 id="map-maximum-a-posteriori">MAP: Maximum A Posteriori<a class="anchor" aria-label="anchor" href="#map-maximum-a-posteriori"></a>
 </h2>
-<p><code>MAP</code> stands for <strong>Maximum A
-Posteriori</strong>.</p>
 <p>When <code>MAP = TRUE</code>, the model selects the single most
 probable permutation structure and uses the covariance matrix projected
 onto that structure.</p>
@@ -361,6 +370,8 @@ written in cycle notation. It means that the permutation maps feature
 <code>4</code> to <code>3</code>, and <code>3</code> back to
 <code>1</code>. Features appearing in the same cycle are treated as
 exchangeable under the selected symmetry structure.</p>
+<p>For formulas and a more detailed explanation of posterior averaging,
+see the <a href="advanced-usage.html">Advanced usage</a> vignette.</p>
 </div>
 <div class="section level2">
 <h2 id="optimizer">Optimizer<a class="anchor" aria-label="anchor" href="#optimizer"></a>
@@ -404,63 +415,16 @@ control the number of iterations.</p>
 <span><span class="op">)</span></span></code></pre></div>
 <p>For <code>optimizer = "BF"</code>, <code>max_iter</code> is
 ignored.</p>
-</div>
-<div class="section level2">
-<h2 id="weighted_avg-in-gipslda">
-<code>weighted_avg</code> in <code>gipslda()</code><a class="anchor" aria-label="anchor" href="#weighted_avg-in-gipslda"></a>
-</h2>
-<p><code>weighted_avg</code> controls how the pooled covariance matrix
-is constructed before the <code>gips</code> projection is applied.</p>
-<p>Let <code>K</code> be the number of classes, <code>n_k</code> the
-number of observations in class <code>k</code>, <code>n</code> the total
-number of observations, and <code>S_k</code> the sample covariance
-matrix in class <code>k</code>.</p>
-<p>With <code>weighted_avg = FALSE</code>, <code><a href="../reference/gipslda.html">gipslda()</a></code> uses
-the classic pooled covariance estimator:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mrow><mi mathvariant="normal">c</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">s</mi><mi mathvariant="normal">s</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">c</mi></mrow></msub><mo>=</mo><mfrac><mn>1</mn><mrow><mi>n</mi><mo>−</mo><mi>K</mi></mrow></mfrac><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover><mo stretchy="false" form="prefix">(</mo><msub><mi>n</mi><mi>k</mi></msub><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><msub><mi>S</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">
-S_{\mathrm{classic}}
-=
-\frac{1}{n - K}
-\sum_{k = 1}^{K}
-(n_k - 1) S_k.
-</annotation></semantics></math></p>
-<p>With <code>weighted_avg = TRUE</code>, it uses the
-class-size-weighted average:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mrow><mi mathvariant="normal">w</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">g</mi><mi mathvariant="normal">h</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">d</mi></mrow></msub><mo>=</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover><msub><mi>n</mi><mi>k</mi></msub><msub><mi>S</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">
-S_{\mathrm{weighted}}
-=
-\frac{1}{n}
-\sum_{k = 1}^{K}
-n_k S_k.
-</annotation></semantics></math></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">lda_classic</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gipslda.html">gipslda</a></span><span class="op">(</span></span>
-<span>  <span class="va">Species</span> <span class="op">~</span> <span class="va">.</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">train</span>,</span>
-<span>  weighted_avg <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">lda_weighted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gipslda.html">gipslda</a></span><span class="op">(</span></span>
-<span>  <span class="va">Species</span> <span class="op">~</span> <span class="va">.</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">train</span>,</span>
-<span>  weighted_avg <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>  classic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">lda_classic</span>, <span class="va">test</span><span class="op">)</span><span class="op">$</span><span class="va">class</span> <span class="op">==</span> <span class="va">test</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span>,</span>
-<span>  weighted <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">lda_weighted</span>, <span class="va">test</span><span class="op">)</span><span class="op">$</span><span class="va">class</span> <span class="op">==</span> <span class="va">test</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt;   classic  weighted </span></span>
-<span><span class="co">#&gt; 0.9777778 0.9333333</span></span></code></pre></div>
+<p>For more details about optimization settings, see the <a href="advanced-usage.html">Advanced usage</a> vignette.</p>
 </div>
 <div class="section level2">
 <h2 id="fitting-all-three-models">Fitting all three models<a class="anchor" aria-label="anchor" href="#fitting-all-three-models"></a>
 </h2>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lda_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gipslda.html">gipslda</a></span><span class="op">(</span><span class="va">Species</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">train</span><span class="op">)</span></span>
 <span><span class="va">qda_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gipsqda.html">gipsqda</a></span><span class="op">(</span><span class="va">Species</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">train</span><span class="op">)</span></span>
 <span><span class="va">joint_qda_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gipsmultqda.html">gipsmultqda</a></span><span class="op">(</span><span class="va">Species</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">train</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lda_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">lda_fit</span>, <span class="va">test</span><span class="op">)</span></span>
 <span><span class="va">qda_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">qda_fit</span>, <span class="va">test</span><span class="op">)</span></span>
 <span><span class="va">joint_qda_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">joint_qda_fit</span>, <span class="va">test</span><span class="op">)</span></span>
@@ -474,10 +438,10 @@ n_k S_k.
 <span><span class="co">#&gt;   0.9777778   0.9777778   1.0000000</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="inspecting-fitted-models">Inspecting fitted models<a class="anchor" aria-label="anchor" href="#inspecting-fitted-models"></a>
+<h2 id="inspecting-a-fitted-model">Inspecting a fitted model<a class="anchor" aria-label="anchor" href="#inspecting-a-fitted-model"></a>
 </h2>
 <p>The most readable way to inspect a fitted model is to print it.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">lda_fit</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; gipslda(Species ~ ., data = train)</span></span>
@@ -505,45 +469,11 @@ n_k S_k.
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
 <span><span class="co">#&gt; [1] (1243)</span></span></code></pre></div>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">qda_fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; gipsqda(Species ~ ., data = train)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Prior probabilities of groups:</span></span>
-<span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
-<span><span class="co">#&gt;  0.3333333  0.3333333  0.3333333 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Group means:</span></span>
-<span><span class="co">#&gt;            Sepal.Length Sepal.Width Petal.Length Petal.Width</span></span>
-<span><span class="co">#&gt; setosa         5.020000    3.420000     1.482857   0.2428571</span></span>
-<span><span class="co">#&gt; versicolor     5.911429    2.771429     4.302857   1.3371429</span></span>
-<span><span class="co">#&gt; virginica      6.725714    3.020000     5.654286   2.0685714</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
-<span><span class="co">#&gt; [1] (13)(24)</span></span></code></pre></div>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">joint_qda_fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; gipsmultqda(Species ~ ., data = train)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Prior probabilities of groups:</span></span>
-<span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
-<span><span class="co">#&gt;  0.3333333  0.3333333  0.3333333 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Group means:</span></span>
-<span><span class="co">#&gt;            Sepal.Length Sepal.Width Petal.Length Petal.Width</span></span>
-<span><span class="co">#&gt; setosa         5.020000    3.420000     1.482857   0.2428571</span></span>
-<span><span class="co">#&gt; versicolor     5.911429    2.771429     4.302857   1.3371429</span></span>
-<span><span class="co">#&gt; virginica      6.725714    3.020000     5.654286   2.0685714</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
-<span><span class="co">#&gt; [1] (13)</span></span></code></pre></div>
 <p>The printed output shows the model call, class priors, group means,
 and information about selected or averaged permutation structures.</p>
-<p>For a structural summary of the object, use
-<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<p>If a dedicated <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> method is available, it can be
+used for a more compact model summary.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">lda_fit</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                   Length Class     Mode     </span></span>
 <span><span class="co">#&gt; prior              3     -none-    numeric  </span></span>
@@ -556,90 +486,15 @@ and information about selected or averaged permutation structures.</p>
 <span><span class="co">#&gt; optimization_info  1     gips_perm list     </span></span>
 <span><span class="co">#&gt; call               3     -none-    call     </span></span>
 <span><span class="co">#&gt; terms              3     terms     call     </span></span>
-<span><span class="co">#&gt; xlevels            0     -none-    list</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">qda_fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                   Length Class     Mode     </span></span>
-<span><span class="co">#&gt; prior              3     -none-    numeric  </span></span>
-<span><span class="co">#&gt; counts             3     -none-    numeric  </span></span>
-<span><span class="co">#&gt; means             12     -none-    numeric  </span></span>
-<span><span class="co">#&gt; scaling           48     -none-    numeric  </span></span>
-<span><span class="co">#&gt; ldet               3     -none-    numeric  </span></span>
-<span><span class="co">#&gt; lev                3     -none-    character</span></span>
-<span><span class="co">#&gt; N                  1     -none-    numeric  </span></span>
-<span><span class="co">#&gt; call               3     -none-    call     </span></span>
-<span><span class="co">#&gt; optimization_info  2     gips_perm list     </span></span>
-<span><span class="co">#&gt; terms              3     terms     call     </span></span>
-<span><span class="co">#&gt; xlevels            0     -none-    list</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">joint_qda_fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                   Length Class     Mode     </span></span>
-<span><span class="co">#&gt; prior              3     -none-    numeric  </span></span>
-<span><span class="co">#&gt; counts             3     -none-    numeric  </span></span>
-<span><span class="co">#&gt; means             12     -none-    numeric  </span></span>
-<span><span class="co">#&gt; scaling           48     -none-    numeric  </span></span>
-<span><span class="co">#&gt; ldet               3     -none-    numeric  </span></span>
-<span><span class="co">#&gt; lev                3     -none-    character</span></span>
-<span><span class="co">#&gt; N                  1     -none-    numeric  </span></span>
-<span><span class="co">#&gt; call               3     -none-    call     </span></span>
-<span><span class="co">#&gt; optimization_info  3     gips_perm list     </span></span>
-<span><span class="co">#&gt; terms              3     terms     call     </span></span>
 <span><span class="co">#&gt; xlevels            0     -none-    list</span></span></code></pre></div>
-<p>Fitted models are list-like S3 objects, so their components can also
-be inspected directly.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">lda_fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] "prior"             "counts"            "means"            </span></span>
-<span><span class="co">#&gt;  [4] "scaling"           "lev"               "svd"              </span></span>
-<span><span class="co">#&gt;  [7] "N"                 "optimization_info" "call"             </span></span>
-<span><span class="co">#&gt; [10] "terms"             "xlevels"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">qda_fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] "prior"             "counts"            "means"            </span></span>
-<span><span class="co">#&gt;  [4] "scaling"           "ldet"              "lev"              </span></span>
-<span><span class="co">#&gt;  [7] "N"                 "call"              "optimization_info"</span></span>
-<span><span class="co">#&gt; [10] "terms"             "xlevels"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">joint_qda_fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] "prior"             "counts"            "means"            </span></span>
-<span><span class="co">#&gt;  [4] "scaling"           "ldet"              "lev"              </span></span>
-<span><span class="co">#&gt;  [7] "N"                 "call"              "optimization_info"</span></span>
-<span><span class="co">#&gt; [10] "terms"             "xlevels"</span></span></code></pre></div>
-<p>The <code>optimization_info</code> component stores information
-returned by the permutation optimization step.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">lda_fit</span><span class="op">$</span><span class="va">optimization_info</span></span>
-<span><span class="co">#&gt; [1] (1243)</span></span>
-<span><span class="va">qda_fit</span><span class="op">$</span><span class="va">optimization_info</span></span>
-<span><span class="co">#&gt; [1] (13)(24)</span></span>
-<span><span class="va">joint_qda_fit</span><span class="op">$</span><span class="va">optimization_info</span></span>
-<span><span class="co">#&gt; [1] (13)</span></span></code></pre></div>
+<p>More details about fitted model objects are described in the <a href="advanced-usage.html">Advanced usage</a> vignette.</p>
 </div>
 <div class="section level2">
 <h2 id="prediction-output">Prediction output<a class="anchor" aria-label="anchor" href="#prediction-output"></a>
 </h2>
-<p>Prediction returns a list. The most important components are:</p>
-<table class="table">
-<thead><tr class="header">
-<th>Component</th>
-<th>Meaning</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td><code>class</code></td>
-<td>predicted class labels</td>
-</tr>
-<tr class="even">
-<td><code>posterior</code></td>
-<td>posterior class probabilities</td>
-</tr>
-<tr class="odd">
-<td><code>x</code></td>
-<td>discriminant coordinates, when available</td>
-</tr>
-</tbody>
-</table>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">lda_pred</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "class"     "posterior" "x"</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">lda_pred</span><span class="op">$</span><span class="va">class</span><span class="op">)</span></span>
+<p>Prediction returns predicted classes and posterior probabilities.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">lda_pred</span><span class="op">$</span><span class="va">class</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] setosa setosa setosa setosa setosa setosa</span></span>
 <span><span class="co">#&gt; Levels: setosa versicolor virginica</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">lda_pred</span><span class="op">$</span><span class="va">posterior</span><span class="op">)</span></span>
@@ -650,13 +505,14 @@ returned by the permutation optimization step.</p>
 <span><span class="co">#&gt; 16      1 3.431995e-28 5.926915e-49</span></span>
 <span><span class="co">#&gt; 17      1 3.146059e-24 3.515450e-44</span></span>
 <span><span class="co">#&gt; 19      1 8.270729e-22 2.610171e-41</span></span></code></pre></div>
+<p>More detailed prediction options are described in the <a href="advanced-usage.html">Advanced usage</a> vignette.</p>
 </div>
 <div class="section level2">
 <h2 id="matrix-interface">Matrix interface<a class="anchor" aria-label="anchor" href="#matrix-interface"></a>
 </h2>
 <p>The formula interface is usually the most convenient, but the matrix
 interface is also available.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">iris</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="va">grouping</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">$</span><span class="va">Species</span></span>
 <span></span>
@@ -667,7 +523,7 @@ interface is also available.</p>
 <span><span class="co">#&gt; Levels: setosa versicolor virginica</span></span></code></pre></div>
 <p>The same style can be used with <code><a href="../reference/gipsqda.html">gipsqda()</a></code> and
 <code><a href="../reference/gipsmultqda.html">gipsmultqda()</a></code>.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">qda_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gipsqda.html">gipsqda</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">grouping</span><span class="op">)</span></span>
 <span><span class="va">joint_qda_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gipsmultqda.html">gipsmultqda</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">grouping</span><span class="op">)</span></span>
 <span></span>
@@ -682,7 +538,7 @@ interface is also available.</p>
 <h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h2>
 <p>For a first analysis, start with:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gipslda.html">gipslda</a></span><span class="op">(</span><span class="va">Species</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">train</span><span class="op">)</span></span>
 <span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">test</span><span class="op">)</span></span>
 <span></span>
@@ -757,6 +613,10 @@ probabilities</td>
 </tr>
 </tbody>
 </table>
+<p>More detailed examples, including <code>weighted_avg</code>,
+leave-one-out prediction, matrix interfaces, and model diagnostics, are
+described in the <a href="advanced-usage.html">Advanced usage</a>
+vignette.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
