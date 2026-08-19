@@ -66,16 +66,16 @@ test <- iris[-train_id, ]
 ```
 
 Fit a
-[`gipsqda()`](https://antonikingston.github.io/gipsDA/reference/gipsqda.md)
+[`gipslda()`](https://antonikingston.github.io/gipsDA/reference/gipslda.md)
 model using the formula interface.
 
 ``` r
 
-fit <- gipsqda(Species ~ ., data = train)
+fit <- gipslda(Species ~ ., data = train)
 
 fit
 #> Call:
-#> gipsqda(Species ~ ., data = train)
+#> gipslda(Species ~ ., data = train)
 #> 
 #> Prior probabilities of groups:
 #>     setosa versicolor  virginica 
@@ -87,8 +87,19 @@ fit
 #> versicolor     5.911429    2.771429     4.302857   1.3371429
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
+#> Coefficients of linear discriminants:
+#>                     LD1        LD2
+#> Sepal.Length -0.2522284 -0.3624600
+#> Sepal.Width   2.3832685 -2.2995034
+#> Petal.Length -1.3623096  0.8891933
+#> Petal.Width  -3.5000941 -2.3792848
+#> 
+#> Proportion of trace:
+#>    LD1    LD2 
+#> 0.9888 0.0112 
+#> 
 #> Permutations with their estimated probabilities:
-#> [1] (13)(24)
+#> [1] (1243)
 ```
 
 Predict classes for the test set.
@@ -102,12 +113,12 @@ head(pred$class)
 #> Levels: setosa versicolor virginica
 head(pred$posterior)
 #>    setosa   versicolor    virginica
-#> 6       1 2.909134e-18 1.033310e-27
-#> 9       1 1.075425e-13 1.166576e-19
-#> 14      1 2.143385e-16 2.068832e-22
-#> 16      1 2.508036e-24 3.982454e-36
-#> 17      1 4.556129e-22 4.934051e-32
-#> 19      1 4.873816e-18 2.042588e-29
+#> 6       1 7.906717e-22 4.776377e-41
+#> 9       1 2.674459e-16 1.730922e-35
+#> 14      1 1.353910e-20 1.978581e-41
+#> 16      1 3.431995e-28 5.926915e-49
+#> 17      1 3.146059e-24 3.515450e-44
+#> 19      1 8.270729e-22 2.610171e-41
 
 mean(pred$class == test$Species)
 #> [1] 0.9777778
@@ -178,8 +189,6 @@ and
 | `tol` | numerical tolerance used during fitting |
 
 ## MAP: Maximum A Posteriori
-
-`MAP` stands for **Maximum A Posteriori**.
 
 When `MAP = TRUE`, the model selects the single most probable
 permutation structure and uses the covariance matrix projected onto that
@@ -269,6 +278,11 @@ notation. It means that the permutation maps feature `1` to `2`, `2` to
 `4`, `4` to `3`, and `3` back to `1`. Features appearing in the same
 cycle are treated as exchangeable under the selected symmetry structure.
 
+For formulas and a more detailed explanation of posterior averaging, see
+the [Advanced
+usage](https://antonikingston.github.io/gipsDA/articles/advanced-usage.md)
+vignette.
+
 ## Optimizer
 
 The `optimizer` argument controls how permutation structures are
@@ -294,58 +308,9 @@ fit_mh <- gipsqda(
 
 For `optimizer = "BF"`, `max_iter` is ignored.
 
-## `weighted_avg` in `gipslda()`
-
-`weighted_avg` controls how the pooled covariance matrix is constructed
-before the `gips` projection is applied.
-
-Let `K` be the number of classes, `n_k` the number of observations in
-class `k`, `n` the total number of observations, and `S_k` the sample
-covariance matrix in class `k`.
-
-With `weighted_avg = FALSE`,
-[`gipslda()`](https://antonikingston.github.io/gipsDA/reference/gipslda.md)
-uses the classic pooled covariance estimator:
-
-``` math
-S_{\mathrm{classic}}
-=
-\frac{1}{n - K}
-\sum_{k = 1}^{K}
-(n_k - 1) S_k.
-```
-
-With `weighted_avg = TRUE`, it uses the class-size-weighted average:
-
-``` math
-S_{\mathrm{weighted}}
-=
-\frac{1}{n}
-\sum_{k = 1}^{K}
-n_k S_k.
-```
-
-``` r
-
-lda_classic <- gipslda(
-  Species ~ .,
-  data = train,
-  weighted_avg = FALSE
-)
-
-lda_weighted <- gipslda(
-  Species ~ .,
-  data = train,
-  weighted_avg = TRUE
-)
-
-c(
-  classic = mean(predict(lda_classic, test)$class == test$Species),
-  weighted = mean(predict(lda_weighted, test)$class == test$Species)
-)
-#>   classic  weighted 
-#> 0.9777778 0.9333333
-```
+For more details about optimization settings, see the [Advanced
+usage](https://antonikingston.github.io/gipsDA/articles/advanced-usage.md)
+vignette.
 
 ## Fitting all three models
 
@@ -371,7 +336,7 @@ c(
 #>   0.9777778   0.9777778   1.0000000
 ```
 
-## Inspecting fitted models
+## Inspecting a fitted model
 
 The most readable way to inspect a fitted model is to print it.
 
@@ -406,51 +371,11 @@ print(lda_fit)
 #> [1] (1243)
 ```
 
-``` r
-
-print(qda_fit)
-#> Call:
-#> gipsqda(Species ~ ., data = train)
-#> 
-#> Prior probabilities of groups:
-#>     setosa versicolor  virginica 
-#>  0.3333333  0.3333333  0.3333333 
-#> 
-#> Group means:
-#>            Sepal.Length Sepal.Width Petal.Length Petal.Width
-#> setosa         5.020000    3.420000     1.482857   0.2428571
-#> versicolor     5.911429    2.771429     4.302857   1.3371429
-#> virginica      6.725714    3.020000     5.654286   2.0685714
-#> 
-#> Permutations with their estimated probabilities:
-#> [1] (13)(24)
-```
-
-``` r
-
-print(joint_qda_fit)
-#> Call:
-#> gipsmultqda(Species ~ ., data = train)
-#> 
-#> Prior probabilities of groups:
-#>     setosa versicolor  virginica 
-#>  0.3333333  0.3333333  0.3333333 
-#> 
-#> Group means:
-#>            Sepal.Length Sepal.Width Petal.Length Petal.Width
-#> setosa         5.020000    3.420000     1.482857   0.2428571
-#> versicolor     5.911429    2.771429     4.302857   1.3371429
-#> virginica      6.725714    3.020000     5.654286   2.0685714
-#> 
-#> Permutations with their estimated probabilities:
-#> [1] (13)
-```
-
 The printed output shows the model call, class priors, group means, and
 information about selected or averaged permutation structures.
 
-For a structural summary of the object, use
-[`summary()`](https://rdrr.io/r/base/summary.html).
+If a dedicated [`summary()`](https://rdrr.io/r/base/summary.html) method
+is available, it can be used for a more compact model summary.
 
 ``` r
 
@@ -467,83 +392,17 @@ summary(lda_fit)
 #> call               3     -none-    call     
 #> terms              3     terms     call     
 #> xlevels            0     -none-    list
-summary(qda_fit)
-#>                   Length Class     Mode     
-#> prior              3     -none-    numeric  
-#> counts             3     -none-    numeric  
-#> means             12     -none-    numeric  
-#> scaling           48     -none-    numeric  
-#> ldet               3     -none-    numeric  
-#> lev                3     -none-    character
-#> N                  1     -none-    numeric  
-#> call               3     -none-    call     
-#> optimization_info  2     gips_perm list     
-#> terms              3     terms     call     
-#> xlevels            0     -none-    list
-summary(joint_qda_fit)
-#>                   Length Class     Mode     
-#> prior              3     -none-    numeric  
-#> counts             3     -none-    numeric  
-#> means             12     -none-    numeric  
-#> scaling           48     -none-    numeric  
-#> ldet               3     -none-    numeric  
-#> lev                3     -none-    character
-#> N                  1     -none-    numeric  
-#> call               3     -none-    call     
-#> optimization_info  3     gips_perm list     
-#> terms              3     terms     call     
-#> xlevels            0     -none-    list
 ```
 
-Fitted models are list-like S3 objects, so their components can also be
-inspected directly.
-
-``` r
-
-names(lda_fit)
-#>  [1] "prior"             "counts"            "means"            
-#>  [4] "scaling"           "lev"               "svd"              
-#>  [7] "N"                 "optimization_info" "call"             
-#> [10] "terms"             "xlevels"
-names(qda_fit)
-#>  [1] "prior"             "counts"            "means"            
-#>  [4] "scaling"           "ldet"              "lev"              
-#>  [7] "N"                 "call"              "optimization_info"
-#> [10] "terms"             "xlevels"
-names(joint_qda_fit)
-#>  [1] "prior"             "counts"            "means"            
-#>  [4] "scaling"           "ldet"              "lev"              
-#>  [7] "N"                 "call"              "optimization_info"
-#> [10] "terms"             "xlevels"
-```
-
-The `optimization_info` component stores information returned by the
-permutation optimization step.
-
-``` r
-
-lda_fit$optimization_info
-#> [1] (1243)
-qda_fit$optimization_info
-#> [1] (13)(24)
-joint_qda_fit$optimization_info
-#> [1] (13)
-```
+More details about fitted model objects are described in the [Advanced
+usage](https://antonikingston.github.io/gipsDA/articles/advanced-usage.md)
+vignette.
 
 ## Prediction output
 
-Prediction returns a list. The most important components are:
-
-| Component   | Meaning                                  |
-|-------------|------------------------------------------|
-| `class`     | predicted class labels                   |
-| `posterior` | posterior class probabilities            |
-| `x`         | discriminant coordinates, when available |
+Prediction returns predicted classes and posterior probabilities.
 
 ``` r
-
-names(lda_pred)
-#> [1] "class"     "posterior" "x"
 
 head(lda_pred$class)
 #> [1] setosa setosa setosa setosa setosa setosa
@@ -557,6 +416,10 @@ head(lda_pred$posterior)
 #> 17      1 3.146059e-24 3.515450e-44
 #> 19      1 8.270729e-22 2.610171e-41
 ```
+
+More detailed prediction options are described in the [Advanced
+usage](https://antonikingston.github.io/gipsDA/articles/advanced-usage.md)
+vignette.
 
 ## Matrix interface
 
@@ -624,3 +487,9 @@ The main tuning choices are:
 | `optimizer = "MH"` | stochastic search, typically for `p > 10` |
 | `max_iter` | used only with `optimizer = "MH"` |
 | `weighted_avg` | changes the pooled covariance estimator in [`gipslda()`](https://antonikingston.github.io/gipsDA/reference/gipslda.md) |
+
+More detailed examples, including `weighted_avg`, leave-one-out
+prediction, matrix interfaces, and model diagnostics, are described in
+the [Advanced
+usage](https://antonikingston.github.io/gipsDA/articles/advanced-usage.md)
+vignette.
