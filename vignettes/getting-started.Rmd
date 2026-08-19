@@ -71,10 +71,10 @@ train <- iris[train_id, ]
 test <- iris[-train_id, ]
 ```
 
-Fit a `gipsqda()` model using the formula interface.
+Fit a `gipslda()` model using the formula interface.
 
 ```{r}
-fit <- gipsqda(Species ~ ., data = train)
+fit <- gipslda(Species ~ ., data = train)
 
 fit
 ```
@@ -145,8 +145,6 @@ The figure illustrates the inclusion relations between the model classes.
 
 ## MAP: Maximum A Posteriori
 
-`MAP` stands for **Maximum A Posteriori**.
-
 When `MAP = TRUE`, the model selects the single most probable permutation
 structure and uses the covariance matrix projected onto that structure.
 
@@ -178,6 +176,9 @@ It means that the permutation maps feature `1` to `2`, `2` to `4`, `4` to `3`,
 and `3` back to `1`. Features appearing in the same cycle are treated as
 exchangeable under the selected symmetry structure.
 
+For formulas and a more detailed explanation of posterior averaging, see the
+[Advanced usage](advanced-usage.html) vignette.
+
 ## Optimizer
 
 The `optimizer` argument controls how permutation structures are searched.
@@ -200,54 +201,7 @@ fit_mh <- gipsqda(
 
 For `optimizer = "BF"`, `max_iter` is ignored.
 
-## `weighted_avg` in `gipslda()`
-
-`weighted_avg` controls how the pooled covariance matrix is constructed before
-the `gips` projection is applied.
-
-Let `K` be the number of classes, `n_k` the number of observations in class `k`,
-`n` the total number of observations, and `S_k` the sample covariance matrix in
-class `k`.
-
-With `weighted_avg = FALSE`, `gipslda()` uses the classic pooled covariance
-estimator:
-
-\[
-S_{\mathrm{classic}}
-=
-\frac{1}{n - K}
-\sum_{k = 1}^{K}
-(n_k - 1) S_k.
-\]
-
-With `weighted_avg = TRUE`, it uses the class-size-weighted average:
-
-\[
-S_{\mathrm{weighted}}
-=
-\frac{1}{n}
-\sum_{k = 1}^{K}
-n_k S_k.
-\]
-
-```{r}
-lda_classic <- gipslda(
-  Species ~ .,
-  data = train,
-  weighted_avg = FALSE
-)
-
-lda_weighted <- gipslda(
-  Species ~ .,
-  data = train,
-  weighted_avg = TRUE
-)
-
-c(
-  classic = mean(predict(lda_classic, test)$class == test$Species),
-  weighted = mean(predict(lda_weighted, test)$class == test$Species)
-)
-```
+For more details about optimization settings, see the [Advanced usage](advanced-usage.html) vignette.
 
 ## Fitting all three models
 
@@ -269,7 +223,7 @@ c(
 )
 ```
 
-## Inspecting fitted models
+## Inspecting a fitted model
 
 The most readable way to inspect a fitted model is to print it.
 
@@ -277,60 +231,29 @@ The most readable way to inspect a fitted model is to print it.
 print(lda_fit)
 ```
 
-```{r}
-print(qda_fit)
-```
-
-```{r}
-print(joint_qda_fit)
-```
-
 The printed output shows the model call, class priors, group means, and
 information about selected or averaged permutation structures.
 
-For a structural summary of the object, use `summary()`.
+If a dedicated `summary()` method is available, it can be used for a more compact
+model summary.
 
 ```{r}
 summary(lda_fit)
-summary(qda_fit)
-summary(joint_qda_fit)
 ```
 
-Fitted models are list-like S3 objects, so their components can also be inspected
-directly.
-
-```{r}
-names(lda_fit)
-names(qda_fit)
-names(joint_qda_fit)
-```
-
-The `optimization_info` component stores information returned by the permutation
-optimization step.
-
-```{r}
-lda_fit$optimization_info
-qda_fit$optimization_info
-joint_qda_fit$optimization_info
-```
+More details about fitted model objects are described in the [Advanced usage](advanced-usage.html)
+vignette.
 
 ## Prediction output
 
-Prediction returns a list. The most important components are:
-
-| Component | Meaning |
-|---|---|
-| `class` | predicted class labels |
-| `posterior` | posterior class probabilities |
-| `x` | discriminant coordinates, when available |
+Prediction returns predicted classes and posterior probabilities.
 
 ```{r}
-names(lda_pred)
-
 head(lda_pred$class)
 head(lda_pred$posterior)
 ```
 
+More detailed prediction options are described in the [Advanced usage](advanced-usage.html) vignette.
 
 ## Matrix interface
 
@@ -386,3 +309,7 @@ The main tuning choices are:
 | `optimizer = "MH"` | stochastic search, typically for `p > 10` |
 | `max_iter` | used only with `optimizer = "MH"` |
 | `weighted_avg` | changes the pooled covariance estimator in `gipslda()` |
+
+More detailed examples, including `weighted_avg`, leave-one-out prediction,
+matrix interfaces, and model diagnostics, are described in the [Advanced usage](advanced-usage.html)
+vignette.
