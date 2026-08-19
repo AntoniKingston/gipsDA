@@ -13,12 +13,15 @@ authors:
 
 navbar:
   structure:
-    left: [intro, reference, getting-started, manual-test]
+    left: [intro, reference, getting-started, advanced-usage, manual-test]
     right: [search, github]
   components:
     getting-started:
       text: Getting started
       href: articles/getting-started.html
+    advanced-usage:
+      text: Advanced usage
+      href: articles/advanced-usage.html
     manual-test:
       text: Manual test
       href: articles/manual-test.html
@@ -27,6 +30,7 @@ articles:
   - title: Tutorials
     contents:
       - getting-started
+      - advanced-usage
 
   - title: Validation
     contents:
