@@ -23,21 +23,16 @@ Quadratic Discriminant Analysis (QDA) by replacing standard empirical covariance
 estimates with covariance estimates regularized by permutation-invariant
 structures learned with the `gips` framework.
 
-The package is especially useful when the covariance matrix is difficult to
-estimate reliably, for example when the number of features is large relative to
-the number of observations. In such settings, classical covariance estimators may
-be unstable or singular.
+The package provides three model-fitting functions:
 
-The package provides three main model families:
-
-- `gipslda()` - LDA with a projected pooled covariance matrix.
-- `gipsqda()` - QDA with separately projected class-specific covariance matrices.
-- `gipsmultqda()` - QDA with class-specific covariance matrices and a jointly
+- `gipslda()` — LDA with a projected pooled covariance matrix.
+- `gipsqda()` — QDA with independently projected class-specific covariance matrices.
+- `gipsmultqda()` — QDA with class-specific covariance matrices and a jointly
   estimated permutation structure.
 
-All three functions follow the familiar conventions of `MASS::lda()` and
-`MASS::qda()`. They support formula, matrix, and data-frame interfaces, and their
-`predict()` methods return class predictions and posterior probabilities.
+The functions follow the familiar conventions of `MASS::lda()` and
+`MASS::qda()`: they support formula, matrix, and data-frame interfaces, and their
+`predict()` methods return predicted classes and posterior probabilities.
 
 ## Installation
 
@@ -59,10 +54,10 @@ Load the package:
 library(gipsDA)
 ```
 
-## Example data
+## Quick start
 
-We use the built-in `iris` data set. To make the example closer to a standard
-classification workflow, we create a stratified train/test split.
+We use the built-in `iris` data set and create a simple stratified train/test
+split.
 
 ```{r}
 set.seed(42)
@@ -74,131 +69,128 @@ train_id <- unlist(
 
 train <- iris[train_id, ]
 test <- iris[-train_id, ]
-
-table(train$Species)
-table(test$Species)
 ```
 
-## Main functions
+Fit a `gipsqda()` model using the formula interface.
 
-The main model-fitting functions are:
+```{r}
+fit <- gipsqda(Species ~ ., data = train)
 
-| Function | Classical analogue | Covariance structure |
+fit
+```
+
+Predict classes for the test set.
+
+```{r}
+pred <- predict(fit, test)
+
+head(pred$class)
+head(pred$posterior)
+
+mean(pred$class == test$Species)
+```
+
+## Preparing data
+
+`gipsDA` works with numeric predictors and a categorical grouping variable.
+
+Before fitting a model:
+
+- remove or impute missing values,
+- remove non-informative columns, such as identifiers,
+- encode categorical predictors before passing them to the model,
+- avoid mixing variables with incomparable scales when possible.
+
+Because the method searches for symmetries between variables, predictors should
+be meaningfully comparable. For example, variables measured in the same units or
+representing analogous sensor readings are more natural candidates for
+permutation symmetry.
+
+Standardization can be useful when predictors are on very different scales, but
+it should be done carefully. In particular, scaling parameters should be estimated
+on the training data only and then applied to new data.
+
+
+## Model relationships
+
+The three `gipsDA` models are related to classical LDA and QDA as shown below.
+
+```{r model-hierarchy, echo = FALSE, fig.cap = "The diagram illustrates the hierarchical relationships between the models.", out.width = "95%"}
+knitr::include_graphics("figures/models_hierarchy.png")
+```
+
+The figure illustrates the inclusion relations between the model classes.
+`gipsqda()` is contained in QDA, `gipslda()` is contained in LDA, and
+`gipsmultqda()` lies between `gipsqda()` and `gipslda()`.
+
+
+## Choosing a model
+
+| Function | Covariance-matrix assumption | When this may be reasonable |
 |---|---|---|
-| `gipslda()` | `MASS::lda()` | one projected pooled covariance matrix |
-| `gipsqda()` | `MASS::qda()` | one projected covariance matrix per class |
-| `gipsmultqda()` | `MASS::qda()` | class-specific covariance matrices with one jointly estimated permutation structure |
+| `gipslda()` | all classes share one projected covariance matrix | classes differ mainly in their means, but have similar covariance structure |
+| `gipsqda()` | each class has its own projected covariance matrix and its own permutation structure | classes may have different covariance patterns |
+| `gipsmultqda()` | each class has its own covariance matrix, but all classes share one permutation structure | classes differ in scale or variance, but have a common dependency pattern between features |
 
-The package also provides several S3 methods.
-
-| Method | Objects | Purpose |
-|---|---|---|
-| `predict()` | `gipslda`, `gipsqda`, `gipsmultqda` | class prediction and posterior probabilities |
-| `print()` | `gipslda`, `gipsqda`, `gipsmultqda` | compact model summary |
-| `coef()` | `gipslda` | LDA coefficients |
-| `plot()` | `gipslda` | LDA diagnostic plot |
-| `pairs()` | `gipslda` | pairwise LDA visualization |
-| `model.frame()` | `gipslda`, `gipsqda`, `gipsmultqda` | extract the model frame when available |
-
-## Model-fitting arguments
-
-The fitting functions follow the standard R modeling style. Depending on the
-interface, the model can be fitted using a formula, a matrix, or a data frame.
-
-### Formula interface arguments
+## Key arguments
 
 | Argument | Meaning |
 |---|---|
-| `formula` | model formula, for example `Species ~ .` |
-| `data` | data frame containing predictors and the grouping variable |
-| `subset` | optional subset of rows used for fitting |
-| `na.action` | handling of missing values |
-| `...` | additional arguments passed to the corresponding lower-level method |
+| `prior` | prior probabilities of classes |
+| `MAP` | whether to use the Maximum A Posteriori permutation or posterior-weighted averaging |
+| `optimizer` | permutation-search strategy: `"BF"` or `"MH"` |
+| `max_iter` | number of Metropolis-Hastings iterations when `optimizer = "MH"` |
+| `weighted_avg` | covariance pooling strategy for `gipslda()` |
+| `tol` | numerical tolerance used during fitting |
 
-### Matrix and data-frame interface arguments
+## MAP: Maximum A Posteriori
 
-| Argument | Meaning |
-|---|---|
-| `x` | matrix or data frame of predictors |
-| `grouping` | class labels |
-| `...` | additional arguments passed to the default method |
+`MAP` stands for **Maximum A Posteriori**.
 
-### Main statistical and optimization arguments
-
-| Argument | Used in | Meaning |
-|---|---|---|
-| `prior` | `gipslda()`, `gipsqda()`, `gipsmultqda()` | prior probabilities of classes |
-| `tol` | mainly `gipslda()` | numerical tolerance used during fitting |
-| `MAP` | all models | whether to use the single MAP permutation or posterior-weighted averaging |
-| `optimizer` | all models | permutation-search strategy, usually `"BF"` or `"MH"` |
-| `max_iter` | all models | number of iterations for the Metropolis-Hastings optimizer |
-| `weighted_avg` | `gipslda()` only | covariance pooling strategy before projection |
-
-The most important `gipsDA`-specific arguments are `MAP`, `optimizer`,
-`max_iter`, and, for `gipslda()`, `weighted_avg`.
-
-## `MAP`: single best permutation vs posterior averaging
-
-The `MAP` argument controls how the permutation-invariant covariance estimate is
-constructed.
-
-When `MAP = TRUE`, the model finds the most probable permutation structure and
-projects the covariance matrix onto the space invariant under that structure.
+When `MAP = TRUE`, the model selects the single most probable permutation
+structure and uses the covariance matrix projected onto that structure.
 
 ```{r}
 lda_map <- gipslda(
   Species ~ .,
   data = train,
-  MAP = TRUE,
-  optimizer = "BF"
+  MAP = TRUE
 )
 
 lda_map
 ```
 
 When `MAP = FALSE`, the model uses posterior probabilities over retained
-permutations and computes a posterior-weighted covariance projection.
+permutation structures and computes a posterior-weighted covariance estimate.
 
 ```{r}
 lda_avg <- gipslda(
   Species ~ .,
   data = train,
-  MAP = FALSE,
-  optimizer = "BF"
+  MAP = FALSE
 )
 
 lda_avg
 ```
 
-Use `MAP = TRUE` when you want a single selected structure. Use `MAP = FALSE`
-when you want to account for uncertainty in the selected permutation structure.
+In printed model output, a result such as `(1243)` is written in cycle notation.
+It means that the permutation maps feature `1` to `2`, `2` to `4`, `4` to `3`,
+and `3` back to `1`. Features appearing in the same cycle are treated as
+exchangeable under the selected symmetry structure.
 
-## `optimizer`: brute force and Metropolis-Hastings
+## Optimizer
 
-The `optimizer` argument controls how the permutation structure is searched.
+The `optimizer` argument controls how permutation structures are searched.
 
 | Value | Meaning | Recommended use |
 |---|---|---|
-| `"BF"` | brute-force search | small number of features |
-| `"MH"` | Metropolis-Hastings search | larger number of features |
+| `"BF"` | brute-force search | small problems, typically `p <= 10` |
+| `"MH"` | Metropolis-Hastings search | larger problems, typically `p > 10` |
 
-Brute force is deterministic and searches the relevant permutation space
-exhaustively, but its cost grows quickly with the number of features.
-
-```{r}
-lda_bf <- gipslda(
-  Species ~ .,
-  data = train,
-  optimizer = "BF"
-)
-
-lda_bf
-```
-
-For larger feature spaces, use `"MH"` and control runtime with `max_iter`.
+For `optimizer = "MH"`, use `max_iter` to control the number of iterations.
 
 ```{r, eval = FALSE}
-lda_mh <- gipslda(
+fit_mh <- gipsqda(
   Species ~ .,
   data = train,
   optimizer = "MH",
@@ -206,341 +198,78 @@ lda_mh <- gipslda(
 )
 ```
 
-## `max_iter`
-
-`max_iter` controls the number of Metropolis-Hastings iterations when
-`optimizer = "MH"`.
-
-```{r, eval = FALSE}
-fit <- gipsqda(
-  Species ~ .,
-  data = train,
-  optimizer = "MH",
-  max_iter = 1000
-)
-```
-
-Increasing `max_iter` may improve exploration of the permutation space, but also
-increases runtime.
-
-For `optimizer = "BF"`, `max_iter` is not the main computational control.
-
-## `prior`
-
-The `prior` argument specifies class prior probabilities.
-
-By default, class priors are estimated from the training data. You can override
-them manually.
-
-```{r}
-equal_prior <- rep(1 / length(levels(train$Species)), length(levels(train$Species)))
-names(equal_prior) <- levels(train$Species)
-
-lda_prior <- gipslda(
-  Species ~ .,
-  data = train,
-  prior = equal_prior,
-  optimizer = "BF"
-)
-
-lda_prior$prior
-```
-
-The prior vector should have one value per class and should sum to one.
+For `optimizer = "BF"`, `max_iter` is ignored.
 
 ## `weighted_avg` in `gipslda()`
 
-`weighted_avg` is specific to `gipslda()` and controls how the pooled covariance
-matrix is constructed before applying the `gips` projection.
+`weighted_avg` controls how the pooled covariance matrix is constructed before
+the `gips` projection is applied.
+
+Let `K` be the number of classes, `n_k` the number of observations in class `k`,
+`n` the total number of observations, and `S_k` the sample covariance matrix in
+class `k`.
+
+With `weighted_avg = FALSE`, `gipslda()` uses the classic pooled covariance
+estimator:
+
+\[
+S_{\mathrm{classic}}
+=
+\frac{1}{n - K}
+\sum_{k = 1}^{K}
+(n_k - 1) S_k.
+\]
+
+With `weighted_avg = TRUE`, it uses the class-size-weighted average:
+
+\[
+S_{\mathrm{weighted}}
+=
+\frac{1}{n}
+\sum_{k = 1}^{K}
+n_k S_k.
+\]
 
 ```{r}
 lda_classic <- gipslda(
   Species ~ .,
   data = train,
-  weighted_avg = FALSE,
-  optimizer = "BF"
+  weighted_avg = FALSE
 )
 
 lda_weighted <- gipslda(
   Species ~ .,
   data = train,
-  weighted_avg = TRUE,
-  optimizer = "BF"
+  weighted_avg = TRUE
+)
+
+c(
+  classic = mean(predict(lda_classic, test)$class == test$Species),
+  weighted = mean(predict(lda_weighted, test)$class == test$Species)
 )
 ```
 
-Use:
-
-- `weighted_avg = FALSE` for the classic LDA-style pooled covariance estimator.
-- `weighted_avg = TRUE` for the class-size-weighted averaging variant.
-
-## Linear discriminant analysis with `gipslda()`
-
-The formula interface is the most convenient way to fit a model.
+## Fitting all three models
 
 ```{r}
-lda_fit <- gipslda(
-  Species ~ .,
-  data = train,
-  optimizer = "BF"
-)
-
-lda_fit
+lda_fit <- gipslda(Species ~ ., data = train)
+qda_fit <- gipsqda(Species ~ ., data = train)
+joint_qda_fit <- gipsmultqda(Species ~ ., data = train)
 ```
-
-Prediction returns class labels and posterior probabilities.
 
 ```{r}
 lda_pred <- predict(lda_fit, test)
-
-head(lda_pred$class)
-head(lda_pred$posterior)
-
-mean(lda_pred$class == test$Species)
-```
-
-## Prediction methods for `gipslda()`
-
-For `gipslda()` objects, prediction can be performed with different methods.
-
-```{r}
-pred_plugin <- predict(lda_fit, test, method = "plug-in")
-pred_predictive <- predict(lda_fit, test, method = "predictive")
-pred_debiased <- predict(lda_fit, test, method = "debiased")
-
-head(pred_plugin$class)
-head(pred_predictive$class)
-head(pred_debiased$class)
-```
-
-The available prediction methods are:
-
-| Method | Meaning |
-|---|---|
-| `"plug-in"` | standard plug-in discriminant rule |
-| `"predictive"` | predictive rule |
-| `"debiased"` | debiased rule |
-
-## Quadratic discriminant analysis with `gipsqda()`
-
-`gipsqda()` estimates a separate projected covariance matrix for each class.
-
-```{r}
-qda_fit <- gipsqda(
-  Species ~ .,
-  data = train,
-  optimizer = "BF"
-)
-
-qda_fit
-```
-
-Prediction works analogously to classical QDA.
-
-```{r}
 qda_pred <- predict(qda_fit, test)
-
-head(qda_pred$class)
-head(qda_pred$posterior)
-
-mean(qda_pred$class == test$Species)
-```
-
-## Joint quadratic discriminant analysis with `gipsmultqda()`
-
-`gipsmultqda()` is an intermediate model between `gipslda()` and `gipsqda()`.
-
-Like QDA, it allows each class to have its own covariance matrix. Unlike
-`gipsqda()`, it estimates one shared permutation structure for all class
-covariance matrices. This is useful when classes may differ in scale or variance,
-but are expected to share a common dependency pattern between features.
-
-```{r}
-joint_qda_fit <- gipsmultqda(
-  Species ~ .,
-  data = train,
-  optimizer = "BF"
-)
-
-joint_qda_fit
-```
-
-Prediction returns class labels and posterior probabilities.
-
-```{r}
 joint_qda_pred <- predict(joint_qda_fit, test)
 
-head(joint_qda_pred$class)
-head(joint_qda_pred$posterior)
-
-mean(joint_qda_pred$class == test$Species)
-```
-
-## Comparing the three models
-
-```{r}
-acc <- c(
+c(
   gipslda = mean(lda_pred$class == test$Species),
   gipsqda = mean(qda_pred$class == test$Species),
   gipsmultqda = mean(joint_qda_pred$class == test$Species)
 )
-
-acc
 ```
 
-## Leave-one-out prediction for QDA models
-
-For `gipsqda()` and `gipsmultqda()` objects, leave-one-out cross-validation can
-be requested by omitting `newdata` and using `method = "looCV"`.
-
-In this mode, each training observation is classified as if it had been left out
-when fitting the model. This gives an internal estimate of classification
-accuracy without creating a separate test set.
-
-```{r}
-qda_loo <- predict(qda_fit, method = "looCV")
-joint_qda_loo <- predict(joint_qda_fit, method = "looCV")
-
-c(
-  gipsqda_loo_accuracy = mean(qda_loo$class == train$Species),
-  gipsmultqda_loo_accuracy = mean(joint_qda_loo$class == train$Species)
-)
-```
-
-## Formula interface
-
-The formula interface is usually the easiest one to use.
-
-```{r}
-fit_formula <- gipslda(
-  Species ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width,
-  data = train,
-  optimizer = "BF"
-)
-
-predict(fit_formula, test)$class[1:10]
-```
-
-Formula methods also support standard arguments such as `subset` and `na.action`
-through the usual R model-frame workflow.
-
-```{r}
-fit_subset <- gipslda(
-  Species ~ .,
-  data = iris,
-  subset = Species != "setosa",
-  optimizer = "BF"
-)
-
-fit_subset
-```
-
-## Matrix interface
-
-The matrix interface separates predictors from class labels.
-
-```{r}
-x <- as.matrix(iris[, 1:4])
-grouping <- iris$Species
-
-fit_matrix <- gipslda(
-  x,
-  grouping,
-  optimizer = "BF"
-)
-
-predict(fit_matrix, x[1:5, ])$class
-```
-
-The same interface can be used with `gipsqda()`.
-
-```{r}
-qda_matrix <- gipsqda(
-  x,
-  grouping,
-  optimizer = "BF"
-)
-
-predict(qda_matrix, x[1:5, ])$class
-```
-
-And with `gipsmultqda()`.
-
-```{r}
-joint_qda_matrix <- gipsmultqda(
-  x,
-  grouping,
-  optimizer = "BF"
-)
-
-predict(joint_qda_matrix, x[1:5, ])$class
-```
-
-## Data-frame interface
-
-You can also pass predictors as a data frame and labels separately.
-
-```{r}
-x_df <- iris[, 1:4]
-y <- iris$Species
-
-fit_df <- gipslda(
-  x_df,
-  y,
-  optimizer = "BF"
-)
-
-predict(fit_df, x_df[1:5, ])$class
-```
-
-The data-frame interface is also available for QDA-type models.
-
-```{r}
-qda_df <- gipsqda(
-  x_df,
-  y,
-  optimizer = "BF"
-)
-
-joint_qda_df <- gipsmultqda(
-  x_df,
-  y,
-  optimizer = "BF"
-)
-
-predict(qda_df, x_df[1:5, ])$class
-predict(joint_qda_df, x_df[1:5, ])$class
-```
-
-## Fitted objects
-
-Fitted objects contain the usual discriminant-analysis components, such as class
-priors, class counts, group means, and scaling information.
-
-```{r}
-names(lda_fit)
-names(qda_fit)
-names(joint_qda_fit)
-```
-
-`gipsDA` objects additionally store optimization information.
-
-```{r}
-lda_fit$optimization_info
-qda_fit$optimization_info
-joint_qda_fit$optimization_info
-```
-
-When `MAP = TRUE`, this information corresponds to the selected permutation
-structure. When `MAP = FALSE`, it contains posterior-probability information used
-for averaging.
-
-## Inspecting fitted model objects
-
-Fitted `gipsDA` models are standard R objects. They contain the usual
-discriminant-analysis components, such as class priors, class counts, group
-means, scaling information, and additional information about the permutation
-optimization.
+## Inspecting fitted models
 
 The most readable way to inspect a fitted model is to print it.
 
@@ -556,11 +285,10 @@ print(qda_fit)
 print(joint_qda_fit)
 ```
 
-The printed output shows the main fitted quantities, including prior
-probabilities, group means, and information about the permutation structures
-selected or averaged by the model.
+The printed output shows the model call, class priors, group means, and
+information about selected or averaged permutation structures.
 
-For a more structural view, use `summary()`.
+For a structural summary of the object, use `summary()`.
 
 ```{r}
 summary(lda_fit)
@@ -568,8 +296,8 @@ summary(qda_fit)
 summary(joint_qda_fit)
 ```
 
-Because fitted models are list-like S3 objects, it is also useful to inspect
-their component names directly.
+Fitted models are list-like S3 objects, so their components can also be inspected
+directly.
 
 ```{r}
 names(lda_fit)
@@ -577,111 +305,18 @@ names(qda_fit)
 names(joint_qda_fit)
 ```
 
-The most important components are usually:
-
-| Component | Meaning |
-|---|---|
-| `prior` | prior probabilities of classes |
-| `counts` | number of observations in each class |
-| `means` | class-wise feature means |
-| `scaling` | scaling or decomposition information used for prediction |
-| `ldet` | log-determinant information for QDA-type models |
-| `lev` | class labels |
-| `call` | original function call |
-| `optimization_info` | information returned by the permutation optimization step |
-
-The exact set of components can differ between LDA-type and QDA-type models.
-
-A compact way to inspect the internal structure is to create a small helper.
-
-```{r}
-inspect_model <- function(object) {
-  data.frame(
-    component = names(object),
-    class = vapply(
-      object,
-      function(x) paste(class(x), collapse = ", "),
-      character(1)
-    ),
-    length = vapply(object, length, integer(1)),
-    dim = vapply(
-      object,
-      function(x) {
-        d <- dim(x)
-        if (is.null(d)) "" else paste(d, collapse = " x ")
-      },
-      character(1)
-    ),
-    row.names = NULL
-  )
-}
-```
-
-```{r}
-inspect_model(lda_fit)
-```
-
-```{r}
-inspect_model(qda_fit)
-```
-
-```{r}
-inspect_model(joint_qda_fit)
-```
-
-The `optimization_info` component stores the result of the `gips` optimization.
+The `optimization_info` component stores information returned by the permutation
+optimization step.
 
 ```{r}
 lda_fit$optimization_info
-```
-
-```{r}
 qda_fit$optimization_info
-```
-
-```{r}
 joint_qda_fit$optimization_info
-```
-
-When `MAP = TRUE`, this component describes the selected permutation structure.
-When `MAP = FALSE`, it contains posterior-probability information used for
-weighted averaging.
-
-## LDA diagnostics and visualization
-
-For `gipslda()` objects, standard diagnostic and visualization methods are
-available.
-
-```{r}
-coef(lda_fit)
-```
-
-```{r, fig.width = 6, fig.height = 5}
-plot(lda_fit)
-```
-
-```{r, fig.width = 6, fig.height = 5}
-pairs(lda_fit, type = "std")
-```
-
-Depending on the object and method, additional plot types may be available.
-
-```{r, eval = FALSE}
-pairs(lda_fit, type = "trellis")
 ```
 
 ## Prediction output
 
-Prediction methods return objects containing predicted classes and posterior
-probabilities.
-
-```{r}
-names(lda_pred)
-names(qda_pred)
-names(joint_qda_pred)
-```
-
-The most commonly used components are:
+Prediction returns a list. The most important components are:
 
 | Component | Meaning |
 |---|---|
@@ -689,126 +324,65 @@ The most commonly used components are:
 | `posterior` | posterior class probabilities |
 | `x` | discriminant coordinates, when available |
 
-For example:
-
 ```{r}
+names(lda_pred)
+
 head(lda_pred$class)
 head(lda_pred$posterior)
 ```
 
-## Practical recommendations
 
-Start with `gipslda()` when a common covariance structure across classes is a
-reasonable assumption.
+## Matrix interface
 
-```{r}
-fit <- gipslda(
-  Species ~ .,
-  data = train,
-  optimizer = "BF"
-)
-```
-
-Use `gipsqda()` when each class may have a different covariance structure.
+The formula interface is usually the most convenient, but the matrix interface is
+also available.
 
 ```{r}
-fit <- gipsqda(
-  Species ~ .,
-  data = train,
-  optimizer = "BF"
-)
+x <- as.matrix(iris[, 1:4])
+grouping <- iris$Species
+
+fit_matrix <- gipslda(x, grouping)
+
+predict(fit_matrix, x[1:5, ])$class
 ```
 
-Use `gipsmultqda()` when class covariance matrices may differ but are expected to
-share a common permutation structure.
+The same style can be used with `gipsqda()` and `gipsmultqda()`.
 
 ```{r}
-fit <- gipsmultqda(
-  Species ~ .,
-  data = train,
-  optimizer = "BF"
-)
+qda_matrix <- gipsqda(x, grouping)
+joint_qda_matrix <- gipsmultqda(x, grouping)
+
+predict(qda_matrix, x[1:5, ])$class
+predict(joint_qda_matrix, x[1:5, ])$class
 ```
 
-For small numbers of features, use `optimizer = "BF"`.
-
-```{r}
-fit <- gipslda(
-  Species ~ .,
-  data = train,
-  optimizer = "BF"
-)
-```
-
-For larger numbers of features, use `optimizer = "MH"` and set `max_iter`.
-
-```{r, eval = FALSE}
-fit <- gipslda(
-  Species ~ .,
-  data = train,
-  optimizer = "MH",
-  max_iter = 1000
-)
-```
-
-Use `MAP = FALSE` when you want to account for uncertainty in the selected
-permutation structure.
-
-```{r}
-fit <- gipslda(
-  Species ~ .,
-  data = train,
-  MAP = FALSE,
-  optimizer = "BF"
-)
-```
-
-Use `weighted_avg = TRUE` only for `gipslda()` when you want the alternative
-class-size-weighted covariance pooling strategy.
-
-```{r}
-fit <- gipslda(
-  Species ~ .,
-  data = train,
-  weighted_avg = TRUE,
-  optimizer = "BF"
-)
-```
 
 ## Summary
 
-`gipsDA` provides three main drop-in alternatives to classical discriminant
-analysis:
-
-- `gipslda()` regularizes LDA by projecting the pooled covariance matrix onto a
-  permutation-invariant structure.
-- `gipsqda()` regularizes QDA by projecting each class-specific covariance matrix
-  independently.
-- `gipsmultqda()` regularizes QDA by estimating one shared permutation structure
-  for all class-specific covariance matrices.
-
-The most important arguments are:
-
-| Argument | Main use |
-|---|---|
-| `MAP` | choose MAP projection or posterior-weighted averaging |
-| `optimizer` | choose `"BF"` or `"MH"` |
-| `max_iter` | control MH runtime |
-| `prior` | set class priors |
-| `weighted_avg` | choose the LDA covariance pooling strategy |
-| `tol` | numerical tolerance |
-
-For new users, a good starting point is:
+For a first analysis, start with:
 
 ```{r}
-fit <- gipslda(
-  Species ~ .,
-  data = train,
-  MAP = TRUE,
-  optimizer = "BF"
-)
-
+fit <- gipslda(Species ~ ., data = train)
 pred <- predict(fit, test)
 
 mean(pred$class == test$Species)
 ```
+
+Use:
+
+| Function | Use when |
+|---|---|
+| `gipslda()` | classes can reasonably share one covariance structure |
+| `gipsqda()` | each class may have its own covariance structure |
+| `gipsmultqda()` | classes may have different covariance matrices but a shared dependency pattern |
+
+The main tuning choices are:
+
+| Argument | Practical meaning |
+|---|---|
+| `MAP = TRUE` | use one selected Maximum A Posteriori permutation |
+| `MAP = FALSE` | average over retained permutations using posterior probabilities |
+| `optimizer = "BF"` | exhaustive search, typically for `p <= 10` |
+| `optimizer = "MH"` | stochastic search, typically for `p > 10` |
+| `max_iter` | used only with `optimizer = "MH"` |
+| `weighted_avg` | changes the pooled covariance estimator in `gipslda()` |
