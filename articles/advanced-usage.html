@@ -282,9 +282,32 @@ the invariant space determined by that structure.</p>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; gipslda(Species ~ ., data = train, MAP = TRUE)</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model: gipslda </span></span>
+<span><span class="co">#&gt; Number of observations: 105 </span></span>
+<span><span class="co">#&gt; Number of groups: 3 </span></span>
+<span><span class="co">#&gt; Number of predictors: 4 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Fitting options:</span></span>
+<span><span class="co">#&gt; $MAP</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $optimizer</span></span>
+<span><span class="co">#&gt; [1] "BF"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $max_iter</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $weighted_avg</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Prior probabilities of groups:</span></span>
 <span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
 <span><span class="co">#&gt;  0.3333333  0.3333333  0.3333333 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Class counts:</span></span>
+<span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
+<span><span class="co">#&gt;         35         35         35 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Group means:</span></span>
 <span><span class="co">#&gt;            Sepal.Length Sepal.Width Petal.Length Petal.Width</span></span>
@@ -292,19 +315,18 @@ the invariant space determined by that structure.</p>
 <span><span class="co">#&gt; versicolor     5.911429    2.771429     4.302857   1.3371429</span></span>
 <span><span class="co">#&gt; virginica      6.725714    3.020000     5.654286   2.0685714</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Coefficients of linear discriminants:</span></span>
 <span><span class="co">#&gt;                     LD1        LD2</span></span>
-<span><span class="co">#&gt; Sepal.Length -0.2522284 -0.3624600</span></span>
-<span><span class="co">#&gt; Sepal.Width   2.3832685 -2.2995034</span></span>
-<span><span class="co">#&gt; Petal.Length -1.3623096  0.8891933</span></span>
-<span><span class="co">#&gt; Petal.Width  -3.5000941 -2.3792848</span></span>
+<span><span class="co">#&gt; Sepal.Length -0.2534381 -0.3641984</span></span>
+<span><span class="co">#&gt; Sepal.Width   2.3946991 -2.3105323</span></span>
+<span><span class="co">#&gt; Petal.Length -1.3688435  0.8934580</span></span>
+<span><span class="co">#&gt; Petal.Width  -3.5168812 -2.3906963</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Proportion of trace:</span></span>
 <span><span class="co">#&gt;    LD1    LD2 </span></span>
-<span><span class="co">#&gt; 0.9888 0.0112 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
-<span><span class="co">#&gt; [1] (1243)</span></span></code></pre></div>
+<span><span class="co">#&gt; 0.9888 0.0112</span></span></code></pre></div>
 <p>When <code>MAP = FALSE</code>, the model uses posterior probabilities
 over retained permutation structures and computes a posterior-weighted
 projection.</p>
@@ -319,9 +341,32 @@ projection.</p>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; gipslda(Species ~ ., data = train, MAP = FALSE)</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model: gipslda </span></span>
+<span><span class="co">#&gt; Number of observations: 105 </span></span>
+<span><span class="co">#&gt; Number of groups: 3 </span></span>
+<span><span class="co">#&gt; Number of predictors: 4 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Fitting options:</span></span>
+<span><span class="co">#&gt; $MAP</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $optimizer</span></span>
+<span><span class="co">#&gt; [1] "BF"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $max_iter</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $weighted_avg</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Prior probabilities of groups:</span></span>
 <span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
 <span><span class="co">#&gt;  0.3333333  0.3333333  0.3333333 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Class counts:</span></span>
+<span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
+<span><span class="co">#&gt;         35         35         35 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Group means:</span></span>
 <span><span class="co">#&gt;            Sepal.Length Sepal.Width Petal.Length Petal.Width</span></span>
@@ -329,20 +374,20 @@ projection.</p>
 <span><span class="co">#&gt; versicolor     5.911429    2.771429     4.302857   1.3371429</span></span>
 <span><span class="co">#&gt; virginica      6.725714    3.020000     5.654286   2.0685714</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
+<span><span class="co">#&gt;   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) </span></span>
+<span><span class="co">#&gt; 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725 </span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Coefficients of linear discriminants:</span></span>
 <span><span class="co">#&gt;                      LD1        LD2</span></span>
-<span><span class="co">#&gt; Sepal.Length  0.06678184 -0.5324123</span></span>
-<span><span class="co">#&gt; Sepal.Width   2.14426388 -2.2137470</span></span>
-<span><span class="co">#&gt; Petal.Length -1.58624789  0.9723419</span></span>
-<span><span class="co">#&gt; Petal.Width  -3.35358888 -2.3945239</span></span>
+<span><span class="co">#&gt; Sepal.Length  0.06710214 -0.5349658</span></span>
+<span><span class="co">#&gt; Sepal.Width   2.15454818 -2.2243646</span></span>
+<span><span class="co">#&gt; Petal.Length -1.59385584  0.9770055</span></span>
+<span><span class="co">#&gt; Petal.Width  -3.36967333 -2.4060085</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Proportion of trace:</span></span>
 <span><span class="co">#&gt;    LD1    LD2 </span></span>
-<span><span class="co">#&gt; 0.9886 0.0114 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
-<span><span class="co">#&gt;   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) </span></span>
-<span><span class="co">#&gt; 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725</span></span></code></pre></div>
+<span><span class="co">#&gt; 0.9886 0.0114</span></span></code></pre></div>
 <p>Conceptually, if
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>S</mi><annotation encoding="application/x-tex">S</annotation></semantics></math>
 is an empirical covariance matrix and
@@ -439,9 +484,29 @@ number of features.</p>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; gipsqda(Species ~ ., data = train, optimizer = "BF")</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model: gipsqda </span></span>
+<span><span class="co">#&gt; Number of observations: 105 </span></span>
+<span><span class="co">#&gt; Number of groups: 3 </span></span>
+<span><span class="co">#&gt; Number of predictors: 4 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Fitting options:</span></span>
+<span><span class="co">#&gt; $MAP</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $optimizer</span></span>
+<span><span class="co">#&gt; [1] "BF"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $max_iter</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Prior probabilities of groups:</span></span>
 <span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
 <span><span class="co">#&gt;  0.3333333  0.3333333  0.3333333 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Class counts:</span></span>
+<span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
+<span><span class="co">#&gt;         35         35         35 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Group means:</span></span>
 <span><span class="co">#&gt;            Sepal.Length Sepal.Width Petal.Length Petal.Width</span></span>
@@ -450,7 +515,18 @@ number of features.</p>
 <span><span class="co">#&gt; virginica      6.725714    3.020000     5.654286   2.0685714</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
-<span><span class="co">#&gt; [1] (13)(24)</span></span></code></pre></div>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Group: setosa </span></span>
+<span><span class="co">#&gt; [1] (12)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Group: versicolor </span></span>
+<span><span class="co">#&gt; [1] (23)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Group: virginica </span></span>
+<span><span class="co">#&gt; [1] (13)(24)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Log determinants of projected covariance matrices:</span></span>
+<span><span class="co">#&gt; [1] -10.197338  -8.531728  -8.239145</span></span></code></pre></div>
 <p>For larger problems, use the Metropolis-Hastings optimizer.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_mh</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gipsqda.html">gipsqda</a></span><span class="op">(</span></span>
@@ -583,7 +659,7 @@ n_k S_k.
 <span>  weighted <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">pred_weighted</span><span class="op">$</span><span class="va">class</span> <span class="op">==</span> <span class="va">test</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt;   classic  weighted </span></span>
-<span><span class="co">#&gt; 0.9777778 0.9333333</span></span></code></pre></div>
+<span><span class="co">#&gt; 0.9777778 0.9777778</span></span></code></pre></div>
 <p>The two variants can behave differently when class sizes are
 imbalanced or when class-specific covariance estimates differ
 substantially.</p>
@@ -603,9 +679,32 @@ substantially.</p>
 <span><span class="co">#&gt; gipslda(Species ~ Sepal.Length + Sepal.Width + Petal.Length + </span></span>
 <span><span class="co">#&gt;     Petal.Width, data = train)</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model: gipslda </span></span>
+<span><span class="co">#&gt; Number of observations: 105 </span></span>
+<span><span class="co">#&gt; Number of groups: 3 </span></span>
+<span><span class="co">#&gt; Number of predictors: 4 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Fitting options:</span></span>
+<span><span class="co">#&gt; $MAP</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $optimizer</span></span>
+<span><span class="co">#&gt; [1] "BF"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $max_iter</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $weighted_avg</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Prior probabilities of groups:</span></span>
 <span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
 <span><span class="co">#&gt;  0.3333333  0.3333333  0.3333333 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Class counts:</span></span>
+<span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
+<span><span class="co">#&gt;         35         35         35 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Group means:</span></span>
 <span><span class="co">#&gt;            Sepal.Length Sepal.Width Petal.Length Petal.Width</span></span>
@@ -613,19 +712,18 @@ substantially.</p>
 <span><span class="co">#&gt; versicolor     5.911429    2.771429     4.302857   1.3371429</span></span>
 <span><span class="co">#&gt; virginica      6.725714    3.020000     5.654286   2.0685714</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Coefficients of linear discriminants:</span></span>
 <span><span class="co">#&gt;                     LD1        LD2</span></span>
-<span><span class="co">#&gt; Sepal.Length -0.2522284 -0.3624600</span></span>
-<span><span class="co">#&gt; Sepal.Width   2.3832685 -2.2995034</span></span>
-<span><span class="co">#&gt; Petal.Length -1.3623096  0.8891933</span></span>
-<span><span class="co">#&gt; Petal.Width  -3.5000941 -2.3792848</span></span>
+<span><span class="co">#&gt; Sepal.Length -0.2534381 -0.3641984</span></span>
+<span><span class="co">#&gt; Sepal.Width   2.3946991 -2.3105323</span></span>
+<span><span class="co">#&gt; Petal.Length -1.3688435  0.8934580</span></span>
+<span><span class="co">#&gt; Petal.Width  -3.5168812 -2.3906963</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Proportion of trace:</span></span>
 <span><span class="co">#&gt;    LD1    LD2 </span></span>
-<span><span class="co">#&gt; 0.9888 0.0112 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
-<span><span class="co">#&gt; [1] (1243)</span></span></code></pre></div>
+<span><span class="co">#&gt; 0.9888 0.0112</span></span></code></pre></div>
 <p>The shorthand <code>Species ~ .</code> uses all remaining columns as
 predictors.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
@@ -638,9 +736,32 @@ predictors.</p>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; gipslda(Species ~ ., data = train)</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model: gipslda </span></span>
+<span><span class="co">#&gt; Number of observations: 105 </span></span>
+<span><span class="co">#&gt; Number of groups: 3 </span></span>
+<span><span class="co">#&gt; Number of predictors: 4 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Fitting options:</span></span>
+<span><span class="co">#&gt; $MAP</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $optimizer</span></span>
+<span><span class="co">#&gt; [1] "BF"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $max_iter</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $weighted_avg</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Prior probabilities of groups:</span></span>
 <span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
 <span><span class="co">#&gt;  0.3333333  0.3333333  0.3333333 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Class counts:</span></span>
+<span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
+<span><span class="co">#&gt;         35         35         35 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Group means:</span></span>
 <span><span class="co">#&gt;            Sepal.Length Sepal.Width Petal.Length Petal.Width</span></span>
@@ -648,19 +769,18 @@ predictors.</p>
 <span><span class="co">#&gt; versicolor     5.911429    2.771429     4.302857   1.3371429</span></span>
 <span><span class="co">#&gt; virginica      6.725714    3.020000     5.654286   2.0685714</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Coefficients of linear discriminants:</span></span>
 <span><span class="co">#&gt;                     LD1        LD2</span></span>
-<span><span class="co">#&gt; Sepal.Length -0.2522284 -0.3624600</span></span>
-<span><span class="co">#&gt; Sepal.Width   2.3832685 -2.2995034</span></span>
-<span><span class="co">#&gt; Petal.Length -1.3623096  0.8891933</span></span>
-<span><span class="co">#&gt; Petal.Width  -3.5000941 -2.3792848</span></span>
+<span><span class="co">#&gt; Sepal.Length -0.2534381 -0.3641984</span></span>
+<span><span class="co">#&gt; Sepal.Width   2.3946991 -2.3105323</span></span>
+<span><span class="co">#&gt; Petal.Length -1.3688435  0.8934580</span></span>
+<span><span class="co">#&gt; Petal.Width  -3.5168812 -2.3906963</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Proportion of trace:</span></span>
 <span><span class="co">#&gt;    LD1    LD2 </span></span>
-<span><span class="co">#&gt; 0.9888 0.0112 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
-<span><span class="co">#&gt; [1] (1243)</span></span></code></pre></div>
+<span><span class="co">#&gt; 0.9888 0.0112</span></span></code></pre></div>
 <p>Formula methods also support <code>subset</code>.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_subset</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gipslda.html">gipslda</a></span><span class="op">(</span></span>
@@ -674,24 +794,46 @@ predictors.</p>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; gipslda(Species ~ ., data = iris, subset = Species != "setosa")</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model: gipslda </span></span>
+<span><span class="co">#&gt; Number of observations: 100 </span></span>
+<span><span class="co">#&gt; Number of groups: 2 </span></span>
+<span><span class="co">#&gt; Number of predictors: 4 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Fitting options:</span></span>
+<span><span class="co">#&gt; $MAP</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $optimizer</span></span>
+<span><span class="co">#&gt; [1] "BF"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $max_iter</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $weighted_avg</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Prior probabilities of groups:</span></span>
 <span><span class="co">#&gt; versicolor  virginica </span></span>
 <span><span class="co">#&gt;        0.5        0.5 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Class counts:</span></span>
+<span><span class="co">#&gt; versicolor  virginica </span></span>
+<span><span class="co">#&gt;         50         50 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Group means:</span></span>
 <span><span class="co">#&gt;            Sepal.Length Sepal.Width Petal.Length Petal.Width</span></span>
 <span><span class="co">#&gt; versicolor        5.936       2.770        4.260       1.326</span></span>
 <span><span class="co">#&gt; virginica         6.588       2.974        5.552       2.026</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Coefficients of linear discriminants:</span></span>
 <span><span class="co">#&gt;                    LD1</span></span>
-<span><span class="co">#&gt; Sepal.Length -1.094122</span></span>
-<span><span class="co">#&gt; Sepal.Width  -1.229136</span></span>
-<span><span class="co">#&gt; Petal.Length  1.864973</span></span>
-<span><span class="co">#&gt; Petal.Width   3.324524</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
-<span><span class="co">#&gt; [1] (13)(24)</span></span></code></pre></div>
+<span><span class="co">#&gt; Sepal.Length -1.099634</span></span>
+<span><span class="co">#&gt; Sepal.Width  -1.235329</span></span>
+<span><span class="co">#&gt; Petal.Length  1.874368</span></span>
+<span><span class="co">#&gt; Petal.Width   3.341273</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="matrix-interface">Matrix interface<a class="anchor" aria-label="anchor" href="#matrix-interface"></a>
@@ -776,12 +918,12 @@ separately.</p>
 <span><span class="co">#&gt; Levels: setosa versicolor virginica</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pred</span><span class="op">$</span><span class="va">posterior</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    setosa   versicolor    virginica</span></span>
-<span><span class="co">#&gt; 6       1 7.906717e-22 4.776377e-41</span></span>
-<span><span class="co">#&gt; 9       1 2.674459e-16 1.730922e-35</span></span>
-<span><span class="co">#&gt; 14      1 1.353910e-20 1.978581e-41</span></span>
-<span><span class="co">#&gt; 16      1 3.431995e-28 5.926915e-49</span></span>
-<span><span class="co">#&gt; 17      1 3.146059e-24 3.515450e-44</span></span>
-<span><span class="co">#&gt; 19      1 8.270729e-22 2.610171e-41</span></span></code></pre></div>
+<span><span class="co">#&gt; 6       1 4.955555e-22 1.956129e-41</span></span>
+<span><span class="co">#&gt; 9       1 1.894514e-16 8.017336e-36</span></span>
+<span><span class="co">#&gt; 14      1 8.720623e-21 8.034755e-42</span></span>
+<span><span class="co">#&gt; 16      1 1.868380e-28 2.037539e-49</span></span>
+<span><span class="co">#&gt; 17      1 1.869751e-24 1.343241e-44</span></span>
+<span><span class="co">#&gt; 19      1 5.185944e-22 1.062783e-41</span></span></code></pre></div>
 <p>For <code><a href="../reference/gipsqda.html">gipsqda()</a></code> and <code><a href="../reference/gipsmultqda.html">gipsmultqda()</a></code>, the output
 has the same main structure.</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
@@ -830,28 +972,28 @@ methods.</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pred_plugin</span><span class="op">$</span><span class="va">posterior</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    setosa   versicolor    virginica</span></span>
-<span><span class="co">#&gt; 6       1 7.906717e-22 4.776377e-41</span></span>
-<span><span class="co">#&gt; 9       1 2.674459e-16 1.730922e-35</span></span>
-<span><span class="co">#&gt; 14      1 1.353910e-20 1.978581e-41</span></span>
-<span><span class="co">#&gt; 16      1 3.431995e-28 5.926915e-49</span></span>
-<span><span class="co">#&gt; 17      1 3.146059e-24 3.515450e-44</span></span>
-<span><span class="co">#&gt; 19      1 8.270729e-22 2.610171e-41</span></span>
+<span><span class="co">#&gt; 6       1 4.955555e-22 1.956129e-41</span></span>
+<span><span class="co">#&gt; 9       1 1.894514e-16 8.017336e-36</span></span>
+<span><span class="co">#&gt; 14      1 8.720623e-21 8.034755e-42</span></span>
+<span><span class="co">#&gt; 16      1 1.868380e-28 2.037539e-49</span></span>
+<span><span class="co">#&gt; 17      1 1.869751e-24 1.343241e-44</span></span>
+<span><span class="co">#&gt; 19      1 5.185944e-22 1.062783e-41</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pred_predictive</span><span class="op">$</span><span class="va">posterior</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    setosa   versicolor    virginica</span></span>
-<span><span class="co">#&gt; 6       1 4.178535e-15 4.768416e-23</span></span>
-<span><span class="co">#&gt; 9       1 3.998704e-12 5.873273e-21</span></span>
-<span><span class="co">#&gt; 14      1 1.559157e-14 2.975005e-23</span></span>
-<span><span class="co">#&gt; 16      1 4.033632e-17 1.834581e-24</span></span>
-<span><span class="co">#&gt; 17      1 4.354432e-16 7.036180e-24</span></span>
-<span><span class="co">#&gt; 19      1 3.498899e-15 2.957633e-23</span></span>
+<span><span class="co">#&gt; 6       1 3.321301e-15 3.513263e-23</span></span>
+<span><span class="co">#&gt; 9       1 3.298368e-12 4.408852e-21</span></span>
+<span><span class="co">#&gt; 14      1 1.246057e-14 2.184951e-23</span></span>
+<span><span class="co">#&gt; 16      1 3.198616e-17 1.370273e-24</span></span>
+<span><span class="co">#&gt; 17      1 3.437129e-16 5.177073e-24</span></span>
+<span><span class="co">#&gt; 19      1 2.773375e-15 2.170032e-23</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pred_debiased</span><span class="op">$</span><span class="va">posterior</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    setosa   versicolor    virginica</span></span>
-<span><span class="co">#&gt; 6       1 3.300984e-21 7.328371e-40</span></span>
-<span><span class="co">#&gt; 9       1 7.678181e-16 1.822557e-34</span></span>
-<span><span class="co">#&gt; 14      1 5.199420e-20 3.115444e-40</span></span>
-<span><span class="co">#&gt; 16      1 2.204574e-27 1.553370e-47</span></span>
-<span><span class="co">#&gt; 17      1 1.545286e-23 6.668687e-43</span></span>
-<span><span class="co">#&gt; 19      1 3.448387e-21 4.076583e-40</span></span></code></pre></div>
+<span><span class="co">#&gt; 6       1 2.097526e-21 3.081126e-40</span></span>
+<span><span class="co">#&gt; 9       1 5.494451e-16 8.635043e-35</span></span>
+<span><span class="co">#&gt; 14      1 3.392590e-20 1.299122e-40</span></span>
+<span><span class="co">#&gt; 16      1 1.221829e-27 5.510501e-48</span></span>
+<span><span class="co">#&gt; 17      1 9.325508e-24 2.621213e-43</span></span>
+<span><span class="co">#&gt; 19      1 2.192110e-21 1.704312e-40</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="leave-one-out-prediction-for-qda-models">Leave-one-out prediction for QDA models<a class="anchor" aria-label="anchor" href="#leave-one-out-prediction-for-qda-models"></a>
@@ -885,9 +1027,32 @@ replacement for a proper independent test set when one is available.</p>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; gipslda(Species ~ ., data = train)</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model: gipslda </span></span>
+<span><span class="co">#&gt; Number of observations: 105 </span></span>
+<span><span class="co">#&gt; Number of groups: 3 </span></span>
+<span><span class="co">#&gt; Number of predictors: 4 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Fitting options:</span></span>
+<span><span class="co">#&gt; $MAP</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $optimizer</span></span>
+<span><span class="co">#&gt; [1] "BF"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $max_iter</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $weighted_avg</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Prior probabilities of groups:</span></span>
 <span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
 <span><span class="co">#&gt;  0.3333333  0.3333333  0.3333333 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Class counts:</span></span>
+<span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
+<span><span class="co">#&gt;         35         35         35 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Group means:</span></span>
 <span><span class="co">#&gt;            Sepal.Length Sepal.Width Petal.Length Petal.Width</span></span>
@@ -895,27 +1060,46 @@ replacement for a proper independent test set when one is available.</p>
 <span><span class="co">#&gt; versicolor     5.911429    2.771429     4.302857   1.3371429</span></span>
 <span><span class="co">#&gt; virginica      6.725714    3.020000     5.654286   2.0685714</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Coefficients of linear discriminants:</span></span>
 <span><span class="co">#&gt;                     LD1        LD2</span></span>
-<span><span class="co">#&gt; Sepal.Length -0.2522284 -0.3624600</span></span>
-<span><span class="co">#&gt; Sepal.Width   2.3832685 -2.2995034</span></span>
-<span><span class="co">#&gt; Petal.Length -1.3623096  0.8891933</span></span>
-<span><span class="co">#&gt; Petal.Width  -3.5000941 -2.3792848</span></span>
+<span><span class="co">#&gt; Sepal.Length -0.2534381 -0.3641984</span></span>
+<span><span class="co">#&gt; Sepal.Width   2.3946991 -2.3105323</span></span>
+<span><span class="co">#&gt; Petal.Length -1.3688435  0.8934580</span></span>
+<span><span class="co">#&gt; Petal.Width  -3.5168812 -2.3906963</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Proportion of trace:</span></span>
 <span><span class="co">#&gt;    LD1    LD2 </span></span>
-<span><span class="co">#&gt; 0.9888 0.0112 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
-<span><span class="co">#&gt; [1] (1243)</span></span></code></pre></div>
+<span><span class="co">#&gt; 0.9888 0.0112</span></span></code></pre></div>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">qda_fit</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; gipsqda(Species ~ ., data = train)</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model: gipsqda </span></span>
+<span><span class="co">#&gt; Number of observations: 105 </span></span>
+<span><span class="co">#&gt; Number of groups: 3 </span></span>
+<span><span class="co">#&gt; Number of predictors: 4 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Fitting options:</span></span>
+<span><span class="co">#&gt; $MAP</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $optimizer</span></span>
+<span><span class="co">#&gt; [1] "BF"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $max_iter</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Prior probabilities of groups:</span></span>
 <span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
 <span><span class="co">#&gt;  0.3333333  0.3333333  0.3333333 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Class counts:</span></span>
+<span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
+<span><span class="co">#&gt;         35         35         35 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Group means:</span></span>
 <span><span class="co">#&gt;            Sepal.Length Sepal.Width Petal.Length Petal.Width</span></span>
@@ -924,15 +1108,46 @@ replacement for a proper independent test set when one is available.</p>
 <span><span class="co">#&gt; virginica      6.725714    3.020000     5.654286   2.0685714</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
-<span><span class="co">#&gt; [1] (13)(24)</span></span></code></pre></div>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Group: setosa </span></span>
+<span><span class="co">#&gt; [1] (12)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Group: versicolor </span></span>
+<span><span class="co">#&gt; [1] (23)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Group: virginica </span></span>
+<span><span class="co">#&gt; [1] (13)(24)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Log determinants of projected covariance matrices:</span></span>
+<span><span class="co">#&gt; [1] -10.197338  -8.531728  -8.239145</span></span></code></pre></div>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">joint_qda_fit</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; gipsmultqda(Species ~ ., data = train)</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model: gipsmultqda </span></span>
+<span><span class="co">#&gt; Number of observations: 105 </span></span>
+<span><span class="co">#&gt; Number of groups: 3 </span></span>
+<span><span class="co">#&gt; Number of predictors: 4 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Fitting options:</span></span>
+<span><span class="co">#&gt; $MAP</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $optimizer</span></span>
+<span><span class="co">#&gt; [1] "BF"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $max_iter</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Prior probabilities of groups:</span></span>
 <span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
 <span><span class="co">#&gt;  0.3333333  0.3333333  0.3333333 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Class counts:</span></span>
+<span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
+<span><span class="co">#&gt;         35         35         35 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Group means:</span></span>
 <span><span class="co">#&gt;            Sepal.Length Sepal.Width Petal.Length Petal.Width</span></span>
@@ -941,69 +1156,166 @@ replacement for a proper independent test set when one is available.</p>
 <span><span class="co">#&gt; virginica      6.725714    3.020000     5.654286   2.0685714</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
-<span><span class="co">#&gt; [1] (13)</span></span></code></pre></div>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Log determinants of projected covariance matrices:</span></span>
+<span><span class="co">#&gt; [1] -10.093275  -8.701035  -8.306090</span></span></code></pre></div>
 <p>The printed output shows the model call, prior probabilities, group
 means, and information about selected or averaged permutation
 structures.</p>
 <p>For a structural view of the object, use <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>.</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">lda_fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                   Length Class     Mode     </span></span>
-<span><span class="co">#&gt; prior              3     -none-    numeric  </span></span>
-<span><span class="co">#&gt; counts             3     -none-    numeric  </span></span>
-<span><span class="co">#&gt; means             12     -none-    numeric  </span></span>
-<span><span class="co">#&gt; scaling            8     -none-    numeric  </span></span>
-<span><span class="co">#&gt; lev                3     -none-    character</span></span>
-<span><span class="co">#&gt; svd                2     -none-    numeric  </span></span>
-<span><span class="co">#&gt; N                  1     -none-    numeric  </span></span>
-<span><span class="co">#&gt; optimization_info  1     gips_perm list     </span></span>
-<span><span class="co">#&gt; call               3     -none-    call     </span></span>
-<span><span class="co">#&gt; terms              3     terms     call     </span></span>
-<span><span class="co">#&gt; xlevels            0     -none-    list</span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; gipslda(Species ~ ., data = train)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model: gipslda </span></span>
+<span><span class="co">#&gt; Number of observations: 105 </span></span>
+<span><span class="co">#&gt; Number of groups: 3 </span></span>
+<span><span class="co">#&gt; Number of predictors: 4 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Fitting options:</span></span>
+<span><span class="co">#&gt; $MAP</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $optimizer</span></span>
+<span><span class="co">#&gt; [1] "BF"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $max_iter</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $weighted_avg</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Class counts:</span></span>
+<span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
+<span><span class="co">#&gt;         35         35         35 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Prior probabilities of groups:</span></span>
+<span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
+<span><span class="co">#&gt;  0.3333333  0.3333333  0.3333333 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Group means:</span></span>
+<span><span class="co">#&gt;            Sepal.Length Sepal.Width Petal.Length Petal.Width</span></span>
+<span><span class="co">#&gt; setosa         5.020000    3.420000     1.482857   0.2428571</span></span>
+<span><span class="co">#&gt; versicolor     5.911429    2.771429     4.302857   1.3371429</span></span>
+<span><span class="co">#&gt; virginica      6.725714    3.020000     5.654286   2.0685714</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Proportion of trace:</span></span>
+<span><span class="co">#&gt;    LD1    LD2 </span></span>
+<span><span class="co">#&gt; 0.9888 0.0112 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Permutation optimization information:</span></span>
+<span><span class="co">#&gt; [1] (1243)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">qda_fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                   Length Class     Mode     </span></span>
-<span><span class="co">#&gt; prior              3     -none-    numeric  </span></span>
-<span><span class="co">#&gt; counts             3     -none-    numeric  </span></span>
-<span><span class="co">#&gt; means             12     -none-    numeric  </span></span>
-<span><span class="co">#&gt; scaling           48     -none-    numeric  </span></span>
-<span><span class="co">#&gt; ldet               3     -none-    numeric  </span></span>
-<span><span class="co">#&gt; lev                3     -none-    character</span></span>
-<span><span class="co">#&gt; N                  1     -none-    numeric  </span></span>
-<span><span class="co">#&gt; call               3     -none-    call     </span></span>
-<span><span class="co">#&gt; optimization_info  2     gips_perm list     </span></span>
-<span><span class="co">#&gt; terms              3     terms     call     </span></span>
-<span><span class="co">#&gt; xlevels            0     -none-    list</span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; gipsqda(Species ~ ., data = train)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model: gipsqda </span></span>
+<span><span class="co">#&gt; Number of observations: 105 </span></span>
+<span><span class="co">#&gt; Number of groups: 3 </span></span>
+<span><span class="co">#&gt; Number of predictors: 4 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Fitting options:</span></span>
+<span><span class="co">#&gt; $MAP</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $optimizer</span></span>
+<span><span class="co">#&gt; [1] "BF"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $max_iter</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Class counts:</span></span>
+<span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
+<span><span class="co">#&gt;         35         35         35 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Prior probabilities of groups:</span></span>
+<span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
+<span><span class="co">#&gt;  0.3333333  0.3333333  0.3333333 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Group means:</span></span>
+<span><span class="co">#&gt;            Sepal.Length Sepal.Width Petal.Length Petal.Width</span></span>
+<span><span class="co">#&gt; setosa         5.020000    3.420000     1.482857   0.2428571</span></span>
+<span><span class="co">#&gt; versicolor     5.911429    2.771429     4.302857   1.3371429</span></span>
+<span><span class="co">#&gt; virginica      6.725714    3.020000     5.654286   2.0685714</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Log determinants of projected covariance matrices:</span></span>
+<span><span class="co">#&gt; [1] -10.197338  -8.531728  -8.239145</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Scaling array dimensions:</span></span>
+<span><span class="co">#&gt; [1] 4 4 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Permutation optimization information:</span></span>
+<span><span class="co">#&gt; $setosa</span></span>
+<span><span class="co">#&gt; [1] (12)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $versicolor</span></span>
+<span><span class="co">#&gt; [1] (23)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $virginica</span></span>
+<span><span class="co">#&gt; [1] (13)(24)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">joint_qda_fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                   Length Class     Mode     </span></span>
-<span><span class="co">#&gt; prior              3     -none-    numeric  </span></span>
-<span><span class="co">#&gt; counts             3     -none-    numeric  </span></span>
-<span><span class="co">#&gt; means             12     -none-    numeric  </span></span>
-<span><span class="co">#&gt; scaling           48     -none-    numeric  </span></span>
-<span><span class="co">#&gt; ldet               3     -none-    numeric  </span></span>
-<span><span class="co">#&gt; lev                3     -none-    character</span></span>
-<span><span class="co">#&gt; N                  1     -none-    numeric  </span></span>
-<span><span class="co">#&gt; call               3     -none-    call     </span></span>
-<span><span class="co">#&gt; optimization_info  3     gips_perm list     </span></span>
-<span><span class="co">#&gt; terms              3     terms     call     </span></span>
-<span><span class="co">#&gt; xlevels            0     -none-    list</span></span></code></pre></div>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; gipsmultqda(Species ~ ., data = train)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model: gipsmultqda </span></span>
+<span><span class="co">#&gt; Number of observations: 105 </span></span>
+<span><span class="co">#&gt; Number of groups: 3 </span></span>
+<span><span class="co">#&gt; Number of predictors: 4 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Fitting options:</span></span>
+<span><span class="co">#&gt; $MAP</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $optimizer</span></span>
+<span><span class="co">#&gt; [1] "BF"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $max_iter</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Class counts:</span></span>
+<span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
+<span><span class="co">#&gt;         35         35         35 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Prior probabilities of groups:</span></span>
+<span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
+<span><span class="co">#&gt;  0.3333333  0.3333333  0.3333333 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Group means:</span></span>
+<span><span class="co">#&gt;            Sepal.Length Sepal.Width Petal.Length Petal.Width</span></span>
+<span><span class="co">#&gt; setosa         5.020000    3.420000     1.482857   0.2428571</span></span>
+<span><span class="co">#&gt; versicolor     5.911429    2.771429     4.302857   1.3371429</span></span>
+<span><span class="co">#&gt; virginica      6.725714    3.020000     5.654286   2.0685714</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Log determinants of projected covariance matrices:</span></span>
+<span><span class="co">#&gt; [1] -10.093275  -8.701035  -8.306090</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Scaling array dimensions:</span></span>
+<span><span class="co">#&gt; [1] 4 4 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Permutation optimization information:</span></span>
+<span><span class="co">#&gt; [1] (13)</span></span></code></pre></div>
 <p>Fitted models are list-like S3 objects, so you can inspect their
 component names.</p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">lda_fit</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "prior"             "counts"            "means"            </span></span>
 <span><span class="co">#&gt;  [4] "scaling"           "lev"               "svd"              </span></span>
-<span><span class="co">#&gt;  [7] "N"                 "optimization_info" "call"             </span></span>
-<span><span class="co">#&gt; [10] "terms"             "xlevels"</span></span>
+<span><span class="co">#&gt;  [7] "N"                 "optimization_info" "fit_info"         </span></span>
+<span><span class="co">#&gt; [10] "call"              "terms"             "xlevels"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">qda_fit</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "prior"             "counts"            "means"            </span></span>
 <span><span class="co">#&gt;  [4] "scaling"           "ldet"              "lev"              </span></span>
 <span><span class="co">#&gt;  [7] "N"                 "call"              "optimization_info"</span></span>
-<span><span class="co">#&gt; [10] "terms"             "xlevels"</span></span>
+<span><span class="co">#&gt; [10] "fit_info"          "terms"             "xlevels"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">joint_qda_fit</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "prior"             "counts"            "means"            </span></span>
 <span><span class="co">#&gt;  [4] "scaling"           "ldet"              "lev"              </span></span>
 <span><span class="co">#&gt;  [7] "N"                 "call"              "optimization_info"</span></span>
-<span><span class="co">#&gt; [10] "terms"             "xlevels"</span></span></code></pre></div>
+<span><span class="co">#&gt; [10] "fit_info"          "terms"             "xlevels"</span></span></code></pre></div>
 <p>The exact set of components depends on the model family, but the most
 useful components are usually:</p>
 <table class="table">
@@ -1056,6 +1368,13 @@ useful components are usually:</p>
 <span><span class="co">#&gt; [1] (1243)</span></span></code></pre></div>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">qda_fit</span><span class="op">$</span><span class="va">optimization_info</span></span>
+<span><span class="co">#&gt; $setosa</span></span>
+<span><span class="co">#&gt; [1] (12)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $versicolor</span></span>
+<span><span class="co">#&gt; [1] (23)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $virginica</span></span>
 <span><span class="co">#&gt; [1] (13)(24)</span></span></code></pre></div>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">joint_qda_fit</span><span class="op">$</span><span class="va">optimization_info</span></span>
@@ -1093,9 +1412,10 @@ useful components are usually:</p>
 <span><span class="co">#&gt; 6                svd        numeric      2      </span></span>
 <span><span class="co">#&gt; 7                  N        integer      1      </span></span>
 <span><span class="co">#&gt; 8  optimization_info      gips_perm      1      </span></span>
-<span><span class="co">#&gt; 9               call           call      3      </span></span>
-<span><span class="co">#&gt; 10             terms terms, formula      3      </span></span>
-<span><span class="co">#&gt; 11           xlevels           list      0</span></span></code></pre></div>
+<span><span class="co">#&gt; 9           fit_info           list      4      </span></span>
+<span><span class="co">#&gt; 10              call           call      3      </span></span>
+<span><span class="co">#&gt; 11             terms terms, formula      3      </span></span>
+<span><span class="co">#&gt; 12           xlevels           list      0</span></span></code></pre></div>
 <div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">inspect_model</span><span class="op">(</span><span class="va">qda_fit</span><span class="op">)</span></span>
 <span><span class="co">#&gt;            component          class length       dim</span></span>
@@ -1107,9 +1427,10 @@ useful components are usually:</p>
 <span><span class="co">#&gt; 6                lev      character      3          </span></span>
 <span><span class="co">#&gt; 7                  N        integer      1          </span></span>
 <span><span class="co">#&gt; 8               call           call      3          </span></span>
-<span><span class="co">#&gt; 9  optimization_info      gips_perm      2          </span></span>
-<span><span class="co">#&gt; 10             terms terms, formula      3          </span></span>
-<span><span class="co">#&gt; 11           xlevels           list      0</span></span></code></pre></div>
+<span><span class="co">#&gt; 9  optimization_info           list      3          </span></span>
+<span><span class="co">#&gt; 10          fit_info           list      3          </span></span>
+<span><span class="co">#&gt; 11             terms terms, formula      3          </span></span>
+<span><span class="co">#&gt; 12           xlevels           list      0</span></span></code></pre></div>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">inspect_model</span><span class="op">(</span><span class="va">joint_qda_fit</span><span class="op">)</span></span>
 <span><span class="co">#&gt;            component          class length       dim</span></span>
@@ -1122,8 +1443,9 @@ useful components are usually:</p>
 <span><span class="co">#&gt; 7                  N        integer      1          </span></span>
 <span><span class="co">#&gt; 8               call           call      3          </span></span>
 <span><span class="co">#&gt; 9  optimization_info      gips_perm      3          </span></span>
-<span><span class="co">#&gt; 10             terms terms, formula      3          </span></span>
-<span><span class="co">#&gt; 11           xlevels           list      0</span></span></code></pre></div>
+<span><span class="co">#&gt; 10          fit_info           list      3          </span></span>
+<span><span class="co">#&gt; 11             terms terms, formula      3          </span></span>
+<span><span class="co">#&gt; 12           xlevels           list      0</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="lda-diagnostics">LDA diagnostics<a class="anchor" aria-label="anchor" href="#lda-diagnostics"></a>
@@ -1133,16 +1455,16 @@ are available.</p>
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">lda_fit</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                     LD1        LD2</span></span>
-<span><span class="co">#&gt; Sepal.Length -0.2522284 -0.3624600</span></span>
-<span><span class="co">#&gt; Sepal.Width   2.3832685 -2.2995034</span></span>
-<span><span class="co">#&gt; Petal.Length -1.3623096  0.8891933</span></span>
-<span><span class="co">#&gt; Petal.Width  -3.5000941 -2.3792848</span></span></code></pre></div>
+<span><span class="co">#&gt; Sepal.Length -0.2534381 -0.3641984</span></span>
+<span><span class="co">#&gt; Sepal.Width   2.3946991 -2.3105323</span></span>
+<span><span class="co">#&gt; Petal.Length -1.3688435  0.8934580</span></span>
+<span><span class="co">#&gt; Petal.Width  -3.5168812 -2.3906963</span></span></code></pre></div>
 <div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lda_fit</span><span class="op">)</span></span></code></pre></div>
-<p><img src="advanced-usage_files/figure-html/unnamed-chunk-48-1.png" class="r-plt" alt="" width="576"></p>
+<p><img src="advanced-usage_files/figure-html/unnamed-chunk-48-1.png" class="r-plt" alt="Plot of the fitted gipslda model in discriminant space." width="576"></p>
 <div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/pairs.html" class="external-link">pairs</a></span><span class="op">(</span><span class="va">lda_fit</span>, type <span class="op">=</span> <span class="st">"std"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="advanced-usage_files/figure-html/unnamed-chunk-49-1.png" class="r-plt" alt="" width="576"></p>
+<p><img src="advanced-usage_files/figure-html/unnamed-chunk-49-1.png" class="r-plt" alt="Pairs plot of discriminant coordinates for the fitted gipslda model." width="576"></p>
 <p>These methods are useful for inspecting the fitted discriminant
 directions and class separation.</p>
 </div>
@@ -1215,20 +1537,20 @@ and inspect <code>optimization_info</code> for more detail.</p>
 <div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pred_lda</span><span class="op">$</span><span class="va">posterior</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    setosa   versicolor    virginica</span></span>
-<span><span class="co">#&gt; 6       1 7.906717e-22 4.776377e-41</span></span>
-<span><span class="co">#&gt; 9       1 2.674459e-16 1.730922e-35</span></span>
-<span><span class="co">#&gt; 14      1 1.353910e-20 1.978581e-41</span></span>
-<span><span class="co">#&gt; 16      1 3.431995e-28 5.926915e-49</span></span>
-<span><span class="co">#&gt; 17      1 3.146059e-24 3.515450e-44</span></span>
-<span><span class="co">#&gt; 19      1 8.270729e-22 2.610171e-41</span></span>
+<span><span class="co">#&gt; 6       1 4.955555e-22 1.956129e-41</span></span>
+<span><span class="co">#&gt; 9       1 1.894514e-16 8.017336e-36</span></span>
+<span><span class="co">#&gt; 14      1 8.720623e-21 8.034755e-42</span></span>
+<span><span class="co">#&gt; 16      1 1.868380e-28 2.037539e-49</span></span>
+<span><span class="co">#&gt; 17      1 1.869751e-24 1.343241e-44</span></span>
+<span><span class="co">#&gt; 19      1 5.185944e-22 1.062783e-41</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pred_qda</span><span class="op">$</span><span class="va">posterior</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    setosa   versicolor    virginica</span></span>
-<span><span class="co">#&gt; 6       1 2.909134e-18 1.033310e-27</span></span>
-<span><span class="co">#&gt; 9       1 1.075425e-13 1.166576e-19</span></span>
-<span><span class="co">#&gt; 14      1 2.143385e-16 2.068832e-22</span></span>
-<span><span class="co">#&gt; 16      1 2.508036e-24 3.982454e-36</span></span>
-<span><span class="co">#&gt; 17      1 4.556129e-22 4.934051e-32</span></span>
-<span><span class="co">#&gt; 19      1 4.873816e-18 2.042588e-29</span></span>
+<span><span class="co">#&gt; 6       1 1.983970e-19 1.033310e-27</span></span>
+<span><span class="co">#&gt; 9       1 2.720258e-16 1.166576e-19</span></span>
+<span><span class="co">#&gt; 14      1 1.613600e-19 2.068832e-22</span></span>
+<span><span class="co">#&gt; 16      1 6.597486e-25 3.982454e-36</span></span>
+<span><span class="co">#&gt; 17      1 1.485936e-23 4.934051e-32</span></span>
+<span><span class="co">#&gt; 19      1 4.669037e-19 2.042588e-29</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pred_joint</span><span class="op">$</span><span class="va">posterior</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    setosa   versicolor    virginica</span></span>
 <span><span class="co">#&gt; 6       1 1.809368e-18 3.630155e-32</span></span>

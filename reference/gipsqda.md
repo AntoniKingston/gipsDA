@@ -14,7 +14,8 @@ gipsqda(formula, data, ..., subset, na.action)
 
 # Default S3 method
 gipsqda(x, grouping, prior = proportions,
-  nu = 5, MAP = TRUE, optimizer = NULL, max_iter = NULL, ...)
+  nu = 5, MAP = TRUE, optimizer = NULL, max_iter = NULL,
+  show_progress_bar = FALSE, ...)
 
 # S3 method for class 'data.frame'
 gipsqda(x, ...)
@@ -76,6 +77,11 @@ gipsqda(x, grouping, ..., subset, na.action)
 - max_iter:
 
   Maximum number of iterations for stochastic optimizers.
+
+- show_progress_bar:
+
+  Logical; if `TRUE`, display the progress bar from the underlying gips
+  optimizer. Defaults to `FALSE`.
 
 - subset:
 

@@ -15,7 +15,8 @@ gipslda(formula, data, ..., subset, na.action)
 # Default S3 method
 gipslda(x, grouping, prior = proportions,
   tol = 1e-4, weighted_avg = FALSE,
-  MAP = TRUE, optimizer = NULL, max_iter = NULL, ...)
+  MAP = TRUE, optimizer = NULL, max_iter = NULL,
+  show_progress_bar = FALSE, ...)
 
 # S3 method for class 'data.frame'
 gipslda(x, ...)
@@ -83,6 +84,11 @@ gipslda(x, grouping, ..., subset, na.action)
 - max_iter:
 
   Maximum number of iterations for the optimizer.
+
+- show_progress_bar:
+
+  Logical; if `TRUE`, display the progress bar from the underlying gips
+  optimizer. Defaults to `FALSE`.
 
 - weighted_avg:
 
@@ -169,9 +175,32 @@ predict(z, Iris[-train, ])$class
 #> gipslda(Sp ~ Sepal.L. + Sepal.W. + Petal.L., data = Iris, prior = c(1, 
 #>     1, 1)/3, subset = train)
 #> 
+#> Model: gipslda 
+#> Number of observations: 75 
+#> Number of groups: 3 
+#> Number of predictors: 3 
+#> 
+#> Fitting options:
+#> $MAP
+#> [1] TRUE
+#> 
+#> $optimizer
+#> [1] "BF"
+#> 
+#> $max_iter
+#> NULL
+#> 
+#> $weighted_avg
+#> [1] FALSE
+#> 
+#> 
 #> Prior probabilities of groups:
 #>         c         s         v 
 #> 0.3333333 0.3333333 0.3333333 
+#> 
+#> Class counts:
+#>  c  s  v 
+#> 25 32 18 
 #> 
 #> Group means:
 #>   Sepal.L. Sepal.W. Petal.L.
@@ -179,16 +208,15 @@ predict(z, Iris[-train, ])$class
 #> s 4.978125 3.390625 1.468750
 #> v 6.666667 3.005556 5.566667
 #> 
+#> Permutations with their estimated probabilities:
+#> 
 #> Coefficients of linear discriminants:
 #>                 LD1       LD2
-#> Sepal.L.  0.7733505 -1.425565
-#> Sepal.W.  0.8581570  3.839487
-#> Petal.L. -3.7433101  1.010818
+#> Sepal.L.  0.7785584 -1.435165
+#> Sepal.W.  0.8639359  3.865342
+#> Petal.L. -3.7685179  1.017625
 #> 
 #> Proportion of trace:
 #>    LD1    LD2 
 #> 0.9949 0.0051 
-#> 
-#> Permutations with their estimated probabilities:
-#> [1] (23)
 ```

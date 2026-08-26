@@ -9,12 +9,12 @@ permutation-invariant structures learned with the `gips` framework.
 
 The package provides three model-fitting functions:
 
-- [`gipslda()`](https://antonikingston.github.io/gipsDA/reference/gipslda.md)
-  — LDA with a projected pooled covariance matrix.
-- [`gipsqda()`](https://antonikingston.github.io/gipsDA/reference/gipsqda.md)
-  — QDA with independently projected class-specific covariance matrices.
-- [`gipsmultqda()`](https://antonikingston.github.io/gipsDA/reference/gipsmultqda.md)
-  — QDA with class-specific covariance matrices and a jointly estimated
+- [`gipslda()`](https://antonikingston.github.io/gipsDA/reference/gipslda.md) -
+  LDA with a projected pooled covariance matrix.
+- [`gipsqda()`](https://antonikingston.github.io/gipsDA/reference/gipsqda.md) -
+  QDA with independently projected class-specific covariance matrices.
+- [`gipsmultqda()`](https://antonikingston.github.io/gipsDA/reference/gipsmultqda.md) -
+  QDA with class-specific covariance matrices and a jointly estimated
   permutation structure.
 
 The functions follow the familiar conventions of
@@ -77,9 +77,32 @@ fit
 #> Call:
 #> gipslda(Species ~ ., data = train)
 #> 
+#> Model: gipslda 
+#> Number of observations: 105 
+#> Number of groups: 3 
+#> Number of predictors: 4 
+#> 
+#> Fitting options:
+#> $MAP
+#> [1] TRUE
+#> 
+#> $optimizer
+#> [1] "BF"
+#> 
+#> $max_iter
+#> NULL
+#> 
+#> $weighted_avg
+#> [1] FALSE
+#> 
+#> 
 #> Prior probabilities of groups:
 #>     setosa versicolor  virginica 
 #>  0.3333333  0.3333333  0.3333333 
+#> 
+#> Class counts:
+#>     setosa versicolor  virginica 
+#>         35         35         35 
 #> 
 #> Group means:
 #>            Sepal.Length Sepal.Width Petal.Length Petal.Width
@@ -87,19 +110,18 @@ fit
 #> versicolor     5.911429    2.771429     4.302857   1.3371429
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
+#> Permutations with their estimated probabilities:
+#> 
 #> Coefficients of linear discriminants:
 #>                     LD1        LD2
-#> Sepal.Length -0.2522284 -0.3624600
-#> Sepal.Width   2.3832685 -2.2995034
-#> Petal.Length -1.3623096  0.8891933
-#> Petal.Width  -3.5000941 -2.3792848
+#> Sepal.Length -0.2534381 -0.3641984
+#> Sepal.Width   2.3946991 -2.3105323
+#> Petal.Length -1.3688435  0.8934580
+#> Petal.Width  -3.5168812 -2.3906963
 #> 
 #> Proportion of trace:
 #>    LD1    LD2 
-#> 0.9888 0.0112 
-#> 
-#> Permutations with their estimated probabilities:
-#> [1] (1243)
+#> 0.9888 0.0112
 ```
 
 Predict classes for the test set.
@@ -113,12 +135,12 @@ head(pred$class)
 #> Levels: setosa versicolor virginica
 head(pred$posterior)
 #>    setosa   versicolor    virginica
-#> 6       1 7.906717e-22 4.776377e-41
-#> 9       1 2.674459e-16 1.730922e-35
-#> 14      1 1.353910e-20 1.978581e-41
-#> 16      1 3.431995e-28 5.926915e-49
-#> 17      1 3.146059e-24 3.515450e-44
-#> 19      1 8.270729e-22 2.610171e-41
+#> 6       1 4.955555e-22 1.956129e-41
+#> 9       1 1.894514e-16 8.017336e-36
+#> 14      1 8.720623e-21 8.034755e-42
+#> 16      1 1.868380e-28 2.037539e-49
+#> 17      1 1.869751e-24 1.343241e-44
+#> 19      1 5.185944e-22 1.062783e-41
 
 mean(pred$class == test$Species)
 #> [1] 0.9777778
@@ -206,9 +228,32 @@ lda_map
 #> Call:
 #> gipslda(Species ~ ., data = train, MAP = TRUE)
 #> 
+#> Model: gipslda 
+#> Number of observations: 105 
+#> Number of groups: 3 
+#> Number of predictors: 4 
+#> 
+#> Fitting options:
+#> $MAP
+#> [1] TRUE
+#> 
+#> $optimizer
+#> [1] "BF"
+#> 
+#> $max_iter
+#> NULL
+#> 
+#> $weighted_avg
+#> [1] FALSE
+#> 
+#> 
 #> Prior probabilities of groups:
 #>     setosa versicolor  virginica 
 #>  0.3333333  0.3333333  0.3333333 
+#> 
+#> Class counts:
+#>     setosa versicolor  virginica 
+#>         35         35         35 
 #> 
 #> Group means:
 #>            Sepal.Length Sepal.Width Petal.Length Petal.Width
@@ -216,19 +261,18 @@ lda_map
 #> versicolor     5.911429    2.771429     4.302857   1.3371429
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
+#> Permutations with their estimated probabilities:
+#> 
 #> Coefficients of linear discriminants:
 #>                     LD1        LD2
-#> Sepal.Length -0.2522284 -0.3624600
-#> Sepal.Width   2.3832685 -2.2995034
-#> Petal.Length -1.3623096  0.8891933
-#> Petal.Width  -3.5000941 -2.3792848
+#> Sepal.Length -0.2534381 -0.3641984
+#> Sepal.Width   2.3946991 -2.3105323
+#> Petal.Length -1.3688435  0.8934580
+#> Petal.Width  -3.5168812 -2.3906963
 #> 
 #> Proportion of trace:
 #>    LD1    LD2 
-#> 0.9888 0.0112 
-#> 
-#> Permutations with their estimated probabilities:
-#> [1] (1243)
+#> 0.9888 0.0112
 ```
 
 When `MAP = FALSE`, the model uses posterior probabilities over retained
@@ -247,9 +291,32 @@ lda_avg
 #> Call:
 #> gipslda(Species ~ ., data = train, MAP = FALSE)
 #> 
+#> Model: gipslda 
+#> Number of observations: 105 
+#> Number of groups: 3 
+#> Number of predictors: 4 
+#> 
+#> Fitting options:
+#> $MAP
+#> [1] FALSE
+#> 
+#> $optimizer
+#> [1] "BF"
+#> 
+#> $max_iter
+#> NULL
+#> 
+#> $weighted_avg
+#> [1] FALSE
+#> 
+#> 
 #> Prior probabilities of groups:
 #>     setosa versicolor  virginica 
 #>  0.3333333  0.3333333  0.3333333 
+#> 
+#> Class counts:
+#>     setosa versicolor  virginica 
+#>         35         35         35 
 #> 
 #> Group means:
 #>            Sepal.Length Sepal.Width Petal.Length Petal.Width
@@ -257,20 +324,20 @@ lda_avg
 #> versicolor     5.911429    2.771429     4.302857   1.3371429
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
+#> Permutations with their estimated probabilities:
+#>   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) 
+#> 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725 
+#> 
 #> Coefficients of linear discriminants:
 #>                      LD1        LD2
-#> Sepal.Length  0.06678184 -0.5324123
-#> Sepal.Width   2.14426388 -2.2137470
-#> Petal.Length -1.58624789  0.9723419
-#> Petal.Width  -3.35358888 -2.3945239
+#> Sepal.Length  0.06710214 -0.5349658
+#> Sepal.Width   2.15454818 -2.2243646
+#> Petal.Length -1.59385584  0.9770055
+#> Petal.Width  -3.36967333 -2.4060085
 #> 
 #> Proportion of trace:
 #>    LD1    LD2 
-#> 0.9886 0.0114 
-#> 
-#> Permutations with their estimated probabilities:
-#>   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) 
-#> 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725
+#> 0.9886 0.0114
 ```
 
 In printed model output, a result such as `(1243)` is written in cycle
@@ -346,9 +413,32 @@ print(lda_fit)
 #> Call:
 #> gipslda(Species ~ ., data = train)
 #> 
+#> Model: gipslda 
+#> Number of observations: 105 
+#> Number of groups: 3 
+#> Number of predictors: 4 
+#> 
+#> Fitting options:
+#> $MAP
+#> [1] TRUE
+#> 
+#> $optimizer
+#> [1] "BF"
+#> 
+#> $max_iter
+#> NULL
+#> 
+#> $weighted_avg
+#> [1] FALSE
+#> 
+#> 
 #> Prior probabilities of groups:
 #>     setosa versicolor  virginica 
 #>  0.3333333  0.3333333  0.3333333 
+#> 
+#> Class counts:
+#>     setosa versicolor  virginica 
+#>         35         35         35 
 #> 
 #> Group means:
 #>            Sepal.Length Sepal.Width Petal.Length Petal.Width
@@ -356,19 +446,18 @@ print(lda_fit)
 #> versicolor     5.911429    2.771429     4.302857   1.3371429
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
+#> Permutations with their estimated probabilities:
+#> 
 #> Coefficients of linear discriminants:
 #>                     LD1        LD2
-#> Sepal.Length -0.2522284 -0.3624600
-#> Sepal.Width   2.3832685 -2.2995034
-#> Petal.Length -1.3623096  0.8891933
-#> Petal.Width  -3.5000941 -2.3792848
+#> Sepal.Length -0.2534381 -0.3641984
+#> Sepal.Width   2.3946991 -2.3105323
+#> Petal.Length -1.3688435  0.8934580
+#> Petal.Width  -3.5168812 -2.3906963
 #> 
 #> Proportion of trace:
 #>    LD1    LD2 
-#> 0.9888 0.0112 
-#> 
-#> Permutations with their estimated probabilities:
-#> [1] (1243)
+#> 0.9888 0.0112
 ```
 
 The printed output shows the model call, class priors, group means, and
@@ -380,18 +469,48 @@ is available, it can be used for a more compact model summary.
 ``` r
 
 summary(lda_fit)
-#>                   Length Class     Mode     
-#> prior              3     -none-    numeric  
-#> counts             3     -none-    numeric  
-#> means             12     -none-    numeric  
-#> scaling            8     -none-    numeric  
-#> lev                3     -none-    character
-#> svd                2     -none-    numeric  
-#> N                  1     -none-    numeric  
-#> optimization_info  1     gips_perm list     
-#> call               3     -none-    call     
-#> terms              3     terms     call     
-#> xlevels            0     -none-    list
+#> Call:
+#> gipslda(Species ~ ., data = train)
+#> 
+#> Model: gipslda 
+#> Number of observations: 105 
+#> Number of groups: 3 
+#> Number of predictors: 4 
+#> 
+#> Fitting options:
+#> $MAP
+#> [1] TRUE
+#> 
+#> $optimizer
+#> [1] "BF"
+#> 
+#> $max_iter
+#> NULL
+#> 
+#> $weighted_avg
+#> [1] FALSE
+#> 
+#> 
+#> Class counts:
+#>     setosa versicolor  virginica 
+#>         35         35         35 
+#> 
+#> Prior probabilities of groups:
+#>     setosa versicolor  virginica 
+#>  0.3333333  0.3333333  0.3333333 
+#> 
+#> Group means:
+#>            Sepal.Length Sepal.Width Petal.Length Petal.Width
+#> setosa         5.020000    3.420000     1.482857   0.2428571
+#> versicolor     5.911429    2.771429     4.302857   1.3371429
+#> virginica      6.725714    3.020000     5.654286   2.0685714
+#> 
+#> Proportion of trace:
+#>    LD1    LD2 
+#> 0.9888 0.0112 
+#> 
+#> Permutation optimization information:
+#> [1] (1243)
 ```
 
 More details about fitted model objects are described in the [Advanced
@@ -409,12 +528,12 @@ head(lda_pred$class)
 #> Levels: setosa versicolor virginica
 head(lda_pred$posterior)
 #>    setosa   versicolor    virginica
-#> 6       1 7.906717e-22 4.776377e-41
-#> 9       1 2.674459e-16 1.730922e-35
-#> 14      1 1.353910e-20 1.978581e-41
-#> 16      1 3.431995e-28 5.926915e-49
-#> 17      1 3.146059e-24 3.515450e-44
-#> 19      1 8.270729e-22 2.610171e-41
+#> 6       1 4.955555e-22 1.956129e-41
+#> 9       1 1.894514e-16 8.017336e-36
+#> 14      1 8.720623e-21 8.034755e-42
+#> 16      1 1.868380e-28 2.037539e-49
+#> 17      1 1.869751e-24 1.343241e-44
+#> 19      1 5.185944e-22 1.062783e-41
 ```
 
 More detailed prediction options are described in the [Advanced
