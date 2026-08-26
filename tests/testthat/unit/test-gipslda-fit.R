@@ -140,9 +140,16 @@ test_that("fit output has stable structural invariants", {
     fit,
     c(
       "prior", "counts", "means", "scaling", "lev", "svd", "N",
-      "optimization_info", "call"
+      "optimization_info", "fit_info", "call"
     )
   )
+
+  expect_named(fit$fit_info, c("MAP", "optimizer", "max_iter", "weighted_avg"))
+  expect_true(is.logical(fit$fit_info$MAP))
+  expect_identical(fit$fit_info$optimizer, "BF")
+  expect_null(fit$fit_info$max_iter)
+  expect_false(fit$fit_info$weighted_avg)
+
   expect_valid_lda_fit(fit, n = 18, p = 3, groups = 3)
   expect_equal(names(fit$counts), levels(fixture$grouping))
   expect_equal(rownames(fit$means), levels(fixture$grouping))

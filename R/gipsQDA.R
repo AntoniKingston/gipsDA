@@ -10,7 +10,7 @@
 #'
 #' @name gipsqda
 #' @aliases
-#'   gipsqda gipsqda.default gipsqda.formula gipsqda.data.frame gipsqda.matrix print.gipsqda model.frame.gipsqda
+#'   gipsqda gipsqda.default gipsqda.formula gipsqda.data.frame gipsqda.matrix model.frame.gipsqda
 #'
 #' @usage
 #' gipsqda(x, ...)
@@ -203,13 +203,16 @@ gipsqda.default <-
     group.means <- tapply(x, list(rep(g, ncol(x)), col(x)), mean)
     scaling <- array(dim = c(p, p, ng))
     ldet <- numeric(ng)
+
+    optimization_info <- vector("list", ng)
+    names(optimization_info) <- lev
     ####################################################################################
 
     for (i in 1L:ng) {
       x_i <- (x[unclass(g) == i, ])
       pr_cov_opt_info <- project_covs(list(stats::cov(x_i)), n, MAP, optimizer, max_iter)
       cov_proj <- pr_cov_opt_info$covs[[1]]
-      optimization_info <- pr_cov_opt_info$opt_info
+      optimization_info[[i]] <- pr_cov_opt_info$opt_info
       cov_proj <- desingularize(cov_proj, 0.05)
       group.means[i, ] <- colMeans(x_i)
       sX <- svd(cov_proj, nu = 0)
@@ -238,8 +241,20 @@ gipsqda.default <-
     cl <- match.call()
     cl[[1L]] <- as.name("gipsqda")
     res <- list(
-      prior = prior, counts = counts, means = group.means,
-      scaling = scaling, ldet = ldet, lev = lev, N = n, call = cl, optimization_info = optimization_info
+      prior = prior,
+      counts = counts,
+      means = group.means,
+      scaling = scaling,
+      ldet = ldet,
+      lev = lev,
+      N = n,
+      call = cl,
+      optimization_info = optimization_info,
+      fit_info = list(
+        MAP = MAP,
+        optimizer = optimizer,
+        max_iter = max_iter
+      )
     )
     class(res) <- "gipsqda"
     res
@@ -407,20 +422,5 @@ predict.gipsqda <- function(object, newdata, prior = object$prior,
   list(class = cl, posterior = posterior)
 }
 
-#' @exportS3Method
-print.gipsqda <- function(x, ...) {
-  if (!is.null(cl <- x$call)) {
-    names(cl)[2L] <- ""
-    cat("Call:\n")
-    dput(cl, control = NULL)
-  }
-  cat("\nPrior probabilities of groups:\n")
-  print(x$prior, ...)
-  cat("\nGroup means:\n")
-  print(x$means, ...)
-  cat("\nPermutations with their estimated probabilities:\n")
-  print(x$optimization_info)
-  invisible(x)
-}
 #' @exportS3Method
 model.frame.gipsqda <- model.frame.gipslda

@@ -195,15 +195,40 @@ Journal of Statistical Software, <strong>112</strong>(7), 1–38.
 <span class="r-out co"><span class="r-pr">#&gt;</span> gipslda(Sp ~ Sepal.L. + Sepal.W. + Petal.L., data = Iris, prior = c(1, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     1, 1)/3, subset = train)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Model: gipslda </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Number of observations: 75 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Number of groups: 3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Number of predictors: 3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fitting options:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MAP</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $optimizer</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "BF"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $max_iter</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $weighted_avg</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Prior probabilities of groups:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         c         s         v </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0.3333333 0.3333333 0.3333333 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Class counts:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  c  s  v </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25 32 18 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Group means:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.L. Sepal.W. Petal.L.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> c 6.032000 2.836000 4.304000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> s 4.978125 3.390625 1.468750</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> v 6.666667 3.005556 5.566667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Permutations with their estimated probabilities:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients of linear discriminants:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 LD1       LD2</span>
@@ -214,9 +239,6 @@ Journal of Statistical Software, <strong>112</strong>(7), 1–38.
 <span class="r-out co"><span class="r-pr">#&gt;</span> Proportion of trace:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    LD1    LD2 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0.9949 0.0051 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Permutations with their estimated probabilities:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] (23)</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -6,7 +6,6 @@
 \alias{gipsmultqda.formula}
 \alias{gipsmultqda.data.frame}
 \alias{gipsmultqda.matrix}
-\alias{print.gipsmultqda}
 \alias{model.frame.gipsmultqda}
 \title{Quadratic Discriminant Analysis with multiple gips-projected covariances}
 \usage{

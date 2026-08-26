@@ -8,7 +8,7 @@
 #' the classical sample covariance estimators by projected covariance matrices
 #' obtained using the \code{\link[gips]{gips}} framework.
 #' @name gipslda
-#' @aliases gipslda.default gipslda.data.frame gipslda.formula gipslda.matrix model.frame.gipslda print.gipslda
+#' @aliases gipslda.default gipslda.data.frame gipslda.formula gipslda.matrix model.frame.gipslda
 #'
 #' @usage
 #' gipslda(x, ...)
@@ -276,15 +276,24 @@ gipslda.default <-
     }
     cl <- match.call()
     cl[[1L]] <- as.name("gipslda")
-    cl$weighted_avg <- NULL
-    cl$MAP <- NULL
-    cl$optimizer <- NULL
-    cl$max_iter <- NULL
+
     structure(
       list(
-        prior = prior, counts = counts, means = group.means,
-        scaling = scaling, lev = lev, svd = X.s$d[1L:rank],
-        N = n, optimization_info = optimization_info, call = cl
+        prior = prior,
+        counts = counts,
+        means = group.means,
+        scaling = scaling,
+        lev = lev,
+        svd = X.s$d[1L:rank],
+        N = n,
+        optimization_info = optimization_info,
+        fit_info = list(
+          MAP = MAP,
+          optimizer = optimizer,
+          max_iter = max_iter,
+          weighted_avg = weighted_avg
+        ),
+        call = cl
       ),
       class = "gipslda"
     )
@@ -404,29 +413,6 @@ predict.gipslda <- function(object, newdata, prior = object$prior, dimen,
   list(class = cl, posterior = posterior, x = x[, 1L:dimen, drop = FALSE])
 }
 
-#' @exportS3Method
-print.gipslda <- function(x, ...) {
-  if (!is.null(cl <- x$call)) {
-    names(cl)[2L] <- ""
-    cat("Call:\n")
-    dput(cl, control = NULL)
-  }
-  cat("\nPrior probabilities of groups:\n")
-  print(x$prior, ...)
-  cat("\nGroup means:\n")
-  print(x$means, ...)
-  cat("\nCoefficients of linear discriminants:\n")
-  print(x$scaling, ...)
-  svd <- x$svd
-  names(svd) <- dimnames(x$scaling)[[2L]]
-  if (length(svd) > 1L) {
-    cat("\nProportion of trace:\n")
-    print(round(svd^2 / sum(svd^2), 4L), ...)
-  }
-  cat("\nPermutations with their estimated probabilities:\n")
-  print(x$optimization_info)
-  invisible(x)
-}
 
 #' Plot a fitted gips LDA model
 #'

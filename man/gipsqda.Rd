@@ -6,7 +6,6 @@
 \alias{gipsqda.formula}
 \alias{gipsqda.data.frame}
 \alias{gipsqda.matrix}
-\alias{print.gipsqda}
 \alias{model.frame.gipsqda}
 \title{Quadratic Discriminant Analysis with gips covariance projection}
 \usage{

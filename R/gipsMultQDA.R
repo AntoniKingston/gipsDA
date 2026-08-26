@@ -10,7 +10,7 @@
 #'
 #' @name gipsmultqda
 #' @aliases
-#'   gipsmultqda gipsmultqda.default gipsmultqda.formula gipsmultqda.data.frame gipsmultqda.matrix print.gipsmultqda model.frame.gipsmultqda
+#'   gipsmultqda gipsmultqda.default gipsmultqda.formula gipsmultqda.data.frame gipsmultqda.matrix model.frame.gipsmultqda
 #'
 #' @usage
 #' gipsmultqda(x, ...)
@@ -232,8 +232,20 @@ gipsmultqda.default <-
     cl <- match.call()
     cl[[1L]] <- as.name("gipsmultqda")
     res <- list(
-      prior = prior, counts = counts, means = group.means,
-      scaling = scaling, ldet = ldet, lev = lev, N = n, call = cl, optimization_info = optimization_info
+      prior = prior,
+      counts = counts,
+      means = group.means,
+      scaling = scaling,
+      ldet = ldet,
+      lev = lev,
+      N = n,
+      call = cl,
+      optimization_info = optimization_info,
+      fit_info = list(
+        MAP = MAP,
+        optimizer = optimizer,
+        max_iter = max_iter
+      )
     )
     class(res) <- "gipsmultqda"
     res
@@ -402,23 +414,6 @@ predict.gipsmultqda <- function(object, newdata, prior = object$prior,
   dimnames(posterior) <- list(rownames(x), object$lev)
   list(class = cl, posterior = posterior)
 }
-
-#' @exportS3Method
-print.gipsmultqda <- function(x, ...) {
-  if (!is.null(cl <- x$call)) {
-    names(cl)[2L] <- ""
-    cat("Call:\n")
-    dput(cl, control = NULL)
-  }
-  cat("\nPrior probabilities of groups:\n")
-  print(x$prior, ...)
-  cat("\nGroup means:\n")
-  print(x$means, ...)
-  cat("\nPermutations with their estimated probabilities:\n")
-  print(x$optimization_info)
-  invisible(x)
-}
-
 
 #' @exportS3Method
 model.frame.gipsmultqda <- model.frame.gipslda

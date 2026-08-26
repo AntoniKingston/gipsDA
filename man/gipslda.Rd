@@ -7,7 +7,6 @@
 \alias{gipslda.formula}
 \alias{gipslda.matrix}
 \alias{model.frame.gipslda}
-\alias{print.gipslda}
 \title{Linear Discriminant Analysis with gips Covariance Projection}
 \usage{
 gipslda(x, ...)

@@ -244,5 +244,11 @@ test_that("QDA fits expose stable dimensions, labels, and finite estimates", {
     expect_true(all(is.finite(fit$means)))
     expect_true(all(is.finite(fit$ldet)))
     expect_false(is.null(fit$optimization_info))
+
+    if (spec$class == "gipsqda") {
+      expect_true(is.list(fit$optimization_info))
+      expect_named(fit$optimization_info, levels(fixture$grouping))
+      expect_length(fit$optimization_info, length(levels(fixture$grouping)))
+    }
   }
 })
