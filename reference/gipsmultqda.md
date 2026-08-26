@@ -110,8 +110,8 @@ An object of class `"gipsmultqda"` containing:
 
 - `N`: total number of observations
 
-- `optimization_info`: information returned by the covariance optimizer
-  for the joint projection
+- `optimization_info`: estimated probabilities of retained permutations
+  returned by the joint gips optimization
 
 - `call`: the matched call
 

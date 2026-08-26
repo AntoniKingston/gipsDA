@@ -114,7 +114,8 @@ An object of class `"gipslda"` containing:
 
 - `N`: number of observations
 
-- `optimization_info`: information about the gips optimization
+- `optimization_info`: estimated probabilities of retained permutations
+  returned by the gips optimization
 
 - `call`: matched call
 

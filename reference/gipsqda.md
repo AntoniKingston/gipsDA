@@ -111,8 +111,8 @@ An object of class `"gipsqda"` containing the following components:
 
 - `N`: total number of observations
 
-- `optimization_info`: information returned by the covariance projection
-  optimizer for the final class projection
+- `optimization_info`: named list of estimated probabilities of retained
+  permutations, one element per class
 
 - `call`: the matched call
 
