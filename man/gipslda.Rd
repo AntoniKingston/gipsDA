@@ -15,7 +15,8 @@ gipslda(x, ...)
 
 \method{gipslda}{default}(x, grouping, prior = proportions,
   tol = 1e-4, weighted_avg = FALSE,
-  MAP = TRUE, optimizer = NULL, max_iter = NULL, ...)
+  MAP = TRUE, optimizer = NULL, max_iter = NULL,
+  show_progress_bar = FALSE, ...)
 
 \method{gipslda}{data.frame}(x, ...)
 
@@ -56,6 +57,9 @@ retained posterior permutation probabilities.}
 (e.g. \code{"BF"} or \code{"MH"}).}
 
 \item{max_iter}{Maximum number of iterations for the optimizer.}
+
+\item{show_progress_bar}{Logical; if \code{TRUE}, display the progress bar
+from the underlying gips optimizer. Defaults to \code{FALSE}.}
 
 \item{weighted_avg}{Logical; if \code{FALSE}, use the pooled within-class
 scatter matrix. If \code{TRUE}, use a class-proportion-weighted average

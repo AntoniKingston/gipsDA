@@ -14,7 +14,8 @@ gipsmultqda(x, ...)
 \method{gipsmultqda}{formula}(formula, data, ..., subset, na.action)
 
 \method{gipsmultqda}{default}(x, grouping, prior = proportions,
-  nu = 5, MAP = TRUE, optimizer = NULL, max_iter = NULL, ...)
+  nu = 5, MAP = TRUE, optimizer = NULL, max_iter = NULL,
+  show_progress_bar = FALSE, ...)
 
 \method{gipsmultqda}{data.frame}(x, ...)
 
@@ -51,6 +52,9 @@ for covariance projection. If \code{NULL}, a default choice is made
 based on the problem dimension.}
 
 \item{max_iter}{Maximum number of iterations for stochastic optimizers.}
+
+\item{show_progress_bar}{Logical; if \code{TRUE}, display the progress bar
+from the underlying gips optimizer. Defaults to \code{FALSE}.}
 
 \item{subset}{An index vector specifying the cases to be used in the training
 sample. (NOTE: must be named.)}

@@ -54,7 +54,8 @@ numerical stability.</p>
 <span></span>
 <span><span class="co"># Default S3 method</span></span>
 <span><span class="fu">gipsqda</span><span class="op">(</span><span class="va">x</span>, <span class="va">grouping</span>, prior <span class="op">=</span> <span class="va">proportions</span>,</span>
-<span>  nu <span class="op">=</span> <span class="fl">5</span>, MAP <span class="op">=</span> <span class="cn">TRUE</span>, optimizer <span class="op">=</span> <span class="cn">NULL</span>, max_iter <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
+<span>  nu <span class="op">=</span> <span class="fl">5</span>, MAP <span class="op">=</span> <span class="cn">TRUE</span>, optimizer <span class="op">=</span> <span class="cn">NULL</span>, max_iter <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  show_progress_bar <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'data.frame'</span></span>
 <span><span class="fu">gipsqda</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -117,6 +118,11 @@ the problem dimension is used.</p></dd>
 
 <dt id="arg-max-iter">max_iter<a class="anchor" aria-label="anchor" href="#arg-max-iter"></a></dt>
 <dd><p>Maximum number of iterations for stochastic optimizers.</p></dd>
+
+
+<dt id="arg-show-progress-bar">show_progress_bar<a class="anchor" aria-label="anchor" href="#arg-show-progress-bar"></a></dt>
+<dd><p>Logical; if <code>TRUE</code>, display the progress bar
+from the underlying gips optimizer. Defaults to <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-subset">subset<a class="anchor" aria-label="anchor" href="#arg-subset"></a></dt>
@@ -187,7 +193,7 @@ Journal of Statistical Software, <strong>112</strong>(7), 1–38.
 <span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu">gipsqda</span><span class="op">(</span><span class="va">train</span>, <span class="va">cl</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">z</span>, <span class="va">test</span><span class="op">)</span><span class="op">$</span><span class="va">class</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] s s s s s s s s s s s s s s s s s s s s s s s s s c c c c c c c c c c c c c</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [39] c c v c c c c c c c c c v v v v v v v v v v v c v v v c v v c v v v v v v</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [39] c c v c c c c c c c c c v v v v v v v v v v v v v v v c v v v v v v v v v</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Levels: c s v</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

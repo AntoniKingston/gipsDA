@@ -18,7 +18,8 @@
 #' \method{gipsmultqda}{formula}(formula, data, ..., subset, na.action)
 #'
 #' \method{gipsmultqda}{default}(x, grouping, prior = proportions,
-#'   nu = 5, MAP = TRUE, optimizer = NULL, max_iter = NULL, ...)
+#'   nu = 5, MAP = TRUE, optimizer = NULL, max_iter = NULL,
+#'   show_progress_bar = FALSE, ...)
 #'
 #' \method{gipsmultqda}{data.frame}(x, ...)
 #'
@@ -44,6 +45,8 @@
 #'   for covariance projection. If \code{NULL}, a default choice is made
 #'   based on the problem dimension.
 #' @param max_iter Maximum number of iterations for stochastic optimizers.
+#' @param show_progress_bar Logical; if \code{TRUE}, display the progress bar
+#'   from the underlying gips optimizer. Defaults to \code{FALSE}.
 #' @param subset An index vector specifying the cases to be used in the training
 #'   sample. (NOTE: must be named.)
 #' @param na.action A function specifying the action to be taken if \code{NA}s
@@ -158,7 +161,7 @@ gipsmultqda.matrix <- function(x, grouping, ..., subset, na.action) {
 
 #' @exportS3Method
 gipsmultqda.default <-
-  function(x, grouping, prior = proportions, nu = 5, MAP = TRUE, optimizer = NULL, max_iter = NULL, ...) {
+  function(x, grouping, prior = proportions, nu = 5, MAP = TRUE, optimizer = NULL, max_iter = NULL, show_progress_bar = FALSE, ...) {
     if (is.null(dim(x))) stop("'x' is not a matrix")
     x <- as.matrix(x)
     if (any(!is.finite(x))) {
@@ -182,7 +185,7 @@ gipsmultqda.default <-
     names(prior) <- lev
 
     if (is.null(optimizer)) {
-      if (p < 10) {
+      if (p <= 10) {
         optimizer <- "BF"
       } else {
         optimizer <- "MH"
@@ -212,7 +215,7 @@ gipsmultqda.default <-
     #     cXs[[i]] <- cX$cov
     #     group.means[i,] <- cX$center
     # }
-    pr_cov_opt_info <- project_covs(cXs, counts, MAP, optimizer, max_iter)
+    pr_cov_opt_info <- project_covs(cXs, counts, MAP, optimizer, max_iter, show_progress_bar = show_progress_bar)
     cov_proj <- pr_cov_opt_info$covs
     cov_proj <- lapply(cov_proj, function(mat) desingularize(mat, 0.05))
     optimization_info <- pr_cov_opt_info$opt_info

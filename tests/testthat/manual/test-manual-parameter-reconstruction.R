@@ -126,7 +126,7 @@ manual_lda_parameters <- function(x, grouping, tol = 1e-4) {
   centered <- x - stats$means[grouping, , drop = FALSE]
   within_sd <- sqrt(diag(stats::var(centered)))
   standardizer <- diag(1 / within_sd, nrow = p, ncol = p)
-  pooled <- n / (n - number_of_groups) *
+  pooled <- (n - 1) / (n - number_of_groups) *
     stats::cov(centered %*% standardizer)
 
   projection <- manual_map_projection(list(pooled), n)
@@ -181,7 +181,7 @@ manual_qda_parameters <- function(x, grouping, joint = FALSE) {
     # gipsqda searches independently for each S_g and stores one optimizer
     # result per class.
     projections <- lapply(seq_along(empirical), function(i) {
-      manual_map_projection(list(empirical[[i]]), n)
+      manual_map_projection(list(empirical[[i]]), unname(stats$counts[i]))
     })
     projected <- lapply(projections, function(result) result$covariances[[1L]])
     permutation <- lapply(projections, function(result) result$permutation)
