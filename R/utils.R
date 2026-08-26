@@ -12,26 +12,49 @@ project_covs <- function(emp_covs, ns_obs, MAP = TRUE, optimizer, max_iter,
   } else {
     emp_covs
   }
+
   gg <- gips::gips(gips_input, ns_obs, was_mean_estimated = TRUE)
+
   if (!is.list(emp_covs)) {
     emp_covs <- list(emp_covs)
   }
-  if (MAP) {
-    gg <- gips::find_MAP(gg, optimizer = optimizer, max_iter = max_iter, show_progress_bar = show_progress_bar)
-    perm <- gg[[1]]
-    return(list(covs = lapply(emp_covs, function(x) gips::project_matrix(x, perm)), opt_info = perm))
-  }
-  gg <- gips::find_MAP(gg, optimizer = optimizer, max_iter = max_iter, return_probabilities = TRUE, save_all_perms = TRUE, show_progress_bar = show_progress_bar)
+
+  gg <- gips::find_MAP(
+    gg,
+    optimizer = optimizer,
+    max_iter = max_iter,
+    return_probabilities = TRUE,
+    save_all_perms = TRUE,
+    show_progress_bar = show_progress_bar
+  )
+
+  perm <- gg[[1L]]
   probs <- gips::get_probabilities_from_gips(gg)
+
   if (all(probs <= tol)) {
-    warning("There are no perms with estimated probability above threshold, projecting onto MAP")
-    probs <- probs[1]
+    if (!MAP) {
+      warning(
+        "There are no perms with estimated probability above threshold, keeping only the MAP permutation"
+      )
+    }
+    probs <- probs[1L]
   } else {
     probs <- probs[probs > tol]
   }
 
+  if (MAP) {
+    return(list(
+      covs = lapply(emp_covs, function(x) gips::project_matrix(x, perm)),
+      opt_info = probs,
+      permutation = perm
+    ))
+  }
 
-  return(list(covs = lapply(emp_covs, function(x) project_matrix_multiperm(x, probs)), opt_info = probs))
+  return(list(
+    covs = lapply(emp_covs, function(x) project_matrix_multiperm(x, probs)),
+    opt_info = probs,
+    permutation = perm
+  ))
 }
 
 
