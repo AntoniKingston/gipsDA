@@ -61,7 +61,8 @@ manual_desingularize <- function(A, target = 0.05) {
   (A + diag(s, nrow(A))) / (1 + s)
 }
 
-manual_map_projection <- function(empirical_covariances, sample_sizes) {
+manual_map_projection <- function(empirical_covariances, sample_sizes,
+                                  tol = 1e-3) {
   # For one covariance gips expects a matrix; for the joint model it expects
   # the complete list. `was_mean_estimated = TRUE` accounts for estimating
   # class means. BF enumerates all R^3 permutations and is deterministic.
@@ -70,17 +71,29 @@ manual_map_projection <- function(empirical_covariances, sample_sizes) {
   } else {
     empirical_covariances
   }
+
   search <- gips::gips(
     gips_input,
     sample_sizes,
     was_mean_estimated = TRUE
   )
+
   search <- gips::find_MAP(
     search,
     optimizer = "BF",
+    return_probabilities = TRUE,
+    save_all_perms = TRUE,
     show_progress_bar = FALSE
   )
+
   permutation <- search[[1L]]
+  probabilities <- gips::get_probabilities_from_gips(search)
+
+  if (all(probabilities <= tol)) {
+    probabilities <- probabilities[1L]
+  } else {
+    probabilities <- probabilities[probabilities > tol]
+  }
 
   list(
     covariances = lapply(
@@ -88,7 +101,8 @@ manual_map_projection <- function(empirical_covariances, sample_sizes) {
       gips::project_matrix,
       permutation
     ),
-    permutation = permutation
+    permutation = permutation,
+    optimization_info = probabilities
   )
 }
 
@@ -157,6 +171,7 @@ manual_lda_parameters <- function(x, grouping, tol = 1e-4) {
   c(stats, list(
     scaling = scaling,
     svd = between_svd$d[seq_len(between_rank)],
+    optimization_info = projection$optimization_info,
     permutation = projection$permutation,
     N = n
   ))
@@ -177,6 +192,7 @@ manual_qda_parameters <- function(x, grouping, joint = FALSE) {
     projection <- manual_map_projection(empirical, stats$counts)
     projected <- projection$covariances
     permutation <- projection$permutation
+    optimization_info <- projection$optimization_info
   } else {
     # gipsqda searches independently for each S_g and stores one optimizer
     # result per class.
@@ -186,6 +202,10 @@ manual_qda_parameters <- function(x, grouping, joint = FALSE) {
     projected <- lapply(projections, function(result) result$covariances[[1L]])
     permutation <- lapply(projections, function(result) result$permutation)
     names(permutation) <- stats$groups
+    optimization_info <- lapply(projections, function(result) {
+      result$optimization_info
+    })
+    names(optimization_info) <- stats$groups
   }
   projected <- lapply(projected, manual_desingularize)
 
@@ -209,6 +229,7 @@ manual_qda_parameters <- function(x, grouping, joint = FALSE) {
   c(stats, list(
     scaling = scaling,
     ldet = ldet,
+    optimization_info = optimization_info,
     permutation = permutation,
     N = n
   ))
@@ -223,12 +244,14 @@ expect_common_manual_parameters <- function(fit, reference, tolerance = 1e-10) {
 
   expect_same_optimization_info(
     fit$optimization_info,
-    reference$permutation,
-    reference$groups
+    reference$optimization_info,
+    reference$groups,
+    tolerance = tolerance
   )
 }
 
-expect_same_optimization_info <- function(actual, expected, groups) {
+expect_same_optimization_info <- function(actual, expected, groups,
+                                          tolerance = 1e-10) {
   is_grouped_expected <- is.list(expected) &&
     !is.null(names(expected)) &&
     identical(names(expected), groups)
@@ -239,17 +262,29 @@ expect_same_optimization_info <- function(actual, expected, groups) {
     expect_length(actual, length(groups))
 
     for (group in groups) {
-      expect_identical(
-        as.character(actual[[group]]),
-        as.character(expected[[group]])
+      expect_probability_vector_equal(
+        actual[[group]],
+        expected[[group]],
+        tolerance = tolerance
       )
     }
   } else {
-    expect_identical(
-      as.character(actual),
-      as.character(expected)
+    expect_probability_vector_equal(
+      actual,
+      expected,
+      tolerance = tolerance
     )
   }
+}
+
+expect_probability_vector_equal <- function(actual, expected,
+                                            tolerance = 1e-10) {
+  expect_identical(names(actual), names(expected))
+  expect_equal(
+    unname(actual),
+    unname(expected),
+    tolerance = tolerance
+  )
 }
 
 test_that("R3 model parameters equal independent base R and gips calculations", {

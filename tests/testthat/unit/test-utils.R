@@ -35,10 +35,13 @@ test_that("project_covs MAP mode accepts a matrix and a list", {
   )
 
   expect_length(matrix_result$covs, 1)
-  expect_s3_class(matrix_result$opt_info, "gips_perm")
+  expect_s3_class(matrix_result$permutation, "gips_perm")
+  expect_type(matrix_result$opt_info, "double")
+  expect_false(is.null(names(matrix_result$opt_info)))
+
   expect_equal(
     matrix_result$covs[[1]],
-    gips::project_matrix(cov_1, matrix_result$opt_info)
+    gips::project_matrix(cov_1, matrix_result$permutation)
   )
 
   list_result <- gipsDA:::project_covs(
@@ -50,10 +53,13 @@ test_that("project_covs MAP mode accepts a matrix and a list", {
   )
 
   expect_length(list_result$covs, 2)
-  expect_s3_class(list_result$opt_info, "gips_perm")
+  expect_s3_class(list_result$permutation, "gips_perm")
+  expect_type(list_result$opt_info, "double")
+  expect_false(is.null(names(list_result$opt_info)))
+
   expect_equal(
     list_result$covs,
-    lapply(list(cov_1, cov_2), gips::project_matrix, list_result$opt_info)
+    lapply(list(cov_1, cov_2), gips::project_matrix, list_result$permutation)
   )
 })
 

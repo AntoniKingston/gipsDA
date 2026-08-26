@@ -218,8 +218,8 @@ print.summary.gipsda <- function(x, ...) {
     print(x$scaling_dim, ...)
   }
 
-  cat("\nPermutation optimization information:\n")
-  print(x$optimization_info, ...)
+  cat("\nPermutations with their estimated probabilities:\n")
+  .print_optimization_info(x$optimization_info, ...)
 
   invisible(x)
 }
@@ -230,7 +230,13 @@ print.summary.gipsda <- function(x, ...) {
     return(invisible(NULL))
   }
 
-  if (is.list(x) && !inherits(x, "data.frame") && !inherits(x, "gips")) {
+  is_grouped_optimization_info <- is.list(x) &&
+    !inherits(x, c("data.frame", "gips", "gips_perm")) &&
+    !is.null(names(x)) &&
+    length(names(x)) == length(x) &&
+    all(nzchar(names(x)))
+
+  if (is_grouped_optimization_info) {
     for (nm in names(x)) {
       cat("\nGroup:", nm, "\n")
       print(x[[nm]], ...)

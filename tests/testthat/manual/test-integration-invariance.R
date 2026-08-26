@@ -146,7 +146,7 @@ test_that("MAP projection is invariant under its selected permutation", {
   projected <- result$covs[[1L]]
 
   expect_equal(
-    gips::project_matrix(projected, result$opt_info),
+    gips::project_matrix(projected, result$permutation),
     projected,
     tolerance = 1e-12
   )
