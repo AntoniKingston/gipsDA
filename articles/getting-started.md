@@ -111,6 +111,8 @@ fit
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
 #> Permutations with their estimated probabilities:
+#>   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) 
+#> 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725 
 #> 
 #> Coefficients of linear discriminants:
 #>                     LD1        LD2
@@ -262,6 +264,8 @@ lda_map
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
 #> Permutations with their estimated probabilities:
+#>   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) 
+#> 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725 
 #> 
 #> Coefficients of linear discriminants:
 #>                     LD1        LD2
@@ -447,6 +451,8 @@ print(lda_fit)
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
 #> Permutations with their estimated probabilities:
+#>   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) 
+#> 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725 
 #> 
 #> Coefficients of linear discriminants:
 #>                     LD1        LD2
@@ -509,8 +515,9 @@ summary(lda_fit)
 #>    LD1    LD2 
 #> 0.9888 0.0112 
 #> 
-#> Permutation optimization information:
-#> [1] (1243)
+#> Permutations with their estimated probabilities:
+#>   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) 
+#> 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725
 ```
 
 More details about fitted model objects are described in the [Advanced

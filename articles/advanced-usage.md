@@ -268,6 +268,8 @@ lda_map
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
 #> Permutations with their estimated probabilities:
+#>   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) 
+#> 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725 
 #> 
 #> Coefficients of linear discriminants:
 #>                     LD1        LD2
@@ -479,13 +481,16 @@ fit_bf
 #> Permutations with their estimated probabilities:
 #> 
 #> Group: setosa 
-#> [1] (12)
+#>       (1,2)  (1,2)(3,4)       (3,4)          () 
+#> 0.562114561 0.404501310 0.024221480 0.008570546 
 #> 
 #> Group: versicolor 
-#> [1] (23)
+#>       (2,3)          ()       (1,3)     (1,2,3)       (1,2)  (1,3)(2,4) 
+#> 0.889698934 0.061618087 0.029058419 0.015073718 0.002647551 0.001632264 
 #> 
 #> Group: virginica 
-#> [1] (13)(24)
+#>  (1,3)(2,4)       (1,3)       (2,4)          () 
+#> 0.849678403 0.089183371 0.058826178 0.001555686 
 #> 
 #> Log determinants of projected covariance matrices:
 #> [1] -10.197338  -8.531728  -8.239145
@@ -697,6 +702,8 @@ fit_formula
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
 #> Permutations with their estimated probabilities:
+#>   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) 
+#> 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725 
 #> 
 #> Coefficients of linear discriminants:
 #>                     LD1        LD2
@@ -757,6 +764,8 @@ fit_formula_short
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
 #> Permutations with their estimated probabilities:
+#>   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) 
+#> 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725 
 #> 
 #> Coefficients of linear discriminants:
 #>                     LD1        LD2
@@ -818,6 +827,8 @@ fit_subset
 #> virginica         6.588       2.974        5.552       2.026
 #> 
 #> Permutations with their estimated probabilities:
+#>  (1,3)(2,4)       (2,4)   (1,2,3,4)       (1,3) 
+#> 0.985895638 0.006447573 0.005315219 0.001732745 
 #> 
 #> Coefficients of linear discriminants:
 #>                    LD1
@@ -1082,6 +1093,8 @@ print(lda_fit)
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
 #> Permutations with their estimated probabilities:
+#>   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) 
+#> 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725 
 #> 
 #> Coefficients of linear discriminants:
 #>                     LD1        LD2
@@ -1134,13 +1147,16 @@ print(qda_fit)
 #> Permutations with their estimated probabilities:
 #> 
 #> Group: setosa 
-#> [1] (12)
+#>       (1,2)  (1,2)(3,4)       (3,4)          () 
+#> 0.562114561 0.404501310 0.024221480 0.008570546 
 #> 
 #> Group: versicolor 
-#> [1] (23)
+#>       (2,3)          ()       (1,3)     (1,2,3)       (1,2)  (1,3)(2,4) 
+#> 0.889698934 0.061618087 0.029058419 0.015073718 0.002647551 0.001632264 
 #> 
 #> Group: virginica 
-#> [1] (13)(24)
+#>  (1,3)(2,4)       (1,3)       (2,4)          () 
+#> 0.849678403 0.089183371 0.058826178 0.001555686 
 #> 
 #> Log determinants of projected covariance matrices:
 #> [1] -10.197338  -8.531728  -8.239145
@@ -1183,6 +1199,8 @@ print(joint_qda_fit)
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
 #> Permutations with their estimated probabilities:
+#>     (1,3)        () 
+#> 0.6386674 0.3609011 
 #> 
 #> Log determinants of projected covariance matrices:
 #> [1] -10.093275  -8.701035  -8.306090
@@ -1238,8 +1256,9 @@ summary(lda_fit)
 #>    LD1    LD2 
 #> 0.9888 0.0112 
 #> 
-#> Permutation optimization information:
-#> [1] (1243)
+#> Permutations with their estimated probabilities:
+#>   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) 
+#> 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725
 summary(qda_fit)
 #> Call:
 #> gipsqda(Species ~ ., data = train)
@@ -1280,15 +1299,19 @@ summary(qda_fit)
 #> Scaling array dimensions:
 #> [1] 4 4 3
 #> 
-#> Permutation optimization information:
-#> $setosa
-#> [1] (12)
+#> Permutations with their estimated probabilities:
 #> 
-#> $versicolor
-#> [1] (23)
+#> Group: setosa 
+#>       (1,2)  (1,2)(3,4)       (3,4)          () 
+#> 0.562114561 0.404501310 0.024221480 0.008570546 
 #> 
-#> $virginica
-#> [1] (13)(24)
+#> Group: versicolor 
+#>       (2,3)          ()       (1,3)     (1,2,3)       (1,2)  (1,3)(2,4) 
+#> 0.889698934 0.061618087 0.029058419 0.015073718 0.002647551 0.001632264 
+#> 
+#> Group: virginica 
+#>  (1,3)(2,4)       (1,3)       (2,4)          () 
+#> 0.849678403 0.089183371 0.058826178 0.001555686
 summary(joint_qda_fit)
 #> Call:
 #> gipsmultqda(Species ~ ., data = train)
@@ -1329,8 +1352,9 @@ summary(joint_qda_fit)
 #> Scaling array dimensions:
 #> [1] 4 4 3
 #> 
-#> Permutation optimization information:
-#> [1] (13)
+#> Permutations with their estimated probabilities:
+#>     (1,3)        () 
+#> 0.6386674 0.3609011
 ```
 
 Fitted models are list-like S3 objects, so you can inspect their
@@ -1374,26 +1398,31 @@ Inspect the optimization information directly.
 ``` r
 
 lda_fit$optimization_info
-#> [1] (1243)
+#>   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) 
+#> 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725
 ```
 
 ``` r
 
 qda_fit$optimization_info
 #> $setosa
-#> [1] (12)
+#>       (1,2)  (1,2)(3,4)       (3,4)          () 
+#> 0.562114561 0.404501310 0.024221480 0.008570546 
 #> 
 #> $versicolor
-#> [1] (23)
+#>       (2,3)          ()       (1,3)     (1,2,3)       (1,2)  (1,3)(2,4) 
+#> 0.889698934 0.061618087 0.029058419 0.015073718 0.002647551 0.001632264 
 #> 
 #> $virginica
-#> [1] (13)(24)
+#>  (1,3)(2,4)       (1,3)       (2,4)          () 
+#> 0.849678403 0.089183371 0.058826178 0.001555686
 ```
 
 ``` r
 
 joint_qda_fit$optimization_info
-#> [1] (13)
+#>     (1,3)        () 
+#> 0.6386674 0.3609011
 ```
 
 A compact helper can be useful when debugging fitted objects.
@@ -1433,7 +1462,7 @@ inspect_model(lda_fit)
 #> 5                lev      character      3      
 #> 6                svd        numeric      2      
 #> 7                  N        integer      1      
-#> 8  optimization_info      gips_perm      1      
+#> 8  optimization_info        numeric      5      
 #> 9           fit_info           list      4      
 #> 10              call           call      3      
 #> 11             terms terms, formula      3      
@@ -1470,7 +1499,7 @@ inspect_model(joint_qda_fit)
 #> 6                lev      character      3          
 #> 7                  N        integer      1          
 #> 8               call           call      3          
-#> 9  optimization_info      gips_perm      3          
+#> 9  optimization_info        numeric      2          
 #> 10          fit_info           list      3          
 #> 11             terms terms, formula      3          
 #> 12           xlevels           list      0

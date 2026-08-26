@@ -209,6 +209,8 @@ predict(z, Iris[-train, ])$class
 #> v 6.666667 3.005556 5.566667
 #> 
 #> Permutations with their estimated probabilities:
+#>       (2,3)          ()       (1,3)     (1,2,3) 
+#> 0.891542235 0.067187895 0.038375014 0.002848842 
 #> 
 #> Coefficients of linear discriminants:
 #>                 LD1       LD2
