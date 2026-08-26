@@ -75,7 +75,8 @@ An object of class \code{"gipslda"} containing:
 \item \code{lev}: class labels
 \item \code{svd}: singular values of the between-class scatter
 \item \code{N}: number of observations
-\item \code{optimization_info}: information about the gips optimization
+\item \code{optimization_info}: estimated probabilities of retained
+permutations returned by the gips optimization
 \item \code{call}: matched call
 \item Formula fits additionally contain \code{terms}, \code{contrasts},
 \code{xlevels}, and any recorded \code{na.action}.

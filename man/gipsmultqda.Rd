@@ -73,8 +73,8 @@ from the projected covariance matrices
 \item \code{ldet}: log-determinants of the projected covariance matrices
 \item \code{lev}: class labels
 \item \code{N}: total number of observations
-\item \code{optimization_info}: information returned by the covariance
-optimizer for the joint projection
+\item \code{optimization_info}: estimated probabilities of retained
+permutations returned by the joint gips optimization
 \item \code{call}: the matched call
 \item Formula fits additionally contain \code{terms}, \code{contrasts},
 \code{xlevels}, and any recorded \code{na.action}.
