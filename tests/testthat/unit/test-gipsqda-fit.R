@@ -244,5 +244,44 @@ test_that("QDA fits expose stable dimensions, labels, and finite estimates", {
     expect_true(all(is.finite(fit$means)))
     expect_true(all(is.finite(fit$ldet)))
     expect_false(is.null(fit$optimization_info))
+
+    if (spec$class == "gipsqda") {
+      expect_true(is.list(fit$optimization_info))
+      expect_named(fit$optimization_info, levels(fixture$grouping))
+      expect_length(fit$optimization_info, length(levels(fixture$grouping)))
+    }
   }
+})
+
+test_that("QDA models pass show_progress_bar to covariance projection", {
+  fixture <- make_binary_fixture(p = 2, n_per_class = 6)
+  seen_progress <- logical()
+
+  fake_project_covs <- function(emp_covs, ns_obs, MAP, optimizer, max_iter,
+                                ..., show_progress_bar = FALSE) {
+    seen_progress <<- c(seen_progress, show_progress_bar)
+    list(covs = emp_covs, opt_info = "mock optimization")
+  }
+
+  testthat::local_mocked_bindings(
+    project_covs = fake_project_covs,
+    .package = "gipsDA"
+  )
+
+  suppressWarnings(gipsqda(
+    fixture$x,
+    fixture$grouping,
+    optimizer = "BF",
+    show_progress_bar = TRUE
+  ))
+
+  suppressWarnings(gipsmultqda(
+    fixture$x,
+    fixture$grouping,
+    optimizer = "BF",
+    show_progress_bar = TRUE
+  ))
+
+  expect_true(all(seen_progress))
+  expect_length(seen_progress, length(levels(fixture$grouping)) + 1L)
 })

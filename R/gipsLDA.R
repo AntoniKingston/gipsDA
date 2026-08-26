@@ -8,7 +8,7 @@
 #' the classical sample covariance estimators by projected covariance matrices
 #' obtained using the \code{\link[gips]{gips}} framework.
 #' @name gipslda
-#' @aliases gipslda.default gipslda.data.frame gipslda.formula gipslda.matrix model.frame.gipslda print.gipslda
+#' @aliases gipslda.default gipslda.data.frame gipslda.formula gipslda.matrix model.frame.gipslda
 #'
 #' @usage
 #' gipslda(x, ...)
@@ -17,7 +17,8 @@
 #'
 #' \method{gipslda}{default}(x, grouping, prior = proportions,
 #'   tol = 1e-4, weighted_avg = FALSE,
-#'   MAP = TRUE, optimizer = NULL, max_iter = NULL, ...)
+#'   MAP = TRUE, optimizer = NULL, max_iter = NULL,
+#'   show_progress_bar = FALSE, ...)
 #'
 #' \method{gipslda}{data.frame}(x, ...)
 #'
@@ -47,6 +48,9 @@
 #'   (e.g. \code{"BF"} or \code{"MH"}).
 #'
 #' @param max_iter Maximum number of iterations for the optimizer.
+#'
+#' @param show_progress_bar Logical; if \code{TRUE}, display the progress bar
+#'   from the underlying gips optimizer. Defaults to \code{FALSE}.
 #'
 #' @param weighted_avg Logical; if \code{FALSE}, use the pooled within-class
 #'   scatter matrix. If \code{TRUE}, use a class-proportion-weighted average
@@ -163,7 +167,7 @@ gipslda.matrix <- function(x, grouping, ..., subset, na.action) {
 #' @exportS3Method
 gipslda.default <-
   function(x, grouping, prior = proportions, tol = 1.0e-4,
-           weighted_avg = FALSE, MAP = TRUE, optimizer = NULL, max_iter = NULL, ...) {
+           weighted_avg = FALSE, MAP = TRUE, optimizer = NULL, max_iter = NULL, show_progress_bar = FALSE, ...) {
     if (is.null(dim(x))) stop("'x' is not a matrix")
     x <- as.matrix(x)
     if (any(!is.finite(x))) {
@@ -197,7 +201,7 @@ gipslda.default <-
       counts <- as.vector(table(g))
     }
     if (is.null(optimizer)) {
-      if (p < 10) {
+      if (p <= 10) {
         optimizer <- "BF"
       } else {
         optimizer <- "MH"
@@ -232,24 +236,22 @@ gipslda.default <-
     # scale columns to unit variance before checking for collinearity
     scaling <- diag(1 / f1, , p)
     ####################################################################################
-    if (weighted_avg) {
-      # compute each class covariance matrix S_g
-      cov_list <- tapply(
-        1:nrow(x),
-        g,
-        function(idx) stats::cov(x[idx, , drop = FALSE])
-      )
+    x_centered_scaled <- (x - group.means[as.character(g), , drop = FALSE]) %*% scaling
 
-      # weighted pooled covariance: S = (1/n) * sum_g n_g * S_g
+    if (weighted_avg) {
+      cov_list <- lapply(seq_len(ng), function(i) {
+        idx <- unclass(g) == i
+        stats::cov(x_centered_scaled[idx, , drop = FALSE])
+      })
+
       cov_adj <- Reduce(`+`, Map(`*`, cov_list, proportions))
     } else {
-      # adjust to "unbiased" scaling of covariance matrix
-      cov_raw <- stats::cov((x - group.means[g, ]) %*% scaling)
-      cov_adj <- n / (n - ng) * cov_raw
+      cov_raw <- stats::cov(x_centered_scaled)
+      cov_adj <- (n - 1) / (n - ng) * cov_raw
     }
 
     # project covariance using gips
-    pr_cov_opt_info <- project_covs(list(cov_adj), n, MAP, optimizer, max_iter)
+    pr_cov_opt_info <- project_covs(list(cov_adj), n, MAP, optimizer, max_iter, show_progress_bar = show_progress_bar)
     cov_proj <- pr_cov_opt_info$covs[[1]]
     cov_proj <- desingularize(cov_proj, 0.05)
     optimization_info <- pr_cov_opt_info$opt_info
@@ -276,15 +278,24 @@ gipslda.default <-
     }
     cl <- match.call()
     cl[[1L]] <- as.name("gipslda")
-    cl$weighted_avg <- NULL
-    cl$MAP <- NULL
-    cl$optimizer <- NULL
-    cl$max_iter <- NULL
+
     structure(
       list(
-        prior = prior, counts = counts, means = group.means,
-        scaling = scaling, lev = lev, svd = X.s$d[1L:rank],
-        N = n, optimization_info = optimization_info, call = cl
+        prior = prior,
+        counts = counts,
+        means = group.means,
+        scaling = scaling,
+        lev = lev,
+        svd = X.s$d[1L:rank],
+        N = n,
+        optimization_info = optimization_info,
+        fit_info = list(
+          MAP = MAP,
+          optimizer = optimizer,
+          max_iter = max_iter,
+          weighted_avg = weighted_avg
+        ),
+        call = cl
       ),
       class = "gipslda"
     )
@@ -404,29 +415,6 @@ predict.gipslda <- function(object, newdata, prior = object$prior, dimen,
   list(class = cl, posterior = posterior, x = x[, 1L:dimen, drop = FALSE])
 }
 
-#' @exportS3Method
-print.gipslda <- function(x, ...) {
-  if (!is.null(cl <- x$call)) {
-    names(cl)[2L] <- ""
-    cat("Call:\n")
-    dput(cl, control = NULL)
-  }
-  cat("\nPrior probabilities of groups:\n")
-  print(x$prior, ...)
-  cat("\nGroup means:\n")
-  print(x$means, ...)
-  cat("\nCoefficients of linear discriminants:\n")
-  print(x$scaling, ...)
-  svd <- x$svd
-  names(svd) <- dimnames(x$scaling)[[2L]]
-  if (length(svd) > 1L) {
-    cat("\nProportion of trace:\n")
-    print(round(svd^2 / sum(svd^2), 4L), ...)
-  }
-  cat("\nPermutations with their estimated probabilities:\n")
-  print(x$optimization_info)
-  invisible(x)
-}
 
 #' Plot a fitted gips LDA model
 #'

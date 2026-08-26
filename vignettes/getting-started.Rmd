@@ -25,9 +25,9 @@ structures learned with the `gips` framework.
 
 The package provides three model-fitting functions:
 
-- `gipslda()` — LDA with a projected pooled covariance matrix.
-- `gipsqda()` — QDA with independently projected class-specific covariance matrices.
-- `gipsmultqda()` — QDA with class-specific covariance matrices and a jointly
+- `gipslda()` - LDA with a projected pooled covariance matrix.
+- `gipsqda()` - QDA with independently projected class-specific covariance matrices.
+- `gipsmultqda()` - QDA with class-specific covariance matrices and a jointly
   estimated permutation structure.
 
 The functions follow the familiar conventions of `MASS::lda()` and

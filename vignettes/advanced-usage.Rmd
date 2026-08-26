@@ -728,11 +728,11 @@ For `gipslda()` objects, standard LDA-style diagnostics are available.
 coef(lda_fit)
 ```
 
-```{r, fig.width = 6, fig.height = 5}
+```{r, fig.width = 6, fig.height = 5, fig.alt = "Plot of the fitted gipslda model in discriminant space."}
 plot(lda_fit)
 ```
 
-```{r, fig.width = 6, fig.height = 5}
+```{r, fig.width = 6, fig.height = 5, fig.alt = "Pairs plot of discriminant coordinates for the fitted gipslda model."}
 pairs(lda_fit, type = "std")
 ```
 

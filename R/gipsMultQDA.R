@@ -10,7 +10,7 @@
 #'
 #' @name gipsmultqda
 #' @aliases
-#'   gipsmultqda gipsmultqda.default gipsmultqda.formula gipsmultqda.data.frame gipsmultqda.matrix print.gipsmultqda model.frame.gipsmultqda
+#'   gipsmultqda gipsmultqda.default gipsmultqda.formula gipsmultqda.data.frame gipsmultqda.matrix model.frame.gipsmultqda
 #'
 #' @usage
 #' gipsmultqda(x, ...)
@@ -18,7 +18,8 @@
 #' \method{gipsmultqda}{formula}(formula, data, ..., subset, na.action)
 #'
 #' \method{gipsmultqda}{default}(x, grouping, prior = proportions,
-#'   nu = 5, MAP = TRUE, optimizer = NULL, max_iter = NULL, ...)
+#'   nu = 5, MAP = TRUE, optimizer = NULL, max_iter = NULL,
+#'   show_progress_bar = FALSE, ...)
 #'
 #' \method{gipsmultqda}{data.frame}(x, ...)
 #'
@@ -44,6 +45,8 @@
 #'   for covariance projection. If \code{NULL}, a default choice is made
 #'   based on the problem dimension.
 #' @param max_iter Maximum number of iterations for stochastic optimizers.
+#' @param show_progress_bar Logical; if \code{TRUE}, display the progress bar
+#'   from the underlying gips optimizer. Defaults to \code{FALSE}.
 #' @param subset An index vector specifying the cases to be used in the training
 #'   sample. (NOTE: must be named.)
 #' @param na.action A function specifying the action to be taken if \code{NA}s
@@ -158,7 +161,7 @@ gipsmultqda.matrix <- function(x, grouping, ..., subset, na.action) {
 
 #' @exportS3Method
 gipsmultqda.default <-
-  function(x, grouping, prior = proportions, nu = 5, MAP = TRUE, optimizer = NULL, max_iter = NULL, ...) {
+  function(x, grouping, prior = proportions, nu = 5, MAP = TRUE, optimizer = NULL, max_iter = NULL, show_progress_bar = FALSE, ...) {
     if (is.null(dim(x))) stop("'x' is not a matrix")
     x <- as.matrix(x)
     if (any(!is.finite(x))) {
@@ -182,7 +185,7 @@ gipsmultqda.default <-
     names(prior) <- lev
 
     if (is.null(optimizer)) {
-      if (p < 10) {
+      if (p <= 10) {
         optimizer <- "BF"
       } else {
         optimizer <- "MH"
@@ -212,7 +215,7 @@ gipsmultqda.default <-
     #     cXs[[i]] <- cX$cov
     #     group.means[i,] <- cX$center
     # }
-    pr_cov_opt_info <- project_covs(cXs, counts, MAP, optimizer, max_iter)
+    pr_cov_opt_info <- project_covs(cXs, counts, MAP, optimizer, max_iter, show_progress_bar = show_progress_bar)
     cov_proj <- pr_cov_opt_info$covs
     cov_proj <- lapply(cov_proj, function(mat) desingularize(mat, 0.05))
     optimization_info <- pr_cov_opt_info$opt_info
@@ -232,8 +235,20 @@ gipsmultqda.default <-
     cl <- match.call()
     cl[[1L]] <- as.name("gipsmultqda")
     res <- list(
-      prior = prior, counts = counts, means = group.means,
-      scaling = scaling, ldet = ldet, lev = lev, N = n, call = cl, optimization_info = optimization_info
+      prior = prior,
+      counts = counts,
+      means = group.means,
+      scaling = scaling,
+      ldet = ldet,
+      lev = lev,
+      N = n,
+      call = cl,
+      optimization_info = optimization_info,
+      fit_info = list(
+        MAP = MAP,
+        optimizer = optimizer,
+        max_iter = max_iter
+      )
     )
     class(res) <- "gipsmultqda"
     res
@@ -402,23 +417,6 @@ predict.gipsmultqda <- function(object, newdata, prior = object$prior,
   dimnames(posterior) <- list(rownames(x), object$lev)
   list(class = cl, posterior = posterior)
 }
-
-#' @exportS3Method
-print.gipsmultqda <- function(x, ...) {
-  if (!is.null(cl <- x$call)) {
-    names(cl)[2L] <- ""
-    cat("Call:\n")
-    dput(cl, control = NULL)
-  }
-  cat("\nPrior probabilities of groups:\n")
-  print(x$prior, ...)
-  cat("\nGroup means:\n")
-  print(x$means, ...)
-  cat("\nPermutations with their estimated probabilities:\n")
-  print(x$optimization_info)
-  invisible(x)
-}
-
 
 #' @exportS3Method
 model.frame.gipsmultqda <- model.frame.gipslda

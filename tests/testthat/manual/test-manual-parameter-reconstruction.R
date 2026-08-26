@@ -126,7 +126,7 @@ manual_lda_parameters <- function(x, grouping, tol = 1e-4) {
   centered <- x - stats$means[grouping, , drop = FALSE]
   within_sd <- sqrt(diag(stats::var(centered)))
   standardizer <- diag(1 / within_sd, nrow = p, ncol = p)
-  pooled <- n / (n - number_of_groups) *
+  pooled <- (n - 1) / (n - number_of_groups) *
     stats::cov(centered %*% standardizer)
 
   projection <- manual_map_projection(list(pooled), n)
@@ -176,16 +176,16 @@ manual_qda_parameters <- function(x, grouping, joint = FALSE) {
     # class sample sizes, and applies the resulting permutation to every S_g.
     projection <- manual_map_projection(empirical, stats$counts)
     projected <- projection$covariances
-    permutations <- list(projection$permutation)
+    permutation <- projection$permutation
   } else {
-    # gipsqda searches independently for each S_g. Its implementation supplies
-    # total n to every single-covariance gips fit and stores the final class's
-    # optimizer result in `optimization_info`.
-    projections <- lapply(empirical, function(S) {
-      manual_map_projection(list(S), n)
+    # gipsqda searches independently for each S_g and stores one optimizer
+    # result per class.
+    projections <- lapply(seq_along(empirical), function(i) {
+      manual_map_projection(list(empirical[[i]]), unname(stats$counts[i]))
     })
     projected <- lapply(projections, function(result) result$covariances[[1L]])
-    permutations <- lapply(projections, function(result) result$permutation)
+    permutation <- lapply(projections, function(result) result$permutation)
+    names(permutation) <- stats$groups
   }
   projected <- lapply(projected, manual_desingularize)
 
@@ -209,7 +209,7 @@ manual_qda_parameters <- function(x, grouping, joint = FALSE) {
   c(stats, list(
     scaling = scaling,
     ldet = ldet,
-    permutation = permutations[[length(permutations)]],
+    permutation = permutation,
     N = n
   ))
 }
@@ -220,10 +220,36 @@ expect_common_manual_parameters <- function(fit, reference, tolerance = 1e-10) {
   expect_equal(fit$means, reference$means, tolerance = tolerance)
   expect_identical(fit$lev, reference$groups)
   expect_identical(fit$N, reference$N)
-  expect_identical(
-    as.character(fit$optimization_info),
-    as.character(reference$permutation)
+
+  expect_same_optimization_info(
+    fit$optimization_info,
+    reference$permutation,
+    reference$groups
   )
+}
+
+expect_same_optimization_info <- function(actual, expected, groups) {
+  is_grouped_expected <- is.list(expected) &&
+    !is.null(names(expected)) &&
+    identical(names(expected), groups)
+
+  if (is_grouped_expected) {
+    expect_true(is.list(actual))
+    expect_named(actual, groups)
+    expect_length(actual, length(groups))
+
+    for (group in groups) {
+      expect_identical(
+        as.character(actual[[group]]),
+        as.character(expected[[group]])
+      )
+    }
+  } else {
+    expect_identical(
+      as.character(actual),
+      as.character(expected)
+    )
+  }
 }
 
 test_that("R3 model parameters equal independent base R and gips calculations", {
