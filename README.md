@@ -4,7 +4,7 @@
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN status](https://www.r-pkg.org/badges/version/gipsDA)](https://CRAN.R-project.org/package=gipsDA)
 [![R-CMD-check](https://github.com/AntoniKingston/gipsDA/actions/workflows/R-CMD-check.yaml/badge.svg?branch=nomult)](https://github.com/AntoniKingston/gipsDA/actions/workflows/R-CMD-check.yaml)
-[![Codecov](https://codecov.io/gh/AntoniKingston/gipsDA/branch/nomult/graph/badge.svg)](https://app.codecov.io/gh/AntoniKingston/gipsDA)
+[![Codecov](https://codecov.io/gh/AntoniKingston/gipsDA/branch/main/graph/badge.svg)](https://app.codecov.io/gh/AntoniKingston/gipsDA)
 <!-- badges: end -->
 
 `gipsDA` provides linear and quadratic discriminant analysis with structured
