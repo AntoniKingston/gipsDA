@@ -117,6 +117,9 @@ An object of class `"gipslda"` containing:
 - `optimization_info`: estimated probabilities of retained permutations
   returned by the gips optimization
 
+- `selected_map_permutation`: MAP permutation selected by the gips
+  optimization and used for MAP covariance projection
+
 - `call`: matched call
 
 - Formula fits additionally contain `terms`, `contrasts`, `xlevels`, and
@@ -209,7 +212,9 @@ predict(z, Iris[-train, ])$class
 #> s 4.978125 3.390625 1.468750
 #> v 6.666667 3.005556 5.566667
 #> 
-#> Permutations with their estimated probabilities:
+#> Selected MAP permutation: (2,3) 
+#> 
+#> Posterior probabilities of retained permutations:
 #>       (2,3)          ()       (1,3)     (1,2,3) 
 #> 0.891542235 0.067187895 0.038375014 0.002848842 
 #> 

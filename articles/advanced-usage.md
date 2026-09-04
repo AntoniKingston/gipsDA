@@ -20,7 +20,9 @@ It covers:
 - leave-one-out prediction,
 - model inspection and diagnostics.
 
-For a shorter first example, see the “Getting started” vignette.
+For a shorter first example, see the [Getting
+started](https://antonikingston.github.io/gipsDA/articles/getting-started.md)
+vignette.
 
 ``` r
 
@@ -267,7 +269,9 @@ lda_map
 #> versicolor     5.911429    2.771429     4.302857   1.3371429
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
-#> Permutations with their estimated probabilities:
+#> Selected MAP permutation: (1,2,4,3) 
+#> 
+#> Posterior probabilities of retained permutations:
 #>   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) 
 #> 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725 
 #> 
@@ -331,7 +335,7 @@ lda_avg
 #> versicolor     5.911429    2.771429     4.302857   1.3371429
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
-#> Permutations with their estimated probabilities:
+#> Posterior probabilities of retained permutations:
 #>   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) 
 #> 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725 
 #> 
@@ -427,10 +431,10 @@ which features are treated as exchangeable by the covariance model.
 The `optimizer` argument controls how permutation structures are
 searched.
 
-| Value  | Meaning                    | Typical use                         |
-|--------|----------------------------|-------------------------------------|
-| `"BF"` | brute-force search         | small problems, typically `p <= 10` |
-| `"MH"` | Metropolis-Hastings search | larger problems, typically `p > 10` |
+| Value | Meaning | Typical use |
+|----|----|----|
+| `"BF"` | brute-force search | small number of dimensions, default for `p <= 10` |
+| `"MH"` | Metropolis-Hastings search | larger number of dimensions, default for `p > 10` |
 
 The brute-force optimizer searches the relevant permutation space
 exhaustively. It is deterministic, but its cost grows quickly with the
@@ -478,7 +482,16 @@ fit_bf
 #> versicolor     5.911429    2.771429     4.302857   1.3371429
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
-#> Permutations with their estimated probabilities:
+#> Group: setosa 
+#> Selected MAP permutation: (1,2) 
+#> 
+#> Group: versicolor 
+#> Selected MAP permutation: (2,3) 
+#> 
+#> Group: virginica 
+#> Selected MAP permutation: (1,3)(2,4) 
+#> 
+#> Posterior probabilities of retained permutations:
 #> 
 #> Group: setosa 
 #>       (1,2)  (1,2)(3,4)       (3,4)          () 
@@ -701,7 +714,9 @@ fit_formula
 #> versicolor     5.911429    2.771429     4.302857   1.3371429
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
-#> Permutations with their estimated probabilities:
+#> Selected MAP permutation: (1,2,4,3) 
+#> 
+#> Posterior probabilities of retained permutations:
 #>   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) 
 #> 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725 
 #> 
@@ -763,7 +778,9 @@ fit_formula_short
 #> versicolor     5.911429    2.771429     4.302857   1.3371429
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
-#> Permutations with their estimated probabilities:
+#> Selected MAP permutation: (1,2,4,3) 
+#> 
+#> Posterior probabilities of retained permutations:
 #>   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) 
 #> 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725 
 #> 
@@ -826,7 +843,9 @@ fit_subset
 #> versicolor        5.936       2.770        4.260       1.326
 #> virginica         6.588       2.974        5.552       2.026
 #> 
-#> Permutations with their estimated probabilities:
+#> Selected MAP permutation: (1,3)(2,4) 
+#> 
+#> Posterior probabilities of retained permutations:
 #>  (1,3)(2,4)       (2,4)   (1,2,3,4)       (1,3) 
 #> 0.985895638 0.006447573 0.005315219 0.001732745 
 #> 
@@ -1092,7 +1111,9 @@ print(lda_fit)
 #> versicolor     5.911429    2.771429     4.302857   1.3371429
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
-#> Permutations with their estimated probabilities:
+#> Selected MAP permutation: (1,2,4,3) 
+#> 
+#> Posterior probabilities of retained permutations:
 #>   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) 
 #> 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725 
 #> 
@@ -1144,7 +1165,16 @@ print(qda_fit)
 #> versicolor     5.911429    2.771429     4.302857   1.3371429
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
-#> Permutations with their estimated probabilities:
+#> Group: setosa 
+#> Selected MAP permutation: (1,2) 
+#> 
+#> Group: versicolor 
+#> Selected MAP permutation: (2,3) 
+#> 
+#> Group: virginica 
+#> Selected MAP permutation: (1,3)(2,4) 
+#> 
+#> Posterior probabilities of retained permutations:
 #> 
 #> Group: setosa 
 #>       (1,2)  (1,2)(3,4)       (3,4)          () 
@@ -1198,7 +1228,9 @@ print(joint_qda_fit)
 #> versicolor     5.911429    2.771429     4.302857   1.3371429
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
-#> Permutations with their estimated probabilities:
+#> Selected MAP permutation: (1,3) 
+#> 
+#> Posterior probabilities of retained permutations:
 #>     (1,3)        () 
 #> 0.6386674 0.3609011 
 #> 
@@ -1256,7 +1288,9 @@ summary(lda_fit)
 #>    LD1    LD2 
 #> 0.9888 0.0112 
 #> 
-#> Permutations with their estimated probabilities:
+#> Selected MAP permutation: (1,2,4,3) 
+#> 
+#> Posterior probabilities of retained permutations:
 #>   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) 
 #> 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725
 summary(qda_fit)
@@ -1299,7 +1333,16 @@ summary(qda_fit)
 #> Scaling array dimensions:
 #> [1] 4 4 3
 #> 
-#> Permutations with their estimated probabilities:
+#> Group: setosa 
+#> Selected MAP permutation: (1,2) 
+#> 
+#> Group: versicolor 
+#> Selected MAP permutation: (2,3) 
+#> 
+#> Group: virginica 
+#> Selected MAP permutation: (1,3)(2,4) 
+#> 
+#> Posterior probabilities of retained permutations:
 #> 
 #> Group: setosa 
 #>       (1,2)  (1,2)(3,4)       (3,4)          () 
@@ -1352,7 +1395,9 @@ summary(joint_qda_fit)
 #> Scaling array dimensions:
 #> [1] 4 4 3
 #> 
-#> Permutations with their estimated probabilities:
+#> Selected MAP permutation: (1,3) 
+#> 
+#> Posterior probabilities of retained permutations:
 #>     (1,3)        () 
 #> 0.6386674 0.3609011
 ```
@@ -1363,20 +1408,29 @@ component names.
 ``` r
 
 names(lda_fit)
-#>  [1] "prior"             "counts"            "means"            
-#>  [4] "scaling"           "lev"               "svd"              
-#>  [7] "N"                 "optimization_info" "fit_info"         
-#> [10] "call"              "terms"             "xlevels"
+#>  [1] "prior"                    "counts"                  
+#>  [3] "means"                    "scaling"                 
+#>  [5] "lev"                      "svd"                     
+#>  [7] "N"                        "optimization_info"       
+#>  [9] "selected_map_permutation" "fit_info"                
+#> [11] "call"                     "terms"                   
+#> [13] "xlevels"
 names(qda_fit)
-#>  [1] "prior"             "counts"            "means"            
-#>  [4] "scaling"           "ldet"              "lev"              
-#>  [7] "N"                 "call"              "optimization_info"
-#> [10] "fit_info"          "terms"             "xlevels"
+#>  [1] "prior"                    "counts"                  
+#>  [3] "means"                    "scaling"                 
+#>  [5] "ldet"                     "lev"                     
+#>  [7] "N"                        "call"                    
+#>  [9] "optimization_info"        "selected_map_permutation"
+#> [11] "fit_info"                 "terms"                   
+#> [13] "xlevels"
 names(joint_qda_fit)
-#>  [1] "prior"             "counts"            "means"            
-#>  [4] "scaling"           "ldet"              "lev"              
-#>  [7] "N"                 "call"              "optimization_info"
-#> [10] "fit_info"          "terms"             "xlevels"
+#>  [1] "prior"                    "counts"                  
+#>  [3] "means"                    "scaling"                 
+#>  [5] "ldet"                     "lev"                     
+#>  [7] "N"                        "call"                    
+#>  [9] "optimization_info"        "selected_map_permutation"
+#> [11] "fit_info"                 "terms"                   
+#> [13] "xlevels"
 ```
 
 The exact set of components depends on the model family, but the most
@@ -1454,55 +1508,58 @@ inspect_model <- function(object) {
 ``` r
 
 inspect_model(lda_fit)
-#>            component          class length   dim
-#> 1              prior        numeric      3      
-#> 2             counts        integer      3      
-#> 3              means  matrix, array     12 3 x 4
-#> 4            scaling  matrix, array      8 4 x 2
-#> 5                lev      character      3      
-#> 6                svd        numeric      2      
-#> 7                  N        integer      1      
-#> 8  optimization_info        numeric      5      
-#> 9           fit_info           list      4      
-#> 10              call           call      3      
-#> 11             terms terms, formula      3      
-#> 12           xlevels           list      0
+#>                   component          class length   dim
+#> 1                     prior        numeric      3      
+#> 2                    counts        integer      3      
+#> 3                     means  matrix, array     12 3 x 4
+#> 4                   scaling  matrix, array      8 4 x 2
+#> 5                       lev      character      3      
+#> 6                       svd        numeric      2      
+#> 7                         N        integer      1      
+#> 8         optimization_info        numeric      5      
+#> 9  selected_map_permutation      gips_perm      1      
+#> 10                 fit_info           list      4      
+#> 11                     call           call      3      
+#> 12                    terms terms, formula      3      
+#> 13                  xlevels           list      0
 ```
 
 ``` r
 
 inspect_model(qda_fit)
-#>            component          class length       dim
-#> 1              prior        numeric      3          
-#> 2             counts        integer      3          
-#> 3              means  matrix, array     12     3 x 4
-#> 4            scaling          array     48 4 x 4 x 3
-#> 5               ldet        numeric      3          
-#> 6                lev      character      3          
-#> 7                  N        integer      1          
-#> 8               call           call      3          
-#> 9  optimization_info           list      3          
-#> 10          fit_info           list      3          
-#> 11             terms terms, formula      3          
-#> 12           xlevels           list      0
+#>                   component          class length       dim
+#> 1                     prior        numeric      3          
+#> 2                    counts        integer      3          
+#> 3                     means  matrix, array     12     3 x 4
+#> 4                   scaling          array     48 4 x 4 x 3
+#> 5                      ldet        numeric      3          
+#> 6                       lev      character      3          
+#> 7                         N        integer      1          
+#> 8                      call           call      3          
+#> 9         optimization_info           list      3          
+#> 10 selected_map_permutation           list      3          
+#> 11                 fit_info           list      3          
+#> 12                    terms terms, formula      3          
+#> 13                  xlevels           list      0
 ```
 
 ``` r
 
 inspect_model(joint_qda_fit)
-#>            component          class length       dim
-#> 1              prior        numeric      3          
-#> 2             counts        integer      3          
-#> 3              means  matrix, array     12     3 x 4
-#> 4            scaling          array     48 4 x 4 x 3
-#> 5               ldet        numeric      3          
-#> 6                lev      character      3          
-#> 7                  N        integer      1          
-#> 8               call           call      3          
-#> 9  optimization_info        numeric      2          
-#> 10          fit_info           list      3          
-#> 11             terms terms, formula      3          
-#> 12           xlevels           list      0
+#>                   component          class length       dim
+#> 1                     prior        numeric      3          
+#> 2                    counts        integer      3          
+#> 3                     means  matrix, array     12     3 x 4
+#> 4                   scaling          array     48 4 x 4 x 3
+#> 5                      ldet        numeric      3          
+#> 6                       lev      character      3          
+#> 7                         N        integer      1          
+#> 8                      call           call      3          
+#> 9         optimization_info        numeric      2          
+#> 10 selected_map_permutation      gips_perm      3          
+#> 11                 fit_info           list      3          
+#> 12                    terms terms, formula      3          
+#> 13                  xlevels           list      0
 ```
 
 ## LDA diagnostics

@@ -110,7 +110,9 @@ fit
 #> versicolor     5.911429    2.771429     4.302857   1.3371429
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
-#> Permutations with their estimated probabilities:
+#> Selected MAP permutation: (1,2,4,3) 
+#> 
+#> Posterior probabilities of retained permutations:
 #>   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) 
 #> 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725 
 #> 
@@ -263,7 +265,9 @@ lda_map
 #> versicolor     5.911429    2.771429     4.302857   1.3371429
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
-#> Permutations with their estimated probabilities:
+#> Selected MAP permutation: (1,2,4,3) 
+#> 
+#> Posterior probabilities of retained permutations:
 #>   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) 
 #> 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725 
 #> 
@@ -328,7 +332,7 @@ lda_avg
 #> versicolor     5.911429    2.771429     4.302857   1.3371429
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
-#> Permutations with their estimated probabilities:
+#> Posterior probabilities of retained permutations:
 #>   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) 
 #> 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725 
 #> 
@@ -359,10 +363,10 @@ vignette.
 The `optimizer` argument controls how permutation structures are
 searched.
 
-| Value  | Meaning                    | Recommended use                     |
-|--------|----------------------------|-------------------------------------|
-| `"BF"` | brute-force search         | small problems, typically `p <= 10` |
-| `"MH"` | Metropolis-Hastings search | larger problems, typically `p > 10` |
+| Value | Meaning | Recommended use |
+|----|----|----|
+| `"BF"` | brute-force search | small number of dimensions, default for `p <= 10` |
+| `"MH"` | Metropolis-Hastings search | larger number of dimensions, default for `p > 10` |
 
 For `optimizer = "MH"`, use `max_iter` to control the number of
 iterations.
@@ -450,7 +454,9 @@ print(lda_fit)
 #> versicolor     5.911429    2.771429     4.302857   1.3371429
 #> virginica      6.725714    3.020000     5.654286   2.0685714
 #> 
-#> Permutations with their estimated probabilities:
+#> Selected MAP permutation: (1,2,4,3) 
+#> 
+#> Posterior probabilities of retained permutations:
 #>   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) 
 #> 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725 
 #> 
@@ -515,7 +521,9 @@ summary(lda_fit)
 #>    LD1    LD2 
 #> 0.9888 0.0112 
 #> 
-#> Permutations with their estimated probabilities:
+#> Selected MAP permutation: (1,2,4,3) 
+#> 
+#> Posterior probabilities of retained permutations:
 #>   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) 
 #> 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725
 ```
@@ -609,8 +617,8 @@ The main tuning choices are:
 |----|----|
 | `MAP = TRUE` | use one selected Maximum A Posteriori permutation |
 | `MAP = FALSE` | average over retained permutations using posterior probabilities |
-| `optimizer = "BF"` | exhaustive search, typically for `p <= 10` |
-| `optimizer = "MH"` | stochastic search, typically for `p > 10` |
+| `optimizer = "BF"` | exhaustive search, default for `p <= 10` |
+| `optimizer = "MH"` | stochastic search, default for `p > 10` |
 | `max_iter` | used only with `optimizer = "MH"` |
 | `weighted_avg` | changes the pooled covariance estimator in [`gipslda()`](https://antonikingston.github.io/gipsDA/reference/gipslda.md) |
 

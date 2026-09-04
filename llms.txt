@@ -170,6 +170,17 @@ with S*. Fourth edition. Springer.
   : Quadratic Discriminant Analysis with multiple gips-projected
   covariances
 
+## Model inspection
+
+- [`print(`*`<gipslda>`*`)`](https://antonikingston.github.io/gipsDA/reference/print.gipslda.md)
+  [`print(`*`<gipsqda>`*`)`](https://antonikingston.github.io/gipsDA/reference/print.gipslda.md)
+  [`print(`*`<gipsmultqda>`*`)`](https://antonikingston.github.io/gipsDA/reference/print.gipslda.md)
+  : Print a fitted gipsDA model
+- [`summary(`*`<gipslda>`*`)`](https://antonikingston.github.io/gipsDA/reference/summary.gipslda.md)
+  [`summary(`*`<gipsqda>`*`)`](https://antonikingston.github.io/gipsDA/reference/summary.gipslda.md)
+  [`summary(`*`<gipsmultqda>`*`)`](https://antonikingston.github.io/gipsDA/reference/summary.gipslda.md)
+  : Summarize a fitted gipsDA model
+
 ## Prediction
 
 - [`predict(`*`<gipslda>`*`)`](https://antonikingston.github.io/gipsDA/reference/predict.gipslda.md)

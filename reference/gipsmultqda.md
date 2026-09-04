@@ -113,6 +113,9 @@ An object of class `"gipsmultqda"` containing:
 - `optimization_info`: estimated probabilities of retained permutations
   returned by the joint gips optimization
 
+- `selected_map_permutation`: MAP permutation selected by the joint gips
+  optimization and used for MAP covariance projection
+
 - `call`: the matched call
 
 - Formula fits additionally contain `terms`, `contrasts`, `xlevels`, and

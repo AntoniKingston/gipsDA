@@ -114,6 +114,9 @@ An object of class `"gipsqda"` containing the following components:
 - `optimization_info`: named list of estimated probabilities of retained
   permutations, one element per class
 
+- `selected_map_permutation`: named list of MAP permutations selected
+  independently for each class
+
 - `call`: the matched call
 
 - Formula fits additionally contain `terms`, `contrasts`, `xlevels`, and
