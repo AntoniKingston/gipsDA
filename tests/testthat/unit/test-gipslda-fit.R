@@ -140,7 +140,7 @@ test_that("fit output has stable structural invariants", {
     fit,
     c(
       "prior", "counts", "means", "scaling", "lev", "svd", "N",
-      "optimization_info", "fit_info", "call"
+      "optimization_info", "selected_map_permutation", "fit_info", "call"
     )
   )
 

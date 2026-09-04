@@ -23,4 +23,3 @@ An object of class \code{"summary.gipsda"}.
 \description{
 Summarize a fitted gipsDA model
 }
-\keyword{internal}

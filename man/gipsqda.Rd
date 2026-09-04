@@ -76,6 +76,8 @@ projected covariance matrices
 \item \code{N}: total number of observations
 \item \code{optimization_info}: named list of estimated probabilities of
 retained permutations, one element per class
+\item \code{selected_map_permutation}: named list of MAP permutations
+selected independently for each class
 \item \code{call}: the matched call
 \item Formula fits additionally contain \code{terms}, \code{contrasts},
 \code{xlevels}, and any recorded \code{na.action}.

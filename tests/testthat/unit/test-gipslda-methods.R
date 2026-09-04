@@ -142,7 +142,11 @@ test_that("print, coef, and model.frame methods expose fitted content", {
   expect_true(any(grepl("Prior probabilities", output)))
   expect_true(any(grepl("Group means", output)))
   expect_true(any(grepl("Coefficients of linear discriminants", output)))
-  expect_true(any(grepl("estimated probabilities", output)))
+  expect_true(any(grepl(
+    "Posterior probabilities of retained permutations:",
+    output,
+    fixed = TRUE
+  )))
 
   expect_identical(coef(matrix_fit), matrix_fit$scaling)
   reconstructed <- model.frame(formula_fit)

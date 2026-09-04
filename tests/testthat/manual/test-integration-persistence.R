@@ -49,7 +49,11 @@ test_that("supported model interfaces preserve predictions through JSON", {
       expect_true(any(grepl("^Call:", summary_output)))
       expect_true(any(grepl("Prior probabilities of groups", summary_output)))
       expect_true(any(grepl("Group means", summary_output)))
-      expect_true(any(grepl("estimated probabilities", summary_output)))
+      expect_true(any(grepl(
+        "Posterior probabilities of retained permutations:",
+        summary_output,
+        fixed = TRUE
+      )))
       if (identical(model_name, "gipslda")) {
         expect_true(any(grepl(
           "Coefficients of linear discriminants",

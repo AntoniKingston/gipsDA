@@ -304,10 +304,7 @@ test_that("print methods report model summaries and return invisibly", {
       "Prior probabilities of groups"
     )
     expect_output(print(fit), "Group means")
-    expect_output(
-      print(fit),
-      "Permutations with their estimated probabilities"
-    )
+    expect_output(print(fit), "Posterior probabilities of retained permutations")
     expect_identical(returned, fit)
   }
 })

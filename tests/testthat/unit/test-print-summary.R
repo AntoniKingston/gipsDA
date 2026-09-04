@@ -43,7 +43,8 @@ test_that("print methods report key fitted model content", {
     expect_true(any(grepl("Prior probabilities of groups:", output, fixed = TRUE)))
     expect_true(any(grepl("Class counts:", output, fixed = TRUE)))
     expect_true(any(grepl("Group means:", output, fixed = TRUE)))
-    expect_true(any(grepl("Permutations with their estimated probabilities:", output, fixed = TRUE)))
+    expect_true(any(grepl("Selected MAP permutation:", output, fixed = TRUE)))
+    expect_true(any(grepl("Posterior probabilities of retained permutations:", output, fixed = TRUE)))
 
     if (inherits(fit, "gipslda")) {
       expect_true(any(grepl("Coefficients of linear discriminants:", output, fixed = TRUE)))
@@ -158,7 +159,8 @@ test_that("print helpers handle missing optional optimization and svd content", 
 
   output <- capture.output(print(fit))
 
-  expect_true(any(grepl("Permutations with their estimated probabilities:", output, fixed = TRUE)))
+  expect_true(any(grepl("Selected MAP permutation:", output, fixed = TRUE)))
+  expect_true(any(grepl("Posterior probabilities of retained permutations:", output, fixed = TRUE)))
   expect_true(any(output == "NULL"))
 
   summary_object <- summary(fit)

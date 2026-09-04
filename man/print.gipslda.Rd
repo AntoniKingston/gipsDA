@@ -23,4 +23,3 @@ Invisibly returns \code{x}.
 \description{
 Print a fitted gipsDA model
 }
-\keyword{internal}

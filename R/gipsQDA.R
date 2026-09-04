@@ -67,6 +67,8 @@
 #'   \item \code{N}: total number of observations
 #'   \item \code{optimization_info}: named list of estimated probabilities of
 #'     retained permutations, one element per class
+#'   \item \code{selected_map_permutation}: named list of MAP permutations
+#'     selected independently for each class
 #'   \item \code{call}: the matched call
 #'   \item Formula fits additionally contain \code{terms}, \code{contrasts},
 #'     \code{xlevels}, and any recorded \code{na.action}.
@@ -209,6 +211,9 @@ gipsqda.default <-
 
     optimization_info <- vector("list", ng)
     names(optimization_info) <- lev
+
+    selected_map_permutation <- vector("list", ng)
+    names(selected_map_permutation) <- lev
     ####################################################################################
 
     for (i in seq_len(ng)) {
@@ -225,6 +230,7 @@ gipsqda.default <-
 
       cov_proj <- pr_cov_opt_info$covs[[1]]
       optimization_info[[i]] <- pr_cov_opt_info$opt_info
+      selected_map_permutation[[i]] <- pr_cov_opt_info$permutation
 
       cov_proj <- desingularize(cov_proj, 0.05)
       group.means[i, ] <- colMeans(x_i)
@@ -264,6 +270,7 @@ gipsqda.default <-
       N = n,
       call = cl,
       optimization_info = optimization_info,
+      selected_map_permutation = selected_map_permutation,
       fit_info = list(
         MAP = MAP,
         optimizer = optimizer,

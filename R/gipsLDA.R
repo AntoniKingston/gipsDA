@@ -69,6 +69,8 @@
 #'   \item \code{N}: number of observations
 #'   \item \code{optimization_info}: estimated probabilities of retained
 #'     permutations returned by the gips optimization
+#'   \item \code{selected_map_permutation}: MAP permutation selected by the
+#'     gips optimization and used for MAP covariance projection
 #'   \item \code{call}: matched call
 #'   \item Formula fits additionally contain \code{terms}, \code{contrasts},
 #'     \code{xlevels}, and any recorded \code{na.action}.
@@ -256,6 +258,7 @@ gipslda.default <-
     cov_proj <- pr_cov_opt_info$covs[[1]]
     cov_proj <- desingularize(cov_proj, 0.05)
     optimization_info <- pr_cov_opt_info$opt_info
+    selected_map_permutation <- pr_cov_opt_info$permutation
     ####################################################################################
     sX <- svd(cov_proj, nu = 0L)
     rank <- sum(sX$d > tol^2)
@@ -290,6 +293,7 @@ gipslda.default <-
         svd = X.s$d[1L:rank],
         N = n,
         optimization_info = optimization_info,
+        selected_map_permutation = selected_map_permutation,
         fit_info = list(
           MAP = MAP,
           optimizer = optimizer,
