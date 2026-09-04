@@ -156,7 +156,9 @@ stratified train/test split.</p>
 <span><span class="co">#&gt; versicolor     5.911429    2.771429     4.302857   1.3371429</span></span>
 <span><span class="co">#&gt; virginica      6.725714    3.020000     5.654286   2.0685714</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
+<span><span class="co">#&gt; Selected MAP permutation: (1,2,4,3) </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Posterior probabilities of retained permutations:</span></span>
 <span><span class="co">#&gt;   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) </span></span>
 <span><span class="co">#&gt; 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725 </span></span>
 <span><span class="co">#&gt; </span></span>
@@ -360,7 +362,9 @@ onto that structure.</p>
 <span><span class="co">#&gt; versicolor     5.911429    2.771429     4.302857   1.3371429</span></span>
 <span><span class="co">#&gt; virginica      6.725714    3.020000     5.654286   2.0685714</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
+<span><span class="co">#&gt; Selected MAP permutation: (1,2,4,3) </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Posterior probabilities of retained permutations:</span></span>
 <span><span class="co">#&gt;   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) </span></span>
 <span><span class="co">#&gt; 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725 </span></span>
 <span><span class="co">#&gt; </span></span>
@@ -421,7 +425,7 @@ covariance estimate.</p>
 <span><span class="co">#&gt; versicolor     5.911429    2.771429     4.302857   1.3371429</span></span>
 <span><span class="co">#&gt; virginica      6.725714    3.020000     5.654286   2.0685714</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
+<span><span class="co">#&gt; Posterior probabilities of retained permutations:</span></span>
 <span><span class="co">#&gt;   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) </span></span>
 <span><span class="co">#&gt; 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725 </span></span>
 <span><span class="co">#&gt; </span></span>
@@ -464,13 +468,13 @@ structures are searched.</p>
 <tr class="odd">
 <td><code>"BF"</code></td>
 <td>brute-force search</td>
-<td>small problems, typically <code>p &lt;= 10</code>
+<td>small number of dimensions, default for <code>p &lt;= 10</code>
 </td>
 </tr>
 <tr class="even">
 <td><code>"MH"</code></td>
 <td>Metropolis-Hastings search</td>
-<td>larger problems, typically <code>p &gt; 10</code>
+<td>larger number of dimensions, default for <code>p &gt; 10</code>
 </td>
 </tr>
 </tbody>
@@ -550,7 +554,9 @@ ignored.</p>
 <span><span class="co">#&gt; versicolor     5.911429    2.771429     4.302857   1.3371429</span></span>
 <span><span class="co">#&gt; virginica      6.725714    3.020000     5.654286   2.0685714</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
+<span><span class="co">#&gt; Selected MAP permutation: (1,2,4,3) </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Posterior probabilities of retained permutations:</span></span>
 <span><span class="co">#&gt;   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) </span></span>
 <span><span class="co">#&gt; 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725 </span></span>
 <span><span class="co">#&gt; </span></span>
@@ -610,7 +616,9 @@ used for a more compact model summary.</p>
 <span><span class="co">#&gt;    LD1    LD2 </span></span>
 <span><span class="co">#&gt; 0.9888 0.0112 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Permutations with their estimated probabilities:</span></span>
+<span><span class="co">#&gt; Selected MAP permutation: (1,2,4,3) </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Posterior probabilities of retained permutations:</span></span>
 <span><span class="co">#&gt;   (1,2,4,3)  (1,3)(2,4)   (1,2,3,4)  (1,2)(3,4)  (1,4)(2,3) </span></span>
 <span><span class="co">#&gt; 0.549732245 0.423533797 0.018304175 0.004073983 0.003658725</span></span></code></pre></div>
 <p>More details about fitted model objects are described in the <a href="advanced-usage.html">Advanced usage</a> vignette.</p>
@@ -718,12 +726,12 @@ probabilities</td>
 </tr>
 <tr class="odd">
 <td><code>optimizer = "BF"</code></td>
-<td>exhaustive search, typically for <code>p &lt;= 10</code>
+<td>exhaustive search, default for <code>p &lt;= 10</code>
 </td>
 </tr>
 <tr class="even">
 <td><code>optimizer = "MH"</code></td>
-<td>stochastic search, typically for <code>p &gt; 10</code>
+<td>stochastic search, default for <code>p &gt; 10</code>
 </td>
 </tr>
 <tr class="odd">

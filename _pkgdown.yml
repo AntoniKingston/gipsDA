@@ -43,6 +43,11 @@ reference:
       - gipsqda
       - gipsmultqda
 
+  - title: Model inspection
+    contents:
+      - print.gipslda
+      - summary.gipslda
+
   - title: Prediction
     contents:
       - predict.gipslda

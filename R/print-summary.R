@@ -4,7 +4,6 @@
 #' @param ... Further arguments passed to printing methods.
 #'
 #' @return Invisibly returns `x`.
-#' @keywords internal
 #' @exportS3Method
 print.gipslda <- function(x, ...) {
   .print_gipsda_model(x, model_name = "gipslda", ...)
@@ -77,8 +76,12 @@ print.gipsmultqda <- function(x, ...) {
   cat("\nGroup means:\n")
   print(x$means, ...)
 
-  cat("\nPermutations with their estimated probabilities:\n")
-  .print_optimization_info(x$optimization_info, ...)
+  .print_permutation_output(
+    optimization_info = x$optimization_info,
+    selected_map_permutation = x$selected_map_permutation,
+    MAP = x$fit_info$MAP,
+    ...
+  )
 }
 
 #' Summarize a fitted gipsDA model
@@ -87,7 +90,6 @@ print.gipsmultqda <- function(x, ...) {
 #' @param ... Further arguments passed to or from methods.
 #'
 #' @return An object of class `"summary.gipsda"`.
-#' @keywords internal
 #' @exportS3Method
 summary.gipslda <- function(object, ...) {
   structure(
@@ -104,7 +106,8 @@ summary.gipslda <- function(object, ...) {
       scaling = object$scaling,
       svd = object$svd,
       proportion_trace = .gipslda_trace_proportion(object),
-      optimization_info = object$optimization_info
+      optimization_info = object$optimization_info,
+      selected_map_permutation = object$selected_map_permutation
     ),
     class = c("summary.gipslda", "summary.gipsda")
   )
@@ -126,7 +129,8 @@ summary.gipsqda <- function(object, ...) {
       fit_info = object$fit_info,
       scaling_dim = dim(object$scaling),
       ldet = object$ldet,
-      optimization_info = object$optimization_info
+      optimization_info = object$optimization_info,
+      selected_map_permutation = object$selected_map_permutation
     ),
     class = c("summary.gipsqda", "summary.gipsda")
   )
@@ -148,7 +152,8 @@ summary.gipsmultqda <- function(object, ...) {
       fit_info = object$fit_info,
       scaling_dim = dim(object$scaling),
       ldet = object$ldet,
-      optimization_info = object$optimization_info
+      optimization_info = object$optimization_info,
+      selected_map_permutation = object$selected_map_permutation
     ),
     class = c("summary.gipsmultqda", "summary.gipsda")
   )
@@ -218,8 +223,12 @@ print.summary.gipsda <- function(x, ...) {
     print(x$scaling_dim, ...)
   }
 
-  cat("\nPermutations with their estimated probabilities:\n")
-  .print_optimization_info(x$optimization_info, ...)
+  .print_permutation_output(
+    optimization_info = x$optimization_info,
+    selected_map_permutation = x$selected_map_permutation,
+    MAP = x$fit_info$MAP,
+    ...
+  )
 
   invisible(x)
 }
@@ -230,13 +239,7 @@ print.summary.gipsda <- function(x, ...) {
     return(invisible(NULL))
   }
 
-  is_grouped_optimization_info <- is.list(x) &&
-    !inherits(x, c("data.frame", "gips", "gips_perm")) &&
-    !is.null(names(x)) &&
-    length(names(x)) == length(x) &&
-    all(nzchar(names(x)))
-
-  if (is_grouped_optimization_info) {
+  if (.is_named_plain_list(x)) {
     for (nm in names(x)) {
       cat("\nGroup:", nm, "\n")
       print(x[[nm]], ...)
@@ -246,4 +249,39 @@ print.summary.gipsda <- function(x, ...) {
   }
 
   invisible(NULL)
+}
+
+.print_permutation_output <- function(optimization_info,
+                                      selected_map_permutation = NULL,
+                                      MAP = NULL,
+                                      ...) {
+  if (isTRUE(MAP) && !is.null(selected_map_permutation)) {
+    .print_selected_map_permutation(selected_map_permutation)
+  }
+
+  cat("\nPosterior probabilities of retained permutations:\n")
+  .print_optimization_info(optimization_info, ...)
+
+  invisible(NULL)
+}
+
+.print_selected_map_permutation <- function(x) {
+  if (.is_named_plain_list(x)) {
+    for (nm in names(x)) {
+      cat("\nGroup:", nm, "\n")
+      cat("Selected MAP permutation:", as.character(x[[nm]]), "\n")
+    }
+  } else {
+    cat("\nSelected MAP permutation:", as.character(x), "\n")
+  }
+
+  invisible(NULL)
+}
+
+.is_named_plain_list <- function(x) {
+  is.list(x) &&
+    !inherits(x, c("data.frame", "gips", "gips_perm")) &&
+    !is.null(names(x)) &&
+    length(names(x)) == length(x) &&
+    all(nzchar(names(x)))
 }

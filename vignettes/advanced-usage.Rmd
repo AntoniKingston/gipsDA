@@ -31,7 +31,7 @@ It covers:
 - leave-one-out prediction,
 - model inspection and diagnostics.
 
-For a shorter first example, see the "Getting started" vignette.
+For a shorter first example, see the [Getting started](getting-started.html) vignette.
 
 ```{r}
 library(gipsDA)
@@ -297,8 +297,8 @@ The `optimizer` argument controls how permutation structures are searched.
 
 | Value | Meaning | Typical use |
 |---|---|---|
-| `"BF"` | brute-force search | small problems, typically `p <= 10` |
-| `"MH"` | Metropolis-Hastings search | larger problems, typically `p > 10` |
+| `"BF"` | brute-force search | small number of dimensions, default for `p <= 10` |
+| `"MH"` | Metropolis-Hastings search | larger number of dimensions, default for `p > 10` |
 
 The brute-force optimizer searches the relevant permutation space exhaustively.
 It is deterministic, but its cost grows quickly with the number of features.

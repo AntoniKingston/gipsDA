@@ -185,8 +185,8 @@ The `optimizer` argument controls how permutation structures are searched.
 
 | Value | Meaning | Recommended use |
 |---|---|---|
-| `"BF"` | brute-force search | small problems, typically `p <= 10` |
-| `"MH"` | Metropolis-Hastings search | larger problems, typically `p > 10` |
+| `"BF"` | brute-force search | small number of dimensions, default for `p <= 10` |
+| `"MH"` | Metropolis-Hastings search | larger number of dimensions, default for `p > 10` |
 
 For `optimizer = "MH"`, use `max_iter` to control the number of iterations.
 
@@ -305,8 +305,8 @@ The main tuning choices are:
 |---|---|
 | `MAP = TRUE` | use one selected Maximum A Posteriori permutation |
 | `MAP = FALSE` | average over retained permutations using posterior probabilities |
-| `optimizer = "BF"` | exhaustive search, typically for `p <= 10` |
-| `optimizer = "MH"` | stochastic search, typically for `p > 10` |
+| `optimizer = "BF"` | exhaustive search, default for `p <= 10` |
+| `optimizer = "MH"` | stochastic search, default for `p > 10` |
 | `max_iter` | used only with `optimizer = "MH"` |
 | `weighted_avg` | changes the pooled covariance estimator in `gipslda()` |
 

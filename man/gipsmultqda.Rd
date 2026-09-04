@@ -75,6 +75,8 @@ from the projected covariance matrices
 \item \code{N}: total number of observations
 \item \code{optimization_info}: estimated probabilities of retained
 permutations returned by the joint gips optimization
+\item \code{selected_map_permutation}: MAP permutation selected by the
+joint gips optimization and used for MAP covariance projection
 \item \code{call}: the matched call
 \item Formula fits additionally contain \code{terms}, \code{contrasts},
 \code{xlevels}, and any recorded \code{na.action}.
