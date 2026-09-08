@@ -259,8 +259,12 @@ print.summary.gipsda <- function(x, ...) {
     .print_selected_map_permutation(selected_map_permutation)
   }
 
-  cat("\nPosterior probabilities of retained permutations:\n")
-  .print_optimization_info(optimization_info, ...)
+  if (.has_stored_probabilities(optimization_info)) {
+    cat("\nPosterior probabilities of retained permutations:\n")
+    .print_optimization_info(optimization_info, ...)
+  } else {
+    cat("\nPosterior probabilities of retained permutations: not stored\n")
+  }
 
   invisible(NULL)
 }
@@ -284,4 +288,16 @@ print.summary.gipsda <- function(x, ...) {
     !is.null(names(x)) &&
     length(names(x)) == length(x) &&
     all(nzchar(names(x)))
+}
+
+.has_stored_probabilities <- function(x) {
+  if (is.null(x)) {
+    return(FALSE)
+  }
+
+  if (.is_named_plain_list(x)) {
+    return(any(vapply(x, Negate(is.null), logical(1L))))
+  }
+
+  TRUE
 }

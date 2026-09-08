@@ -300,6 +300,9 @@ the invariant space determined by that structure.</p>
 <span><span class="co">#&gt; $weighted_avg</span></span>
 <span><span class="co">#&gt; [1] FALSE</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $store_probabilities</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Prior probabilities of groups:</span></span>
 <span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
@@ -363,6 +366,9 @@ projection.</p>
 <span><span class="co">#&gt; $weighted_avg</span></span>
 <span><span class="co">#&gt; [1] FALSE</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $store_probabilities</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Prior probabilities of groups:</span></span>
 <span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
@@ -414,6 +420,11 @@ c^* = \arg\max_c P(c \mid X).
 </annotation></semantics></math></p>
 <p>The second option averages over several possible symmetry structures
 instead of using only one selected structure.</p>
+<p>By default, <code>gipsDA</code> stores posterior probabilities of
+retained permutations. For faster MAP-only fitting, set
+<code>store_probabilities = FALSE</code>. In that case, the selected MAP
+permutation is still stored and shown, but posterior probabilities are
+not stored in the fitted model object.</p>
 </div>
 <div class="section level2">
 <h2 id="interpreting-permutation-output">Interpreting permutation output<a class="anchor" aria-label="anchor" href="#interpreting-permutation-output"></a>
@@ -502,6 +513,9 @@ number of features.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $max_iter</span></span>
 <span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $store_probabilities</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Prior probabilities of groups:</span></span>
@@ -713,6 +727,9 @@ substantially.</p>
 <span><span class="co">#&gt; $weighted_avg</span></span>
 <span><span class="co">#&gt; [1] FALSE</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $store_probabilities</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Prior probabilities of groups:</span></span>
 <span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
@@ -773,6 +790,9 @@ predictors.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $weighted_avg</span></span>
 <span><span class="co">#&gt; [1] FALSE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $store_probabilities</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Prior probabilities of groups:</span></span>
@@ -835,6 +855,9 @@ predictors.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $weighted_avg</span></span>
 <span><span class="co">#&gt; [1] FALSE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $store_probabilities</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Prior probabilities of groups:</span></span>
@@ -1073,6 +1096,9 @@ replacement for a proper independent test set when one is available.</p>
 <span><span class="co">#&gt; $weighted_avg</span></span>
 <span><span class="co">#&gt; [1] FALSE</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $store_probabilities</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Prior probabilities of groups:</span></span>
 <span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
@@ -1123,6 +1149,9 @@ replacement for a proper independent test set when one is available.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $max_iter</span></span>
 <span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $store_probabilities</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Prior probabilities of groups:</span></span>
@@ -1184,6 +1213,9 @@ replacement for a proper independent test set when one is available.</p>
 <span><span class="co">#&gt; $max_iter</span></span>
 <span><span class="co">#&gt; NULL</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $store_probabilities</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Prior probabilities of groups:</span></span>
 <span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
@@ -1234,6 +1266,9 @@ structures.</p>
 <span><span class="co">#&gt; $weighted_avg</span></span>
 <span><span class="co">#&gt; [1] FALSE</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $store_probabilities</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Class counts:</span></span>
 <span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
@@ -1276,6 +1311,9 @@ structures.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $max_iter</span></span>
 <span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $store_probabilities</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Class counts:</span></span>
@@ -1338,6 +1376,9 @@ structures.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $max_iter</span></span>
 <span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $store_probabilities</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Class counts:</span></span>
@@ -1494,7 +1535,7 @@ useful components are usually:</p>
 <span><span class="co">#&gt; 7                         N        integer      1      </span></span>
 <span><span class="co">#&gt; 8         optimization_info        numeric      5      </span></span>
 <span><span class="co">#&gt; 9  selected_map_permutation      gips_perm      1      </span></span>
-<span><span class="co">#&gt; 10                 fit_info           list      4      </span></span>
+<span><span class="co">#&gt; 10                 fit_info           list      5      </span></span>
 <span><span class="co">#&gt; 11                     call           call      3      </span></span>
 <span><span class="co">#&gt; 12                    terms terms, formula      3      </span></span>
 <span><span class="co">#&gt; 13                  xlevels           list      0</span></span></code></pre></div>
@@ -1511,7 +1552,7 @@ useful components are usually:</p>
 <span><span class="co">#&gt; 8                      call           call      3          </span></span>
 <span><span class="co">#&gt; 9         optimization_info           list      3          </span></span>
 <span><span class="co">#&gt; 10 selected_map_permutation           list      3          </span></span>
-<span><span class="co">#&gt; 11                 fit_info           list      3          </span></span>
+<span><span class="co">#&gt; 11                 fit_info           list      4          </span></span>
 <span><span class="co">#&gt; 12                    terms terms, formula      3          </span></span>
 <span><span class="co">#&gt; 13                  xlevels           list      0</span></span></code></pre></div>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
@@ -1527,7 +1568,7 @@ useful components are usually:</p>
 <span><span class="co">#&gt; 8                      call           call      3          </span></span>
 <span><span class="co">#&gt; 9         optimization_info        numeric      2          </span></span>
 <span><span class="co">#&gt; 10 selected_map_permutation      gips_perm      3          </span></span>
-<span><span class="co">#&gt; 11                 fit_info           list      3          </span></span>
+<span><span class="co">#&gt; 11                 fit_info           list      4          </span></span>
 <span><span class="co">#&gt; 12                    terms terms, formula      3          </span></span>
 <span><span class="co">#&gt; 13                  xlevels           list      0</span></span></code></pre></div>
 </div>
@@ -1697,6 +1738,11 @@ and apply the same transformation to test data.</p>
 <td>choose the pooled covariance estimator in
 <code><a href="../reference/gipslda.html">gipslda()</a></code>
 </td>
+</tr>
+<tr class="even">
+<td><code>store_probabilities</code></td>
+<td>whether to store posterior probabilities of retained
+permutations</td>
 </tr>
 </tbody>
 </table>

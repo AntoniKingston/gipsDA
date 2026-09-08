@@ -6,7 +6,8 @@
 #' @importFrom stringi stri_length
 #' @noRd
 project_covs <- function(emp_covs, ns_obs, MAP = TRUE, optimizer, max_iter,
-                         tol = 1e-3, show_progress_bar = FALSE) {
+                         tol = 1e-3, show_progress_bar = FALSE,
+                         store_probabilities = TRUE) {
   gips_input <- if (is.list(emp_covs) && length(emp_covs) == 1L) {
     emp_covs[[1L]]
   } else {
@@ -17,6 +18,30 @@ project_covs <- function(emp_covs, ns_obs, MAP = TRUE, optimizer, max_iter,
 
   if (!is.list(emp_covs)) {
     emp_covs <- list(emp_covs)
+  }
+
+  if (!MAP && !store_probabilities) {
+    warning(
+      "store_probabilities = FALSE is ignored when MAP = FALSE, because posterior probabilities are required for posterior-weighted projection"
+    )
+    store_probabilities <- TRUE
+  }
+
+  if (MAP && !store_probabilities) {
+    gg <- gips::find_MAP(
+      gg,
+      optimizer = optimizer,
+      max_iter = max_iter,
+      show_progress_bar = show_progress_bar
+    )
+
+    perm <- gg[[1L]]
+
+    return(list(
+      covs = lapply(emp_covs, function(x) gips::project_matrix(x, perm)),
+      opt_info = NULL,
+      permutation = perm
+    ))
   }
 
   gg <- gips::find_MAP(

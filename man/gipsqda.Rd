@@ -15,7 +15,7 @@ gipsqda(x, ...)
 
 \method{gipsqda}{default}(x, grouping, prior = proportions,
   nu = 5, MAP = TRUE, optimizer = NULL, max_iter = NULL,
-  show_progress_bar = FALSE, ...)
+  show_progress_bar = FALSE, store_probabilities = TRUE, ...)
 
 \method{gipsqda}{data.frame}(x, ...)
 
@@ -57,6 +57,11 @@ the problem dimension is used.}
 \item{show_progress_bar}{Logical; if \code{TRUE}, display the progress bar
 from the underlying gips optimizer. Defaults to \code{FALSE}.}
 
+\item{store_probabilities}{Logical; if \code{TRUE}, store estimated
+posterior probabilities of retained permutations. If \code{FALSE} and
+\code{MAP = TRUE}, only the selected MAP permutations are stored. Defaults
+to \code{TRUE}.}
+
 \item{subset}{An index vector specifying the cases to be used in the training
 sample. (NOTE: must be named.)}
 
@@ -74,8 +79,9 @@ projected covariance matrices
 \item \code{ldet}: log-determinants of the projected covariance matrices
 \item \code{lev}: class labels
 \item \code{N}: total number of observations
-\item \code{optimization_info}: named list of estimated probabilities of
-retained permutations, one element per class
+\item \code{optimization_info}: named list of estimated posterior
+probabilities of retained permutations, one element per class, if stored;
+otherwise a named list of \code{NULL} values
 \item \code{selected_map_permutation}: named list of MAP permutations
 selected independently for each class
 \item \code{call}: the matched call

@@ -19,7 +19,7 @@
 #'
 #' \method{gipsqda}{default}(x, grouping, prior = proportions,
 #'   nu = 5, MAP = TRUE, optimizer = NULL, max_iter = NULL,
-#'   show_progress_bar = FALSE, ...)
+#'   show_progress_bar = FALSE, store_probabilities = TRUE, ...)
 #'
 #' \method{gipsqda}{data.frame}(x, ...)
 #'
@@ -48,6 +48,10 @@
 #' @param max_iter Maximum number of iterations for stochastic optimizers.
 #' @param show_progress_bar Logical; if \code{TRUE}, display the progress bar
 #'   from the underlying gips optimizer. Defaults to \code{FALSE}.
+#' @param store_probabilities Logical; if \code{TRUE}, store estimated
+#'   posterior probabilities of retained permutations. If \code{FALSE} and
+#'   \code{MAP = TRUE}, only the selected MAP permutations are stored. Defaults
+#'   to \code{TRUE}.
 #' @param subset An index vector specifying the cases to be used in the training
 #'   sample. (NOTE: must be named.)
 #' @param na.action A function specifying the action to be taken if \code{NA}s
@@ -65,8 +69,9 @@
 #'   \item \code{ldet}: log-determinants of the projected covariance matrices
 #'   \item \code{lev}: class labels
 #'   \item \code{N}: total number of observations
-#'   \item \code{optimization_info}: named list of estimated probabilities of
-#'     retained permutations, one element per class
+#'   \item \code{optimization_info}: named list of estimated posterior
+#'     probabilities of retained permutations, one element per class, if stored;
+#'     otherwise a named list of \code{NULL} values
 #'   \item \code{selected_map_permutation}: named list of MAP permutations
 #'     selected independently for each class
 #'   \item \code{call}: the matched call
@@ -167,8 +172,9 @@ gipsqda.matrix <- function(x, grouping, ..., subset, na.action) {
 }
 
 #' @exportS3Method
-gipsqda.default <-
-  function(x, grouping, prior = proportions, nu = 5, MAP = TRUE, optimizer = NULL, max_iter = NULL, show_progress_bar = FALSE, ...) {
+gipsqda.default <- function(x, grouping, prior = proportions, nu = 5, MAP = TRUE,
+         optimizer = NULL, max_iter = NULL, show_progress_bar = FALSE,
+         store_probabilities = TRUE, ...) {
     if (is.null(dim(x))) stop("'x' is not a matrix")
     x <- as.matrix(x)
     if (any(!is.finite(x))) {
@@ -225,7 +231,8 @@ gipsqda.default <-
         MAP,
         optimizer,
         max_iter,
-        show_progress_bar = show_progress_bar
+        show_progress_bar = show_progress_bar,
+        store_probabilities = store_probabilities
       )
 
       cov_proj <- pr_cov_opt_info$covs[[1]]
@@ -274,7 +281,8 @@ gipsqda.default <-
       fit_info = list(
         MAP = MAP,
         optimizer = optimizer,
-        max_iter = max_iter
+        max_iter = max_iter,
+        store_probabilities = store_probabilities
       )
     )
     class(res) <- "gipsqda"

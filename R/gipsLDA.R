@@ -18,7 +18,7 @@
 #' \method{gipslda}{default}(x, grouping, prior = proportions,
 #'   tol = 1e-4, weighted_avg = FALSE,
 #'   MAP = TRUE, optimizer = NULL, max_iter = NULL,
-#'   show_progress_bar = FALSE, ...)
+#'   show_progress_bar = FALSE, store_probabilities = TRUE, ...)
 #'
 #' \method{gipslda}{data.frame}(x, ...)
 #'
@@ -52,6 +52,11 @@
 #' @param show_progress_bar Logical; if \code{TRUE}, display the progress bar
 #'   from the underlying gips optimizer. Defaults to \code{FALSE}.
 #'
+#' @param store_probabilities Logical; if \code{TRUE}, store estimated
+#'   posterior probabilities of retained permutations. If \code{FALSE} and
+#'   \code{MAP = TRUE}, only the selected MAP permutation is stored. Defaults
+#'   to \code{TRUE}.
+#'
 #' @param weighted_avg Logical; if \code{FALSE}, use the pooled within-class
 #'   scatter matrix. If \code{TRUE}, use a class-proportion-weighted average
 #'   of class-specific covariance matrices.
@@ -67,8 +72,8 @@
 #'   \item \code{lev}: class labels
 #'   \item \code{svd}: singular values of the between-class scatter
 #'   \item \code{N}: number of observations
-#'   \item \code{optimization_info}: estimated probabilities of retained
-#'     permutations returned by the gips optimization
+#'   \item \code{optimization_info}: estimated posterior probabilities of
+#'     retained permutations if stored; otherwise \code{NULL}
 #'   \item \code{selected_map_permutation}: MAP permutation selected by the
 #'     gips optimization and used for MAP covariance projection
 #'   \item \code{call}: matched call
@@ -168,9 +173,9 @@ gipslda.matrix <- function(x, grouping, ..., subset, na.action) {
 }
 
 #' @exportS3Method
-gipslda.default <-
-  function(x, grouping, prior = proportions, tol = 1.0e-4,
-           weighted_avg = FALSE, MAP = TRUE, optimizer = NULL, max_iter = NULL, show_progress_bar = FALSE, ...) {
+gipslda.default <- function(x, grouping, prior = proportions, tol = 1.0e-4,
+                            weighted_avg = FALSE, MAP = TRUE, optimizer = NULL, max_iter = NULL,
+                            show_progress_bar = FALSE, store_probabilities = TRUE, ...) {
     if (is.null(dim(x))) stop("'x' is not a matrix")
     x <- as.matrix(x)
     if (any(!is.finite(x))) {
@@ -254,7 +259,16 @@ gipslda.default <-
     }
 
     # project covariance using gips
-    pr_cov_opt_info <- project_covs(list(cov_adj), n, MAP, optimizer, max_iter, show_progress_bar = show_progress_bar)
+    pr_cov_opt_info <- project_covs(
+      list(cov_adj),
+      n,
+      MAP,
+      optimizer,
+      max_iter,
+      show_progress_bar = show_progress_bar,
+      store_probabilities = store_probabilities
+    )
+
     cov_proj <- pr_cov_opt_info$covs[[1]]
     cov_proj <- desingularize(cov_proj, 0.05)
     optimization_info <- pr_cov_opt_info$opt_info
@@ -298,7 +312,8 @@ gipslda.default <-
           MAP = MAP,
           optimizer = optimizer,
           max_iter = max_iter,
-          weighted_avg = weighted_avg
+          weighted_avg = weighted_avg,
+          store_probabilities = store_probabilities
         ),
         call = cl
       ),
