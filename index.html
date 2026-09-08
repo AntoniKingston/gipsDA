@@ -15,7 +15,8 @@
 <link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Discriminant Analysis with Permutation-Invariant Covariance Models">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
+<meta property="og:title" content="Discriminant Analysis with Permutation-Invariant Covariance Models">
 <meta name="description" content="Extends classical linear and quadratic discriminant analysis by incorporating permutation-group symmetries into covariance matrix estimation. Methods based on the gips framework identify and impose permutation structures that regularize covariance estimates and improve stability and interpretability for symmetric or exchangeable features. The package provides pooled and class-specific covariance models, including multi-class variants with shared or independently estimated symmetry structures. The underlying methodology is described by Graczyk et al. (2022) &lt;doi:10.1214/22-AOS2174&gt; and Chojecki, Morgen, and Kołodziejek (2025) &lt;doi:10.18637/jss.v112.i07&gt;.">
 <meta property="og:description" content="Extends classical linear and quadratic discriminant analysis by incorporating permutation-group symmetries into covariance matrix estimation. Methods based on the gips framework identify and impose permutation structures that regularize covariance estimates and improve stability and interpretability for symmetric or exchangeable features. The package provides pooled and class-specific covariance models, including multi-class variants with shared or independently estimated symmetry structures. The underlying methodology is described by Graczyk et al. (2022) &lt;doi:10.1214/22-AOS2174&gt; and Chojecki, Morgen, and Kołodziejek (2025) &lt;doi:10.18637/jss.v112.i07&gt;.">
 <meta property="og:image" content="https://antonikingston.github.io/gipsDA/logo.png">
@@ -59,12 +60,14 @@
 <img src="logo.png" class="logo" alt=""><h1 id="gipsda">gipsDA<a class="anchor" aria-label="anchor" href="#gipsda"></a>
 </h1>
 </div>
+<div class="github-readme-logo">
 <p align="center">
 <a href="https://antonikingston.github.io/gipsDA/"> <img src="reference/figures/logo.png" alt="gipsDA logo" width="190"></a>
 </p>
 <p align="center">
 <strong><a href="https://antonikingston.github.io/gipsDA/">Documentation website</a></strong>
 </p>
+</div>
 <!-- badges: start -->
 
 <p><code>gipsDA</code> provides linear and quadratic discriminant analysis with structured covariance estimation. It uses <a href="https://github.com/PrzeChoj/gips" class="external-link"><code>gips</code></a> to identify permutation-invariant covariance models, offering regularized estimates for data with symmetric or exchangeable features. Its formula, matrix, and data-frame interfaces follow the conventions of <code><a href="https://rdrr.io/pkg/MASS/man/lda.html" class="external-link">MASS::lda()</a></code> and <code><a href="https://rdrr.io/pkg/MASS/man/qda.html" class="external-link">MASS::qda()</a></code>.</p>
@@ -190,8 +193,10 @@
 <ul class="list-unstyled">
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
 <li><a href="https://CRAN.R-project.org/package=gipsDA" class="external-link"><img src="https://www.r-pkg.org/badges/version/gipsDA" alt="CRAN status"></a></li>
+<li><a href="https://r-pkg.org/pkg/gipsDA" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/gipsDA" alt="CRAN downloads"></a></li>
 <li><a href="https://github.com/AntoniKingston/gipsDA/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/AntoniKingston/gipsDA/actions/workflows/R-CMD-check.yaml/badge.svg?branch=main" alt="R-CMD-check"></a></li>
 <li><a href="https://app.codecov.io/gh/AntoniKingston/gipsDA" class="external-link"><img src="https://codecov.io/gh/AntoniKingston/gipsDA/branch/main/graph/badge.svg" alt="Codecov"></a></li>
+<li><a href="https://antonikingston.github.io/gipsDA/"><img src="https://img.shields.io/badge/docs-pkgdown-blue.svg" alt="Documentation"></a></li>
 </ul>
 </div>
 
