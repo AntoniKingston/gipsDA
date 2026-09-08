@@ -258,3 +258,37 @@ test_that("empty grouping levels are dropped with a warning", {
   expect_equal(fit$lev, c("setosa", "versicolor", "empty"))
   expect_equal(names(fit$counts), c("setosa", "versicolor"))
 })
+
+test_that("gipslda can skip stored probabilities for MAP fits", {
+  fixture <- make_binary_fixture(p = 2, n_per_class = 6)
+
+  fit <- gipslda(
+    fixture$x,
+    fixture$grouping,
+    MAP = TRUE,
+    optimizer = "BF",
+    store_probabilities = FALSE
+  )
+
+  expect_valid_lda_fit(fit, n = 12, p = 2, groups = 2)
+  expect_null(fit$optimization_info)
+  expect_s3_class(fit$selected_map_permutation, "gips_perm")
+  expect_false(fit$fit_info$store_probabilities)
+})
+
+test_that("gipslda stores probabilities by default", {
+  fixture <- make_binary_fixture(p = 2, n_per_class = 6)
+
+  fit <- gipslda(
+    fixture$x,
+    fixture$grouping,
+    MAP = TRUE,
+    optimizer = "BF"
+  )
+
+  expect_valid_lda_fit(fit, n = 12, p = 2, groups = 2)
+  expect_type(fit$optimization_info, "double")
+  expect_false(is.null(names(fit$optimization_info)))
+  expect_s3_class(fit$selected_map_permutation, "gips_perm")
+  expect_true(fit$fit_info$store_probabilities)
+})

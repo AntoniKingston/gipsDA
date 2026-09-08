@@ -236,8 +236,8 @@ gipsqda.default <- function(x, grouping, prior = proportions, nu = 5, MAP = TRUE
       )
 
       cov_proj <- pr_cov_opt_info$covs[[1]]
-      optimization_info[[i]] <- pr_cov_opt_info$opt_info
-      selected_map_permutation[[i]] <- pr_cov_opt_info$permutation
+      optimization_info[i] <- list(pr_cov_opt_info$opt_info)
+      selected_map_permutation[i] <- list(pr_cov_opt_info$permutation)
 
       cov_proj <- desingularize(cov_proj, 0.05)
       group.means[i, ] <- colMeans(x_i)
