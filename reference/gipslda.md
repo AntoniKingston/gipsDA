@@ -16,7 +16,7 @@ gipslda(formula, data, ..., subset, na.action)
 gipslda(x, grouping, prior = proportions,
   tol = 1e-4, weighted_avg = FALSE,
   MAP = TRUE, optimizer = NULL, max_iter = NULL,
-  show_progress_bar = FALSE, ...)
+  show_progress_bar = FALSE, store_probabilities = TRUE, ...)
 
 # S3 method for class 'data.frame'
 gipslda(x, ...)
@@ -90,6 +90,12 @@ gipslda(x, grouping, ..., subset, na.action)
   Logical; if `TRUE`, display the progress bar from the underlying gips
   optimizer. Defaults to `FALSE`.
 
+- store_probabilities:
+
+  Logical; if `TRUE`, store estimated posterior probabilities of
+  retained permutations. If `FALSE` and `MAP = TRUE`, only the selected
+  MAP permutation is stored. Defaults to `TRUE`.
+
 - weighted_avg:
 
   Logical; if `FALSE`, use the pooled within-class scatter matrix. If
@@ -114,8 +120,8 @@ An object of class `"gipslda"` containing:
 
 - `N`: number of observations
 
-- `optimization_info`: estimated probabilities of retained permutations
-  returned by the gips optimization
+- `optimization_info`: estimated posterior probabilities of retained
+  permutations if stored; otherwise `NULL`
 
 - `selected_map_permutation`: MAP permutation selected by the gips
   optimization and used for MAP covariance projection
@@ -196,6 +202,9 @@ predict(z, Iris[-train, ])$class
 #> 
 #> $weighted_avg
 #> [1] FALSE
+#> 
+#> $store_probabilities
+#> [1] TRUE
 #> 
 #> 
 #> Prior probabilities of groups:

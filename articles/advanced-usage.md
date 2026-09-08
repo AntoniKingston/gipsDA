@@ -254,6 +254,9 @@ lda_map
 #> $weighted_avg
 #> [1] FALSE
 #> 
+#> $store_probabilities
+#> [1] TRUE
+#> 
 #> 
 #> Prior probabilities of groups:
 #>     setosa versicolor  virginica 
@@ -320,6 +323,9 @@ lda_avg
 #> $weighted_avg
 #> [1] FALSE
 #> 
+#> $store_probabilities
+#> [1] TRUE
+#> 
 #> 
 #> Prior probabilities of groups:
 #>     setosa versicolor  virginica 
@@ -376,6 +382,12 @@ For `MAP = FALSE`:
 
 The second option averages over several possible symmetry structures
 instead of using only one selected structure.
+
+By default, `gipsDA` stores posterior probabilities of retained
+permutations. For faster MAP-only fitting, set
+`store_probabilities = FALSE`. In that case, the selected MAP
+permutation is still stored and shown, but posterior probabilities are
+not stored in the fitted model object.
 
 ## Interpreting permutation output
 
@@ -466,6 +478,9 @@ fit_bf
 #> 
 #> $max_iter
 #> NULL
+#> 
+#> $store_probabilities
+#> [1] TRUE
 #> 
 #> 
 #> Prior probabilities of groups:
@@ -699,6 +714,9 @@ fit_formula
 #> $weighted_avg
 #> [1] FALSE
 #> 
+#> $store_probabilities
+#> [1] TRUE
+#> 
 #> 
 #> Prior probabilities of groups:
 #>     setosa versicolor  virginica 
@@ -762,6 +780,9 @@ fit_formula_short
 #> 
 #> $weighted_avg
 #> [1] FALSE
+#> 
+#> $store_probabilities
+#> [1] TRUE
 #> 
 #> 
 #> Prior probabilities of groups:
@@ -828,6 +849,9 @@ fit_subset
 #> 
 #> $weighted_avg
 #> [1] FALSE
+#> 
+#> $store_probabilities
+#> [1] TRUE
 #> 
 #> 
 #> Prior probabilities of groups:
@@ -1096,6 +1120,9 @@ print(lda_fit)
 #> $weighted_avg
 #> [1] FALSE
 #> 
+#> $store_probabilities
+#> [1] TRUE
+#> 
 #> 
 #> Prior probabilities of groups:
 #>     setosa versicolor  virginica 
@@ -1149,6 +1176,9 @@ print(qda_fit)
 #> 
 #> $max_iter
 #> NULL
+#> 
+#> $store_probabilities
+#> [1] TRUE
 #> 
 #> 
 #> Prior probabilities of groups:
@@ -1213,6 +1243,9 @@ print(joint_qda_fit)
 #> $max_iter
 #> NULL
 #> 
+#> $store_probabilities
+#> [1] TRUE
+#> 
 #> 
 #> Prior probabilities of groups:
 #>     setosa versicolor  virginica 
@@ -1269,6 +1302,9 @@ summary(lda_fit)
 #> $weighted_avg
 #> [1] FALSE
 #> 
+#> $store_probabilities
+#> [1] TRUE
+#> 
 #> 
 #> Class counts:
 #>     setosa versicolor  virginica 
@@ -1311,6 +1347,9 @@ summary(qda_fit)
 #> 
 #> $max_iter
 #> NULL
+#> 
+#> $store_probabilities
+#> [1] TRUE
 #> 
 #> 
 #> Class counts:
@@ -1373,6 +1412,9 @@ summary(joint_qda_fit)
 #> 
 #> $max_iter
 #> NULL
+#> 
+#> $store_probabilities
+#> [1] TRUE
 #> 
 #> 
 #> Class counts:
@@ -1518,7 +1560,7 @@ inspect_model(lda_fit)
 #> 7                         N        integer      1      
 #> 8         optimization_info        numeric      5      
 #> 9  selected_map_permutation      gips_perm      1      
-#> 10                 fit_info           list      4      
+#> 10                 fit_info           list      5      
 #> 11                     call           call      3      
 #> 12                    terms terms, formula      3      
 #> 13                  xlevels           list      0
@@ -1538,7 +1580,7 @@ inspect_model(qda_fit)
 #> 8                      call           call      3          
 #> 9         optimization_info           list      3          
 #> 10 selected_map_permutation           list      3          
-#> 11                 fit_info           list      3          
+#> 11                 fit_info           list      4          
 #> 12                    terms terms, formula      3          
 #> 13                  xlevels           list      0
 ```
@@ -1557,7 +1599,7 @@ inspect_model(joint_qda_fit)
 #> 8                      call           call      3          
 #> 9         optimization_info        numeric      2          
 #> 10 selected_map_permutation      gips_perm      3          
-#> 11                 fit_info           list      3          
+#> 11                 fit_info           list      4          
 #> 12                    terms terms, formula      3          
 #> 13                  xlevels           list      0
 ```
@@ -1715,6 +1757,7 @@ The main advanced controls are:
 | `max_iter` | number of Metropolis-Hastings iterations |
 | `prior` | manually set class prior probabilities |
 | `weighted_avg` | choose the pooled covariance estimator in [`gipslda()`](https://antonikingston.github.io/gipsDA/reference/gipslda.md) |
+| `store_probabilities` | whether to store posterior probabilities of retained permutations |
 
 The three main models are:
 

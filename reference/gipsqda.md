@@ -15,7 +15,7 @@ gipsqda(formula, data, ..., subset, na.action)
 # Default S3 method
 gipsqda(x, grouping, prior = proportions,
   nu = 5, MAP = TRUE, optimizer = NULL, max_iter = NULL,
-  show_progress_bar = FALSE, ...)
+  show_progress_bar = FALSE, store_probabilities = TRUE, ...)
 
 # S3 method for class 'data.frame'
 gipsqda(x, ...)
@@ -83,6 +83,12 @@ gipsqda(x, grouping, ..., subset, na.action)
   Logical; if `TRUE`, display the progress bar from the underlying gips
   optimizer. Defaults to `FALSE`.
 
+- store_probabilities:
+
+  Logical; if `TRUE`, store estimated posterior probabilities of
+  retained permutations. If `FALSE` and `MAP = TRUE`, only the selected
+  MAP permutations are stored. Defaults to `TRUE`.
+
 - subset:
 
   An index vector specifying the cases to be used in the training
@@ -111,8 +117,9 @@ An object of class `"gipsqda"` containing the following components:
 
 - `N`: total number of observations
 
-- `optimization_info`: named list of estimated probabilities of retained
-  permutations, one element per class
+- `optimization_info`: named list of estimated posterior probabilities
+  of retained permutations, one element per class, if stored; otherwise
+  a named list of `NULL` values
 
 - `selected_map_permutation`: named list of MAP permutations selected
   independently for each class

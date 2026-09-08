@@ -1,5 +1,10 @@
 # gipsDA
 
+[![gipsDA
+logo](reference/figures/logo.png)](https://antonikingston.github.io/gipsDA/)
+
+**[Documentation website](https://antonikingston.github.io/gipsDA/)**
+
 `gipsDA` provides linear and quadratic discriminant analysis with
 structured covariance estimation. It uses
 [`gips`](https://github.com/PrzeChoj/gips) to identify

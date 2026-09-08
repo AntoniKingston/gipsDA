@@ -95,6 +95,9 @@ fit
 #> $weighted_avg
 #> [1] FALSE
 #> 
+#> $store_probabilities
+#> [1] TRUE
+#> 
 #> 
 #> Prior probabilities of groups:
 #>     setosa versicolor  virginica 
@@ -250,6 +253,9 @@ lda_map
 #> $weighted_avg
 #> [1] FALSE
 #> 
+#> $store_probabilities
+#> [1] TRUE
+#> 
 #> 
 #> Prior probabilities of groups:
 #>     setosa versicolor  virginica 
@@ -316,6 +322,9 @@ lda_avg
 #> 
 #> $weighted_avg
 #> [1] FALSE
+#> 
+#> $store_probabilities
+#> [1] TRUE
 #> 
 #> 
 #> Prior probabilities of groups:
@@ -439,6 +448,9 @@ print(lda_fit)
 #> $weighted_avg
 #> [1] FALSE
 #> 
+#> $store_probabilities
+#> [1] TRUE
+#> 
 #> 
 #> Prior probabilities of groups:
 #>     setosa versicolor  virginica 
@@ -501,6 +513,9 @@ summary(lda_fit)
 #> 
 #> $weighted_avg
 #> [1] FALSE
+#> 
+#> $store_probabilities
+#> [1] TRUE
 #> 
 #> 
 #> Class counts:
@@ -621,6 +636,7 @@ The main tuning choices are:
 | `optimizer = "MH"` | stochastic search, default for `p > 10` |
 | `max_iter` | used only with `optimizer = "MH"` |
 | `weighted_avg` | changes the pooled covariance estimator in [`gipslda()`](https://antonikingston.github.io/gipsDA/reference/gipslda.md) |
+| `store_probabilities` | whether to store posterior probabilities of retained permutations |
 
 More detailed examples, including `weighted_avg`, leave-one-out
 prediction, matrix interfaces, and model diagnostics, are described in
