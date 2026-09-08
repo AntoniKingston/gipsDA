@@ -166,3 +166,43 @@ test_that("print helpers handle missing optional optimization and svd content", 
   summary_object <- summary(fit)
   expect_null(summary_object$proportion_trace)
 })
+
+test_that("print and summary report when posterior probabilities are not stored", {
+  fixture <- make_binary_fixture(p = 2, n_per_class = 6)
+
+  fit <- gipslda(
+    fixture$x,
+    fixture$grouping,
+    MAP = TRUE,
+    optimizer = "BF",
+    store_probabilities = FALSE
+  )
+
+  print_output <- capture.output(print(fit))
+
+  expect_true(any(grepl(
+    "Selected MAP permutation:",
+    print_output,
+    fixed = TRUE
+  )))
+
+  expect_true(any(grepl(
+    "Posterior probabilities of retained permutations: not stored",
+    print_output,
+    fixed = TRUE
+  )))
+
+  summary_output <- capture.output(summary(fit))
+
+  expect_true(any(grepl(
+    "Selected MAP permutation:",
+    summary_output,
+    fixed = TRUE
+  )))
+
+  expect_true(any(grepl(
+    "Posterior probabilities of retained permutations: not stored",
+    summary_output,
+    fixed = TRUE
+  )))
+})

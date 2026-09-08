@@ -285,3 +285,86 @@ test_that("QDA models pass show_progress_bar to covariance projection", {
   expect_true(all(seen_progress))
   expect_length(seen_progress, length(levels(fixture$grouping)) + 1L)
 })
+
+test_that("gipsqda can skip stored probabilities for MAP fits", {
+  fixture <- make_binary_fixture(p = 2, n_per_class = 6)
+
+  fit <- gipsqda(
+    fixture$x,
+    fixture$grouping,
+    MAP = TRUE,
+    optimizer = "BF",
+    store_probabilities = FALSE
+  )
+
+  expect_valid_qda_fit(fit, class = "gipsqda", n = 12, p = 2, groups = 2)
+  expect_named(fit$optimization_info, levels(fixture$grouping))
+  expect_named(fit$selected_map_permutation, levels(fixture$grouping))
+
+  expect_true(all(vapply(fit$optimization_info, is.null, logical(1L))))
+  expect_true(all(vapply(
+    fit$selected_map_permutation,
+    function(x) inherits(x, "gips_perm"),
+    logical(1L)
+  )))
+
+  expect_false(fit$fit_info$store_probabilities)
+})
+
+test_that("gipsqda stores probabilities by default", {
+  fixture <- make_binary_fixture(p = 2, n_per_class = 6)
+
+  fit <- gipsqda(
+    fixture$x,
+    fixture$grouping,
+    MAP = TRUE,
+    optimizer = "BF"
+  )
+
+  expect_valid_qda_fit(fit, class = "gipsqda", n = 12, p = 2, groups = 2)
+  expect_named(fit$optimization_info, levels(fixture$grouping))
+  expect_named(fit$selected_map_permutation, levels(fixture$grouping))
+
+  expect_true(all(vapply(fit$optimization_info, is.double, logical(1L))))
+  expect_true(all(vapply(
+    fit$selected_map_permutation,
+    function(x) inherits(x, "gips_perm"),
+    logical(1L)
+  )))
+
+  expect_true(fit$fit_info$store_probabilities)
+})
+
+test_that("gipsmultqda can skip stored probabilities for MAP fits", {
+  fixture <- make_binary_fixture(p = 2, n_per_class = 6)
+
+  fit <- gipsmultqda(
+    fixture$x,
+    fixture$grouping,
+    MAP = TRUE,
+    optimizer = "BF",
+    store_probabilities = FALSE
+  )
+
+  expect_valid_qda_fit(fit, class = "gipsmultqda", n = 12, p = 2, groups = 2)
+  expect_null(fit$optimization_info)
+  expect_s3_class(fit$selected_map_permutation, "gips_perm")
+  expect_false(fit$fit_info$store_probabilities)
+})
+
+test_that("gipsmultqda stores probabilities by default", {
+  fixture <- make_binary_fixture(p = 2, n_per_class = 6)
+
+  fit <- gipsmultqda(
+    fixture$x,
+    fixture$grouping,
+    MAP = TRUE,
+    optimizer = "BF"
+  )
+
+  expect_valid_qda_fit(fit, class = "gipsmultqda", n = 12, p = 2, groups = 2)
+  expect_type(fit$optimization_info, "double")
+  expect_false(is.null(names(fit$optimization_info)))
+  expect_s3_class(fit$selected_map_permutation, "gips_perm")
+  expect_true(fit$fit_info$store_probabilities)
+})

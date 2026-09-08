@@ -309,6 +309,7 @@ The main tuning choices are:
 | `optimizer = "MH"` | stochastic search, default for `p > 10` |
 | `max_iter` | used only with `optimizer = "MH"` |
 | `weighted_avg` | changes the pooled covariance estimator in `gipslda()` |
+| `store_probabilities` | whether to store posterior probabilities of retained permutations |
 
 More detailed examples, including `weighted_avg`, leave-one-out prediction,
 matrix interfaces, and model diagnostics, are described in the [Advanced usage](advanced-usage.html)

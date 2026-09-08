@@ -21,5 +21,12 @@
 Invisibly returns \code{x}.
 }
 \description{
-Print a fitted gipsDA model
+Prints the main components of a fitted \code{gipsDA} model, including the model
+call, fitting options, group means, class counts, selected MAP permutation,
+and posterior probabilities of retained permutations when stored.
+}
+\examples{
+fit <- gipslda(Species ~ ., data = iris, optimizer = "BF")
+print(fit)
+
 }

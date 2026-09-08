@@ -19,7 +19,7 @@
 #'
 #' \method{gipsmultqda}{default}(x, grouping, prior = proportions,
 #'   nu = 5, MAP = TRUE, optimizer = NULL, max_iter = NULL,
-#'   show_progress_bar = FALSE, ...)
+#'   show_progress_bar = FALSE, store_probabilities = TRUE, ...)
 #'
 #' \method{gipsmultqda}{data.frame}(x, ...)
 #'
@@ -47,6 +47,10 @@
 #' @param max_iter Maximum number of iterations for stochastic optimizers.
 #' @param show_progress_bar Logical; if \code{TRUE}, display the progress bar
 #'   from the underlying gips optimizer. Defaults to \code{FALSE}.
+#' @param store_probabilities Logical; if \code{TRUE}, store estimated
+#'   posterior probabilities of retained permutations. If \code{FALSE} and
+#'   \code{MAP = TRUE}, only the selected MAP permutation is stored. Defaults
+#'   to \code{TRUE}.
 #' @param subset An index vector specifying the cases to be used in the training
 #'   sample. (NOTE: must be named.)
 #' @param na.action A function specifying the action to be taken if \code{NA}s
@@ -64,8 +68,9 @@
 #'   \item \code{ldet}: log-determinants of the projected covariance matrices
 #'   \item \code{lev}: class labels
 #'   \item \code{N}: total number of observations
-#'   \item \code{optimization_info}: estimated probabilities of retained
-#'     permutations returned by the joint gips optimization
+#'   \item \code{optimization_info}: estimated posterior probabilities of
+#'     retained permutations from the joint gips optimization
+#'     if stored; otherwise \code{NULL}
 #'   \item \code{selected_map_permutation}: MAP permutation selected by the
 #'     joint gips optimization and used for MAP covariance projection
 #'   \item \code{call}: the matched call
@@ -162,8 +167,9 @@ gipsmultqda.matrix <- function(x, grouping, ..., subset, na.action) {
 }
 
 #' @exportS3Method
-gipsmultqda.default <-
-  function(x, grouping, prior = proportions, nu = 5, MAP = TRUE, optimizer = NULL, max_iter = NULL, show_progress_bar = FALSE, ...) {
+gipsmultqda.default <- function(x, grouping, prior = proportions, nu = 5,
+                                MAP = TRUE, optimizer = NULL, max_iter = NULL,
+                                show_progress_bar = FALSE, store_probabilities = TRUE, ...) {
     if (is.null(dim(x))) stop("'x' is not a matrix")
     x <- as.matrix(x)
     if (any(!is.finite(x))) {
@@ -217,7 +223,8 @@ gipsmultqda.default <-
     #     cXs[[i]] <- cX$cov
     #     group.means[i,] <- cX$center
     # }
-    pr_cov_opt_info <- project_covs(cXs, counts, MAP, optimizer, max_iter, show_progress_bar = show_progress_bar)
+    pr_cov_opt_info <- project_covs(cXs, counts, MAP, optimizer, max_iter,
+                                    show_progress_bar = show_progress_bar, store_probabilities = store_probabilities)
     cov_proj <- pr_cov_opt_info$covs
     cov_proj <- lapply(cov_proj, function(mat) desingularize(mat, 0.05))
     optimization_info <- pr_cov_opt_info$opt_info
@@ -251,7 +258,8 @@ gipsmultqda.default <-
       fit_info = list(
         MAP = MAP,
         optimizer = optimizer,
-        max_iter = max_iter
+        max_iter = max_iter,
+        store_probabilities = store_probabilities
       )
     )
     class(res) <- "gipsmultqda"

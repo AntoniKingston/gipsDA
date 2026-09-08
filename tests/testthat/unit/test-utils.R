@@ -318,3 +318,53 @@ test_that("desingularize reports invalid scaling and nonsquare inputs", {
     "non-square matrix"
   )
 })
+
+test_that("project_covs can skip storing probabilities for MAP projection", {
+  emp_cov <- matrix(c(
+    2, 0.4,
+    0.4, 1
+  ), nrow = 2, byrow = TRUE)
+
+  result <- gipsDA:::project_covs(
+    emp_cov,
+    ns_obs = 20,
+    MAP = TRUE,
+    optimizer = "BF",
+    max_iter = NA,
+    store_probabilities = FALSE
+  )
+
+  expect_length(result$covs, 1)
+  expect_s3_class(result$permutation, "gips_perm")
+  expect_null(result$opt_info)
+
+  expect_equal(
+    result$covs[[1]],
+    gips::project_matrix(emp_cov, result$permutation)
+  )
+})
+
+test_that("project_covs keeps probabilities when MAP is FALSE", {
+  emp_cov <- matrix(c(
+    2, 0.4,
+    0.4, 1
+  ), nrow = 2, byrow = TRUE)
+
+  expect_warning(
+    result <- gipsDA:::project_covs(
+      emp_cov,
+      ns_obs = 20,
+      MAP = FALSE,
+      optimizer = "BF",
+      max_iter = NA,
+      store_probabilities = FALSE
+    ),
+    "store_probabilities = FALSE is ignored when MAP = FALSE",
+    fixed = TRUE
+  )
+
+  expect_length(result$covs, 1)
+  expect_s3_class(result$permutation, "gips_perm")
+  expect_type(result$opt_info, "double")
+  expect_false(is.null(names(result$opt_info)))
+})

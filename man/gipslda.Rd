@@ -16,7 +16,7 @@ gipslda(x, ...)
 \method{gipslda}{default}(x, grouping, prior = proportions,
   tol = 1e-4, weighted_avg = FALSE,
   MAP = TRUE, optimizer = NULL, max_iter = NULL,
-  show_progress_bar = FALSE, ...)
+  show_progress_bar = FALSE, store_probabilities = TRUE, ...)
 
 \method{gipslda}{data.frame}(x, ...)
 
@@ -61,6 +61,11 @@ retained posterior permutation probabilities.}
 \item{show_progress_bar}{Logical; if \code{TRUE}, display the progress bar
 from the underlying gips optimizer. Defaults to \code{FALSE}.}
 
+\item{store_probabilities}{Logical; if \code{TRUE}, store estimated
+posterior probabilities of retained permutations. If \code{FALSE} and
+\code{MAP = TRUE}, only the selected MAP permutation is stored. Defaults
+to \code{TRUE}.}
+
 \item{weighted_avg}{Logical; if \code{FALSE}, use the pooled within-class
 scatter matrix. If \code{TRUE}, use a class-proportion-weighted average
 of class-specific covariance matrices.}
@@ -75,8 +80,8 @@ An object of class \code{"gipslda"} containing:
 \item \code{lev}: class labels
 \item \code{svd}: singular values of the between-class scatter
 \item \code{N}: number of observations
-\item \code{optimization_info}: estimated probabilities of retained
-permutations returned by the gips optimization
+\item \code{optimization_info}: estimated posterior probabilities of
+retained permutations if stored; otherwise \code{NULL}
 \item \code{selected_map_permutation}: MAP permutation selected by the
 gips optimization and used for MAP covariance projection
 \item \code{call}: matched call

@@ -1,5 +1,15 @@
 # gipsDA
 
+<p align="center">
+  <a href="https://antonikingston.github.io/gipsDA/">
+    <img src="man/figures/logo.png" alt="gipsDA logo" width="190">
+  </a>
+</p>
+
+<p align="center">
+  <strong><a href="https://antonikingston.github.io/gipsDA/">Documentation website</a></strong>
+</p>
+
 <!-- badges: start -->
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN status](https://www.r-pkg.org/badges/version/gipsDA)](https://CRAN.R-project.org/package=gipsDA)
