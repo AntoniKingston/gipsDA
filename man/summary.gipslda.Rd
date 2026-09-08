@@ -21,5 +21,15 @@
 An object of class \code{"summary.gipsda"}.
 }
 \description{
-Summarize a fitted gipsDA model
+Creates a compact summary object for a fitted \code{gipsDA} model. The summary
+contains the most important fitted quantities and can be printed using the
+corresponding \code{print()} method.
+}
+\examples{
+fit <- gipslda(Species ~ ., data = iris, optimizer = "BF")
+summary(fit)
+
+summary_object <- summary(fit)
+names(summary_object)
+
 }

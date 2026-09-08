@@ -1,9 +1,18 @@
 #' Print a fitted gipsDA model
 #'
+#' Prints the main components of a fitted `gipsDA` model, including the model
+#' call, fitting options, group means, class counts, selected MAP permutation,
+#' and posterior probabilities of retained permutations when stored.
+#'
 #' @param x A fitted gipsDA model.
 #' @param ... Further arguments passed to printing methods.
 #'
 #' @return Invisibly returns `x`.
+#'
+#' @examples
+#' fit <- gipslda(Species ~ ., data = iris, optimizer = "BF")
+#' print(fit)
+#'
 #' @exportS3Method
 print.gipslda <- function(x, ...) {
   .print_gipsda_model(x, model_name = "gipslda", ...)
@@ -86,10 +95,22 @@ print.gipsmultqda <- function(x, ...) {
 
 #' Summarize a fitted gipsDA model
 #'
+#' Creates a compact summary object for a fitted `gipsDA` model. The summary
+#' contains the most important fitted quantities and can be printed using the
+#' corresponding `print()` method.
+#'
 #' @param object A fitted gipsDA model.
 #' @param ... Further arguments passed to or from methods.
 #'
 #' @return An object of class `"summary.gipsda"`.
+#'
+#' @examples
+#' fit <- gipslda(Species ~ ., data = iris, optimizer = "BF")
+#' summary(fit)
+#'
+#' summary_object <- summary(fit)
+#' names(summary_object)
+#'
 #' @exportS3Method
 summary.gipslda <- function(object, ...) {
   structure(
