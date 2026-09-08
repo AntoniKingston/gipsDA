@@ -1,5 +1,7 @@
 # gipsDA
 
+<div class="github-readme-logo">
+
 <p align="center">
   <a href="https://antonikingston.github.io/gipsDA/">
     <img src="man/figures/logo.png" alt="gipsDA logo" width="190">
@@ -10,11 +12,15 @@
   <strong><a href="https://antonikingston.github.io/gipsDA/">Documentation website</a></strong>
 </p>
 
+</div>
+
 <!-- badges: start -->
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN status](https://www.r-pkg.org/badges/version/gipsDA)](https://CRAN.R-project.org/package=gipsDA)
+[![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/gipsDA)](https://r-pkg.org/pkg/gipsDA)
 [![R-CMD-check](https://github.com/AntoniKingston/gipsDA/actions/workflows/R-CMD-check.yaml/badge.svg?branch=main)](https://github.com/AntoniKingston/gipsDA/actions/workflows/R-CMD-check.yaml)
 [![Codecov](https://codecov.io/gh/AntoniKingston/gipsDA/branch/main/graph/badge.svg)](https://app.codecov.io/gh/AntoniKingston/gipsDA)
+[![Documentation](https://img.shields.io/badge/docs-pkgdown-blue.svg)](https://antonikingston.github.io/gipsDA/)
 <!-- badges: end -->
 
 `gipsDA` provides linear and quadratic discriminant analysis with structured
