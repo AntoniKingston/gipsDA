@@ -410,6 +410,10 @@ predict.gipslda <- function(object, newdata, prior = object$prior, dimen,
     ) - x[, 1L:dimen, drop = FALSE] %*% t(dm)
     dist <- exp(-(dist - apply(dist, 1L, min, na.rm = TRUE)))
   } else if (method == "debiased") {
+    if (any(object$counts < ncol(object$means))) {
+      stop("Number of observations smaller than number of features for at least 1 class, debiased method not allowed.\n
+      For more information see https://github.com/AntoniKingston/gipsDA/issues/16")
+    }
     dm <- dm[, 1L:dimen, drop = FALSE]
     dist <- matrix(0.5 * rowSums(dm^2), nrow(x), ng, byrow = TRUE) -
       x[, 1L:dimen, drop = FALSE] %*% t(dm)
