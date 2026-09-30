@@ -183,6 +183,9 @@ gipslda.default <- function(x, grouping, prior = proportions, tol = 1.0e-4,
     }
     n <- nrow(x)
     p <- ncol(x)
+    if (p == 1L && !MAP) {
+      stop("gipslda with one predictor requires MAP = TRUE", call. = FALSE)
+    }
     if (n != length(grouping)) {
       stop("nrow(x) and length(grouping) are different")
     }

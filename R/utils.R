@@ -14,6 +14,20 @@ project_covs <- function(emp_covs, ns_obs, MAP = TRUE, optimizer, max_iter,
     emp_covs
   }
 
+  # In one dimension the identity is the only possible permutation.
+  first_cov <- if (is.list(emp_covs)) emp_covs[[1L]] else emp_covs
+  if (ncol(first_cov) == 1L) {
+    if (!MAP) {
+      stop("One-predictor covariance projection requires MAP = TRUE", call. = FALSE)
+    }
+    perm <- gips::gips_perm("()", size = 1L)
+    return(list(
+      covs = if (is.list(emp_covs)) emp_covs else list(emp_covs),
+      opt_info = if (store_probabilities) c("()" = 1) else NULL,
+      permutation = perm
+    ))
+  }
+
   gg <- gips::gips(gips_input, ns_obs, was_mean_estimated = TRUE)
 
   if (!is.list(emp_covs)) {
