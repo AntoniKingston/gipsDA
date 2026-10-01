@@ -13,7 +13,7 @@ authors:
 
 navbar:
   structure:
-    left: [intro, reference, getting-started, advanced-usage, manual-test]
+    left: [intro, reference, getting-started, advanced-usage, manual-test, news]
     right: [search, github]
   components:
     getting-started:
