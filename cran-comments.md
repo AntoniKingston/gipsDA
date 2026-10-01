@@ -20,6 +20,8 @@
   * linux, R release
   * windows, R release
   * ubuntu-release, R release
+* win-builder:
+  * Windows devel, R-devel
 
 ## Release summary
 
