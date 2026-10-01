@@ -177,12 +177,23 @@ gipsmultqda.default <- function(x, grouping, prior = proportions, nu = 5,
     }
     n <- nrow(x)
     p <- ncol(x)
+    if (p == 1L) {
+      stop("gipsmultqda requires at least two predictors", call. = FALSE)
+    }
     if (n != length(grouping)) {
       stop("nrow(x) and length(grouping) are different")
     }
     g <- as.factor(grouping)
     lev <- levels(g)
     counts <- as.vector(table(g))
+    if (any(counts == 0L)) {
+      stop(
+        paste0("Unused levels in grouping: ",
+               paste(lev[counts == 0L], collapse = ", "),
+               ". Remove them with droplevels(grouping) before fitting."),
+        call. = FALSE
+      )
+    }
     names(counts) <- lev
     # if(any(counts < p+1)) stop("some group is too small for 'gipsmultqda'")
     proportions <- counts / length(g)
@@ -399,6 +410,9 @@ predict.gipsmultqda <- function(object, newdata, prior = object$prior,
   } else if (method == "debiased") {
     for (i in 1L:ngroup) {
       nk <- object$counts[i]
+      if (nk <= p) {
+        stop(paste("The number of observations smaller than the number of features in class", i))
+      }
       Bm <- p * log((nk - 1) / 2) - sum(digamma(0.5 * (nk - 1L:ngroup)))
       dev <- ((x - matrix(object$means[i, ],
         nrow = nrow(x),
