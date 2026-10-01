@@ -45,6 +45,14 @@ test_that("LDA diagnostics work after matrix fit with na.action", {
     na.action = na.omit
   )
 
+  pdf_file <- tempfile(fileext = ".pdf")
+  grDevices::pdf(pdf_file)
+
+  withr::defer({
+    grDevices::dev.off()
+    unlink(pdf_file)
+  })
+
   expect_silent(plot(fit))
   expect_silent(pairs(fit))
 })
