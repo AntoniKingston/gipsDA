@@ -379,10 +379,11 @@ predict.gipsqda <- function(object, newdata, prior = object$prior,
         g <- eval.parent(object$call[[3L]])
       }
       if (!is.null(nas <- object$call$na.action)) {
-        df <- data.frame(g = g, X = newdata)
-        df <- eval(call(nas, df))
+        df <- data.frame(g = g, newdata, check.names = FALSE)
+        na_fun <- eval(nas, parent.frame())
+        df <- na_fun(df)
         g <- df$g
-        newdata <- df$X
+        newdata <- as.matrix(df[, -1L, drop = FALSE])
       }
       g <- as.factor(g)
     }
