@@ -389,6 +389,20 @@ permutations. For faster MAP-only fitting, set
 permutation is still stored and shown, but posterior probabilities are
 not stored in the fitted model object.
 
+With one predictor,
+[`gipslda()`](https://antonikingston.github.io/gipsDA/reference/gipslda.md)
+and
+[`gipsqda()`](https://antonikingston.github.io/gipsDA/reference/gipsqda.md)
+require `MAP = TRUE`. The identity permutation `()` is the only possible
+permutation and has probability `1`, which is stored when
+`store_probabilities = TRUE`.
+[`gipsmultqda()`](https://antonikingston.github.io/gipsDA/reference/gipsmultqda.md)
+requires at least two predictors.
+
+Both QDA fitters reject unused levels in the grouping factor with an
+error listing those levels. Use `droplevels(grouping)` before fitting to
+remove them.
+
 ## Interpreting permutation output
 
 Printed model output may contain permutations such as:

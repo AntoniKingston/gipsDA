@@ -429,6 +429,15 @@ retained permutations. For faster MAP-only fitting, set
 <code>store_probabilities = FALSE</code>. In that case, the selected MAP
 permutation is still stored and shown, but posterior probabilities are
 not stored in the fitted model object.</p>
+<p>With one predictor, <code><a href="../reference/gipslda.html">gipslda()</a></code> and <code><a href="../reference/gipsqda.html">gipsqda()</a></code>
+require <code>MAP = TRUE</code>. The identity permutation
+<code>()</code> is the only possible permutation and has probability
+<code>1</code>, which is stored when
+<code>store_probabilities = TRUE</code>. <code><a href="../reference/gipsmultqda.html">gipsmultqda()</a></code>
+requires at least two predictors.</p>
+<p>Both QDA fitters reject unused levels in the grouping factor with an
+error listing those levels. Use <code>droplevels(grouping)</code> before
+fitting to remove them.</p>
 </div>
 <div class="section level2">
 <h2 id="interpreting-permutation-output">Interpreting permutation output<a class="anchor" aria-label="anchor" href="#interpreting-permutation-output"></a>
