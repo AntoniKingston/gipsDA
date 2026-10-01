@@ -429,6 +429,15 @@ retained permutations. For faster MAP-only fitting, set
 <code>store_probabilities = FALSE</code>. In that case, the selected MAP
 permutation is still stored and shown, but posterior probabilities are
 not stored in the fitted model object.</p>
+<p>With one predictor, <code><a href="../reference/gipslda.html">gipslda()</a></code> and <code><a href="../reference/gipsqda.html">gipsqda()</a></code>
+require <code>MAP = TRUE</code>. The identity permutation
+<code>()</code> is the only possible permutation and has probability
+<code>1</code>, which is stored when
+<code>store_probabilities = TRUE</code>. <code><a href="../reference/gipsmultqda.html">gipsmultqda()</a></code>
+requires at least two predictors.</p>
+<p>Both QDA fitters reject unused levels in the grouping factor with an
+error listing those levels. Use <code>droplevels(grouping)</code> before
+fitting to remove them.</p>
 </div>
 <div class="section level2">
 <h2 id="interpreting-permutation-output">Interpreting permutation output<a class="anchor" aria-label="anchor" href="#interpreting-permutation-output"></a>
@@ -446,6 +455,10 @@ not stored in the fitted model object.</p>
 <span><span class="fl">2</span> <span class="op">-&gt;</span> <span class="fl">4</span></span>
 <span><span class="fl">4</span> <span class="op">-&gt;</span> <span class="fl">3</span></span>
 <span><span class="fl">3</span> <span class="op">-&gt;</span> <span class="fl">1</span></span></code></pre>
+<p>For cycles of length greater than two, this should be understood as
+invariance under the cyclic permutation and its repeated applications.
+It does not necessarily mean full exchangeability under every possible
+pairwise swap of features in the cycle.</p>
 <p>A product of cycles such as:</p>
 <pre class="text"><code>(1,2)(3,4)</code></pre>
 <p>means that feature 1 is swapped with feature 2, and feature 3 is
@@ -455,8 +468,19 @@ swapped with feature 4.</p>
 <p>is the identity permutation. It means that no non-trivial permutation
 symmetry was selected.</p>
 <p>In the context of <code>gipsDA</code>, a selected permutation
-structure describes which features are treated as exchangeable by the
-covariance model.</p>
+structure describes invariance constraints imposed on the covariance
+estimator.</p>
+<p>For <code><a href="../reference/gipslda.html">gipslda()</a></code>, the permutation search is performed after
+centering observations by their class means and scaling the resulting
+within-class residuals to unit marginal variance. Therefore, the
+selected permutation describes symmetry in the standardized within-class
+covariance structure, not necessarily symmetry of the raw covariance
+matrix in the original units.</p>
+<p>For <code><a href="../reference/gipsqda.html">gipsqda()</a></code> and <code><a href="../reference/gipsmultqda.html">gipsmultqda()</a></code>, the class
+covariance matrices are projected on the original predictor scale.
+Because of this difference, selected permutations from LDA and QDA
+should not always be interpreted in exactly the same way when predictors
+are measured on different scales.</p>
 </div>
 <div class="section level2">
 <h2 id="optimizer">Optimizer<a class="anchor" aria-label="anchor" href="#optimizer"></a>

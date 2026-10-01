@@ -102,7 +102,26 @@ print.gipsmultqda <- function(x, ...) {
 #' @param object A fitted gipsDA model.
 #' @param ... Further arguments passed to or from methods.
 #'
-#' @return An object of class `"summary.gipsda"`.
+#' @return
+#' An object of class `"summary.gipsda"`. Common components include:
+#' \itemize{
+#'   \item `model`: model type.
+#'   \item `call`: original model call.
+#'   \item `n`: number of observations used for fitting.
+#'   \item `p`: number of predictors.
+#'   \item `groups`: fitted class labels.
+#'   \item `counts`: class counts.
+#'   \item `prior`: prior class probabilities.
+#'   \item `means`: group means.
+#'   \item `fit_info`: fitting options, including `MAP`, `optimizer`,
+#'     `max_iter`, `store_probabilities`, and for LDA also `weighted_avg`.
+#'   \item `optimization_info`: stored posterior probabilities of retained
+#'     permutations, if available.
+#'   \item `selected_map_permutation`: selected MAP permutation or permutations.
+#' }
+#' LDA summaries additionally contain `scaling`, `svd`, and
+#' `proportion_trace`. QDA summaries additionally contain `scaling_dim`
+#' and `ldet`.
 #'
 #' @examples
 #' fit <- gipslda(Species ~ ., data = iris, optimizer = "BF")

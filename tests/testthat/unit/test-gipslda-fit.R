@@ -255,7 +255,8 @@ test_that("empty grouping levels are dropped with a warning", {
   )
   expect_true(any(grepl("group empty is empty", warnings, fixed = TRUE)))
   expect_equal(fit$prior, c(setosa = 0.45, versicolor = 0.55))
-  expect_equal(fit$lev, c("setosa", "versicolor", "empty"))
+  expect_false("empty" %in% fit$lev)
+  expect_equal(fit$lev, c("setosa", "versicolor"))
   expect_equal(names(fit$counts), c("setosa", "versicolor"))
 })
 
@@ -291,4 +292,23 @@ test_that("gipslda stores probabilities by default", {
   expect_false(is.null(names(fit$optimization_info)))
   expect_s3_class(fit$selected_map_permutation, "gips_perm")
   expect_true(fit$fit_info$store_probabilities)
+})
+
+test_that("gipslda stores only non-empty fitted groups", {
+  x <- as.matrix(iris[iris$Species != "virginica", c("Sepal.Length", "Sepal.Width")])
+  grouping <- factor(
+    iris$Species[iris$Species != "virginica"],
+    levels = levels(iris$Species)
+  )
+
+  expect_warning(
+    fit <- gipslda(x, grouping, optimizer = "BF"),
+    "group virginica is empty",
+    fixed = TRUE
+  )
+
+  expect_identical(fit$lev, c("setosa", "versicolor"))
+  expect_identical(summary(fit)$groups, c("setosa", "versicolor"))
+  expect_equal(length(fit$prior), 2L)
+  expect_equal(length(fit$counts), 2L)
 })

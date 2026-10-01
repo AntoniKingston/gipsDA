@@ -306,7 +306,7 @@ gipslda.default <- function(x, grouping, prior = proportions, tol = 1.0e-4,
         counts = counts,
         means = group.means,
         scaling = scaling,
-        lev = lev,
+        lev = lev1,
         svd = X.s$d[1L:rank],
         N = n,
         optimization_info = optimization_info,
@@ -378,7 +378,8 @@ predict.gipslda <- function(object, newdata, prior = object$prior, dimen,
         newdata <- eval.parent(object$call$x)
       }
       if (!is.null(nas <- object$call$na.action)) {
-        newdata <- eval(call(nas, newdata))
+        na_fun <- eval(nas, parent.frame())
+        newdata <- na_fun(newdata)
       }
     }
     if (is.null(dim(newdata))) {
@@ -487,10 +488,11 @@ plot.gipslda <- function(x, panel = panel.gipslda, ..., cex = 0.7,
       g <- eval.parent(gname)
     }
     if (!is.null(nas <- x$call$na.action)) {
-      df <- data.frame(g = g, X = X)
-      df <- eval(call(nas, df))
+      df <- data.frame(g = g, X, check.names = FALSE)
+      na_fun <- eval(nas, parent.frame())
+      df <- na_fun(df)
       g <- df$g
-      X <- df$X
+      X <- as.matrix(df[, -1L, drop = FALSE])
     }
   }
   if (abbrev) levels(g) <- abbreviate(levels(g), abbrev)
@@ -623,10 +625,11 @@ pairs.gipslda <- function(x, labels = colnames(x), panel = panel.gipslda,
       g <- eval.parent(gname)
     }
     if (!is.null(nas <- x$call$na.action)) {
-      df <- data.frame(g = g, X = X)
-      df <- eval(call(nas, df))
+      df <- data.frame(g = g, X, check.names = FALSE)
+      na_fun <- eval(nas, parent.frame())
+      df <- na_fun(df)
       g <- df$g
-      X <- df$X
+      X <- as.matrix(df[, -1L, drop = FALSE])
     }
   }
   g <- as.factor(g)
@@ -657,6 +660,7 @@ model.frame.gipslda <- function(formula, ...) {
   oc <- formula$call
   oc$prior <- oc$tol <- oc$method <- oc$CV <- oc$nu <- NULL
   oc$weighted_avg <- oc$MAP <- oc$optimizer <- oc$max_iter <- NULL
+  oc$show_progress_bar <- oc$store_probabilities <- NULL
   oc[[1L]] <- quote(stats::model.frame)
   if (length(dots <- list(...))) {
     nargs <- dots[match(c("data", "na.action", "subset"), names(dots), 0L)]

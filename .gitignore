@@ -1,0 +1,10 @@
+/doc/
+/Meta/
+
+.DS_Store
+.Rproj.user/
+coverage.html
+Rplots.pdf
+lib/
+*.tar.gz
+*.Rcheck/
