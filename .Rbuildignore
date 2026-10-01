@@ -17,3 +17,6 @@
 ^coverage\.html$
 ^Rplots\.pdf$
 ^\.DS_Store$
+
+^cran-comments\.md$
+^CRAN-RELEASE$
