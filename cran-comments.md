@@ -10,6 +10,12 @@
 
 * local macOS, R 4.5.1
 * R CMD check --as-cran
+* GitHub Actions:
+  * macOS-latest, R release
+  * ubuntu-latest, R release
+  * windows-latest, R release
+* GitHub Actions pkgdown workflow
+* GitHub Actions test coverage workflow
 
 ## Release summary
 
