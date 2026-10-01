@@ -283,6 +283,11 @@ means that the permutation maps:
 3 -> 1
 ```
 
+For cycles of length greater than two, this should be understood as invariance
+under the cyclic permutation and its repeated applications. It does not
+necessarily mean full exchangeability under every possible pairwise swap of
+features in the cycle.
+
 A product of cycles such as:
 
 ```text
