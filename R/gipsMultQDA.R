@@ -410,8 +410,8 @@ predict.gipsmultqda <- function(object, newdata, prior = object$prior,
   } else if (method == "debiased") {
     for (i in 1L:ngroup) {
       nk <- object$counts[i]
-      if (nk < p) {
-        stop(paste("The number of observations smaller than the number of features in class", utils::str(i)))
+      if (nk <= p) {
+        stop(paste("The number of observations smaller than the number of features in class", i))
       }
       Bm <- p * log((nk - 1) / 2) - sum(digamma(0.5 * (nk - 1L:ngroup)))
       dev <- ((x - matrix(object$means[i, ],
