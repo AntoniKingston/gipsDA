@@ -186,9 +186,14 @@ observations and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>G</mi><annotation encoding="application/x-tex">G</annotation></semantics></math>
 classes, the covariance supplied to <code>gips</code> is calculated
 manually as</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mi>W</mi></msub><mo>=</mo><mfrac><mi>n</mi><mrow><mi>n</mi><mo>−</mo><mi>G</mi></mrow></mfrac><mrow><mi mathvariant="normal">cov</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>E</mi><mi>D</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
-S_W=\frac{n}{n-G}\operatorname{cov}(ED).
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mi>W</mi></msub><mo>=</mo><mfrac><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow><mrow><mi>n</mi><mo>−</mo><mi>G</mi></mrow></mfrac><mrow><mi mathvariant="normal">cov</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>E</mi><mi>D</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+S_W=\frac{n-1}{n-G}\operatorname{cov}(ED).
 </annotation></semantics></math></p>
+<p>Here <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">stats::cov()</a></code> uses the usual denominator
+<code>n - 1</code>, and the additional factor
+<code>(n - 1) / (n - G)</code> converts the standardized residual
+covariance to the pooled within-class covariance scale used by the
+implementation.</p>
 <p>After MAP projection and regularization, write
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>S</mi><mi>W</mi><mo>*</mo></msubsup><mo>=</mo><mi>V</mi><mrow><mi mathvariant="normal">diag</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>d</mi><mo stretchy="false" form="postfix">)</mo><msup><mi>V</mi><mi>𝖳</mi></msup></mrow><annotation encoding="application/x-tex">S_W^*=V\operatorname{diag}(d)V^\mathsf{T}</annotation></semantics></math>.
 The whitening transform is</p>
@@ -225,11 +230,12 @@ signs.</li>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mi>g</mi></msub><mo>=</mo><mrow><mi mathvariant="normal">cov</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>X</mi><mi>g</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">
 S_g=\operatorname{cov}(X_g)
 </annotation></semantics></math></p>
-<p>is projected in a separate brute-force <code>gips</code> search. The
-total sample size
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
-is supplied to each search, matching the estimator’s statistical
-parameterization. If</p>
+<p>is projected in a separate brute-force <code>gips</code> search. For
+each class, the class sample size
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>n</mi><mi>g</mi></msub><annotation encoding="application/x-tex">n_g</annotation></semantics></math>
+is supplied to the corresponding <code>gips</code> search, matching the
+class-specific covariance estimator used by <code><a href="../reference/gipsqda.html">gipsqda()</a></code>.
+If</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>S</mi><mi>g</mi><mo>*</mo></msubsup><mo>=</mo><msub><mi>V</mi><mi>g</mi></msub><mrow><mi mathvariant="normal">diag</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>d</mi><mi>g</mi></msub><mo stretchy="false" form="postfix">)</mo><msubsup><mi>V</mi><mi>g</mi><mi>𝖳</mi></msubsup><mo>,</mo></mrow><annotation encoding="application/x-tex">
 S_g^*=V_g\operatorname{diag}(d_g)V_g^\mathsf{T},
 </annotation></semantics></math></p>

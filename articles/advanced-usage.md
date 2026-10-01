@@ -431,6 +431,11 @@ means that the permutation maps:
 3 -> 1
 ```
 
+For cycles of length greater than two, this should be understood as
+invariance under the cyclic permutation and its repeated applications.
+It does not necessarily mean full exchangeability under every possible
+pairwise swap of features in the cycle.
+
 A product of cycles such as:
 
 ``` text
@@ -450,7 +455,24 @@ is the identity permutation. It means that no non-trivial permutation
 symmetry was selected.
 
 In the context of `gipsDA`, a selected permutation structure describes
-which features are treated as exchangeable by the covariance model.
+invariance constraints imposed on the covariance estimator.
+
+For
+[`gipslda()`](https://antonikingston.github.io/gipsDA/reference/gipslda.md),
+the permutation search is performed after centering observations by
+their class means and scaling the resulting within-class residuals to
+unit marginal variance. Therefore, the selected permutation describes
+symmetry in the standardized within-class covariance structure, not
+necessarily symmetry of the raw covariance matrix in the original units.
+
+For
+[`gipsqda()`](https://antonikingston.github.io/gipsDA/reference/gipsqda.md)
+and
+[`gipsmultqda()`](https://antonikingston.github.io/gipsDA/reference/gipsmultqda.md),
+the class covariance matrices are projected on the original predictor
+scale. Because of this difference, selected permutations from LDA and
+QDA should not always be interpreted in exactly the same way when
+predictors are measured on different scales.
 
 ## Optimizer
 

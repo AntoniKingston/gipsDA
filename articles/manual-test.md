@@ -121,8 +121,13 @@ For $`n`$ observations and $`G`$ classes, the covariance supplied to
 `gips` is calculated manually as
 
 ``` math
-S_W=\frac{n}{n-G}\operatorname{cov}(ED).
+S_W=\frac{n-1}{n-G}\operatorname{cov}(ED).
 ```
+
+Here [`stats::cov()`](https://rdrr.io/r/stats/cor.html) uses the usual
+denominator `n - 1`, and the additional factor `(n - 1) / (n - G)`
+converts the standardized residual covariance to the pooled within-class
+covariance scale used by the implementation.
 
 After MAP projection and regularization, write
 $`S_W^*=V\operatorname{diag}(d)V^\mathsf{T}`$. The whitening transform
@@ -157,9 +162,11 @@ For each class, the sample covariance
 S_g=\operatorname{cov}(X_g)
 ```
 
-is projected in a separate brute-force `gips` search. The total sample
-size $`n`$ is supplied to each search, matching the estimator’s
-statistical parameterization. If
+is projected in a separate brute-force `gips` search. For each class,
+the class sample size $`n_g`$ is supplied to the corresponding `gips`
+search, matching the class-specific covariance estimator used by
+[`gipsqda()`](https://antonikingston.github.io/gipsDA/reference/gipsqda.md).
+If
 
 ``` math
 S_g^*=V_g\operatorname{diag}(d_g)V_g^\mathsf{T},

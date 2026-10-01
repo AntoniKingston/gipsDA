@@ -170,6 +170,13 @@ should be meaningfully comparable. For example, variables measured in
 the same units or representing analogous sensor readings are more
 natural candidates for permutation symmetry.
 
+Note that
+[`gipslda()`](https://antonikingston.github.io/gipsDA/reference/gipslda.md)
+learns permutation structure after within-class standardization of
+residuals, whereas the QDA variants project class covariance matrices on
+the original predictor scale. This affects the interpretation of
+selected permutations when variables are measured in different units.
+
 Standardization can be useful when predictors are on very different
 scales, but it should be done carefully. In particular, scaling
 parameters should be estimated on the training data only and then

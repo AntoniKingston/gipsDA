@@ -30,7 +30,35 @@ summary(object, ...)
 
 ## Value
 
-An object of class `"summary.gipsda"`.
+An object of class `"summary.gipsda"`. Common components include:
+
+- `model`: model type.
+
+- `call`: original model call.
+
+- `n`: number of observations used for fitting.
+
+- `p`: number of predictors.
+
+- `groups`: fitted class labels.
+
+- `counts`: class counts.
+
+- `prior`: prior class probabilities.
+
+- `means`: group means.
+
+- `fit_info`: fitting options, including `MAP`, `optimizer`, `max_iter`,
+  `store_probabilities`, and for LDA also `weighted_avg`.
+
+- `optimization_info`: stored posterior probabilities of retained
+  permutations, if available.
+
+- `selected_map_permutation`: selected MAP permutation or permutations.
+
+LDA summaries additionally contain `scaling`, `svd`, and
+`proportion_trace`. QDA summaries additionally contain `scaling_dim` and
+`ldet`.
 
 ## Examples
 
