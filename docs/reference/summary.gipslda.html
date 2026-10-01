@@ -70,7 +70,22 @@ corresponding <code><a href="https://rdrr.io/r/base/print.html" class="external-
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class <code>"summary.gipsda"</code>.</p>
+    <p>An object of class <code>"summary.gipsda"</code>. Common components include:</p><ul><li><p><code>model</code>: model type.</p></li>
+<li><p><code>call</code>: original model call.</p></li>
+<li><p><code>n</code>: number of observations used for fitting.</p></li>
+<li><p><code>p</code>: number of predictors.</p></li>
+<li><p><code>groups</code>: fitted class labels.</p></li>
+<li><p><code>counts</code>: class counts.</p></li>
+<li><p><code>prior</code>: prior class probabilities.</p></li>
+<li><p><code>means</code>: group means.</p></li>
+<li><p><code>fit_info</code>: fitting options, including <code>MAP</code>, <code>optimizer</code>,
+<code>max_iter</code>, <code>store_probabilities</code>, and for LDA also <code>weighted_avg</code>.</p></li>
+<li><p><code>optimization_info</code>: stored posterior probabilities of retained
+permutations, if available.</p></li>
+<li><p><code>selected_map_permutation</code>: selected MAP permutation or permutations.</p></li>
+</ul><p>LDA summaries additionally contain <code>scaling</code>, <code>svd</code>, and
+<code>proportion_trace</code>. QDA summaries additionally contain <code>scaling_dim</code>
+and <code>ldet</code>.</p>
     </div>
 
     <div class="section level2">

@@ -2,8 +2,7 @@
 ^\.Rproj\.user$
 ^\.idea$
 ^\.git$
-.*\.md
-.gitignore
+^\.gitignore$
 
 ^_pkgdown\.yml$
 ^docs$
@@ -13,3 +12,8 @@
 ^LICENSE\.md$
 ^doc$
 ^Meta$
+
+^lib$
+^coverage\.html$
+^Rplots\.pdf$
+^\.DS_Store$

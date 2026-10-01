@@ -35,7 +35,7 @@ Suggests:
     roxygen2,
     withr
 Depends:
-    R (>= 2.10)
+    R (>= 4.1.0)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 8.0.0

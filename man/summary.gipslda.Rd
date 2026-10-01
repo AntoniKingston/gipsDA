@@ -18,7 +18,25 @@
 \item{...}{Further arguments passed to or from methods.}
 }
 \value{
-An object of class \code{"summary.gipsda"}.
+An object of class \code{"summary.gipsda"}. Common components include:
+\itemize{
+\item \code{model}: model type.
+\item \code{call}: original model call.
+\item \code{n}: number of observations used for fitting.
+\item \code{p}: number of predictors.
+\item \code{groups}: fitted class labels.
+\item \code{counts}: class counts.
+\item \code{prior}: prior class probabilities.
+\item \code{means}: group means.
+\item \code{fit_info}: fitting options, including \code{MAP}, \code{optimizer},
+\code{max_iter}, \code{store_probabilities}, and for LDA also \code{weighted_avg}.
+\item \code{optimization_info}: stored posterior probabilities of retained
+permutations, if available.
+\item \code{selected_map_permutation}: selected MAP permutation or permutations.
+}
+LDA summaries additionally contain \code{scaling}, \code{svd}, and
+\code{proportion_trace}. QDA summaries additionally contain \code{scaling_dim}
+and \code{ldet}.
 }
 \description{
 Creates a compact summary object for a fitted \code{gipsDA} model. The summary
