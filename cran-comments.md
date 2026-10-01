@@ -16,6 +16,10 @@
   * windows-latest, R release
 * GitHub Actions pkgdown workflow
 * GitHub Actions test coverage workflow
+* R-hub v2:
+  * linux, R release
+  * windows, R release
+  * ubuntu-release, R release
 
 ## Release summary
 
