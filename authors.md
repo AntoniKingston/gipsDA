@@ -12,7 +12,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/AntoniKingston/gipsDA/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/AntoniKingston/gipsDA/blob/v1.0.0/DESCRIPTION)
 
 Kingston AZ, Frydrysiak NM (2026). *gipsDA: Discriminant Analysis with
 Permutation-Invariant Covariance Models*. R package version 1.0.0,

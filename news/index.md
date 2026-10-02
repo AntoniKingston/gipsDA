@@ -2,6 +2,8 @@
 
 ## gipsDA 1.0.0
 
+CRAN release: 2026-10-01
+
 ### Bug fixes
 
 - Fixed prediction from formula fits when fitting-only arguments such as
